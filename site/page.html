@@ -1483,6 +1483,8 @@
     let voices = [];
     const AC = window.AudioContext || window.webkitAudioContext;
     const NEURAL_VOICES = [['n:alex', 'Jarvis · masculina (neural)'], ['n:dora', 'Jarvis · feminina (neural)']];
+    let picked = null;
+    try { picked = localStorage.getItem('bx-voice'); } catch (e) { }
     const loadVoices = () => {
       const all = ok ? synth.getVoices().filter((v) => /^pt/i.test(v.lang)) : [];
       const score = (v) => (MALE.test(v.name) ? 100 : FEMALE.test(v.name) ? 0 : 40) + (/natural|neural|online|premium|enhanced/i.test(v.name) ? 20 : 0) + (/pt[-_]BR/i.test(v.lang) ? 10 : 0);
@@ -1496,7 +1498,9 @@
         voiceSel.append(new Option('Aparelho · ' + v.name.replace(/Microsoft |Google |\(.*?\)| - .*$/g, '').trim() + tag, v.name));
       });
       if (!voiceSel.options.length) voiceSel.append(new Option('Voz padrão do aparelho', ''));
-      voiceSel.value = keep && [...voiceSel.options].some((o) => o.value === keep) ? keep : voiceSel.options[0].value;
+      // the recorded human voice (Alex/Dora) wins unless the user picked another one by hand
+      const has = (v) => v && [...voiceSel.options].some((o) => o.value === v);
+      voiceSel.value = has(picked) ? picked : voiceSel.options[0].value;
     };
     loadVoices();
     dash.onData(loadVoices);
@@ -2074,6 +2078,7 @@
     document.getElementById('bx-doc-listen').addEventListener('click', () => { root.classList.add('bx-awake'); startBriefing('dossie-completo'); });
     document.getElementById('bx-nav-jarvis').addEventListener('click', () => { document.getElementById('topo').scrollIntoView({ behavior: 'smooth', block: 'start' }); wake(); });
     voiceSel.addEventListener('change', () => {
+      picked = voiceSel.value; try { localStorage.setItem('bx-voice', picked); } catch (e) { }
       script.forEach((x) => x.segs.forEach((g) => { delete g.noNeural; }));
       const nn = neuralName(); if (nn) voiceData(nn);
       if (state === 'playing' || state === 'paused') { cut(); state = 'playing'; pi = 0; speakPhrase(); } else setUI();

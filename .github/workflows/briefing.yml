@@ -1,8 +1,14 @@
 name: Briefing diário
 
+# Modo sem API (atual): a tarefa agendada do claude.ai pesquisa e grava site/data/*.json aqui;
+# esse envio dispara este workflow, que só grava a voz e publica (grátis em repositório público).
+# Modo com API (futuro): crie o segredo ANTHROPIC_API_KEY e descomente o schedule abaixo.
 on:
-  schedule:
-    - cron: '20 8 * * 1-5'   # 05:20 em Brasília (UTC-3), segunda a sexta
+  push:
+    branches: [main]
+    paths: ['site/data/*.json']
+  # schedule:
+  #   - cron: '20 8 * * 1-5'   # 05:20 em Brasília (UTC-3), segunda a sexta
   workflow_dispatch:
     inputs:
       skip_generate:
@@ -23,6 +29,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      HAS_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -36,14 +44,15 @@ jobs:
           pip install -q anthropic jsonschema numpy sherpa-onnx soundfile espeakng-loader phonemizer-fork
 
       - name: Gerar dados do dia (Claude)
-        if: ${{ !inputs.skip_generate }}
+        id: gen
+        if: ${{ env.HAS_KEY == 'true' && github.event_name != 'push' && !inputs.skip_generate }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           DATA_DIR: site/data
         run: python3 gen/generate.py
 
       - name: Salvar os JSON do dia no repositório
-        if: ${{ !inputs.skip_generate }}
+        if: ${{ steps.gen.outcome == 'success' }}
         run: |
           git config user.name "briefing-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

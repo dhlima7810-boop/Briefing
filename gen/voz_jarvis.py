@@ -23,7 +23,7 @@ WEEKDAYS = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'se
 
 # words the Portuguese phonemizer would say wrong, spelled the way a Brazilian says them
 SAY = [
-    (r'\bbriefing\b', 'brífin'), (r'\bBriefing\b', 'Brífin'), (r'\bDheryck\b', 'Dérik'),
+    (r'\bbriefing\b', 'brífin'), (r'\bBriefing\b', 'Brífin'), (r'\bDheryck\b', 'Dérik'), (r'\bZyra\b', 'Záira'),
     (r'\bOpenAI\b', 'Ópen Ei Ai'), (r'\bChatGPT\b', 'Tchat G P T'), (r'\bGPT\b', 'G P T'),
     (r'\bDeepMind\b', 'Dip Maind'), (r'\bGoogle\b', 'Gúgou'), (r'\bGitHub\b', 'Guit Rãb'),
     (r'\bApple\b', 'Épou'), (r'\bAnthropic\b', 'Ântropic'), (r'\bClaude\b', 'Clód'),

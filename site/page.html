@@ -73,7 +73,7 @@
   .bx-orb::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, .7); opacity: 0; }
   .bx-nospeech .bx-voice-only { display: none !important; }
 
-  /* ---------- Jarvis console ---------- */
+  /* ---------- Zyra console ---------- */
   .bx-jv { min-width: 0; }
   .bx-console { min-width: 0; margin-top: 8px; border: 1px solid var(--hair); border-radius: 24px; padding: 16px 18px; background: rgba(10, 10, 14, .62); backdrop-filter: blur(8px); }
   .bx-hint { display: flex; align-items: center; gap: 12px; margin-top: 30px; font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 470px; }
@@ -379,7 +379,7 @@
   .bx-failed::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--saffron); }
 
   /* ---------- reading along ---------- */
-  /* while the briefing is read: what is still ahead stays dim; each block lights up when Jarvis reaches it and stays lit */
+  /* while the briefing is read: what is still ahead stays dim; each block lights up when Zyra reaches it and stays lit */
   .bx-step, .bx-seg, .bx-sec { transition: opacity .7s ease, box-shadow .7s ease, background-color .7s ease; }
   .bx.bx-reading .bx-sec:not(.bx-reached) { opacity: .22; }
   .bx.bx-reading .bx-seg:not(.bx-now):not(.bx-heard) { opacity: .3; }
@@ -423,9 +423,9 @@
   @keyframes bx-beat { 0%, 100% { box-shadow: 0 0 0 0 currentColor; } 50% { box-shadow: 0 0 0 5px transparent; } }
 
   @media (prefers-reduced-motion: no-preference) {
-    /* the background stays still: nothing on the page moves unless Jarvis is talking or the user touches it */
+    /* the background stays still: nothing on the page moves unless Zyra is talking or the user touches it */
     .bx-ticker-track { animation: bx-marquee 50s linear infinite; }
-    /* the rings pulse only while Jarvis talks */
+    /* the rings pulse only while Zyra talks */
     .bx.bx-speaking .bx-orb::after { animation: bx-ring 2.4s ease-out infinite; }
     .bx.bx-speaking .bx-big-orb::before { animation: bx-ring 1.1s ease-out infinite; }
     .bx.bx-speaking .bx-big-orb::after { animation: bx-ring 1.1s ease-out .55s infinite; }
@@ -463,7 +463,7 @@
         <button type="button" data-go="dossie">Dossiê</button>
         <button type="button" data-go="geopolitica">Geopolítica</button>
       </div>
-      <button type="button" class="bx-btn" id="bx-nav-jarvis"><span class="bx-orb"></span>Jarvis</button>
+      <button type="button" class="bx-btn" id="bx-nav-jarvis"><span class="bx-orb"></span>Zyra</button>
     </nav>
   </div>
 
@@ -479,18 +479,18 @@
           <p class="bx-eyebrow" id="bx-today">Briefing diário</p>
           <h1 class="bx-display">O estado do <span class="bx-rot" id="bx-rot">mundo</span>, antes do seu café.</h1>
           <p class="bx-lead">Clima, mercado, notícias, inteligência artificial, o dossiê de poder e a geopolítica financeira do dia, com o motivo por trás de cada número.</p>
-          <p class="bx-hint"><span class="bx-hint-dot"></span>Toque na constelação. O Jarvis te dá bom dia, lê o briefing e responde o que você perguntar.</p>
+          <p class="bx-hint"><span class="bx-hint-dot"></span>Toque na constelação. A Zyra te dá bom dia, lê o briefing e responde o que você perguntar.</p>
         </div>
         <div class="bx-jv">
-          <div class="bx-stage" id="bx-stage" role="button" tabindex="0" aria-label="Falar com o Jarvis">
+          <div class="bx-stage" id="bx-stage" role="button" tabindex="0" aria-label="Falar com a Zyra">
             <canvas id="bx-brain" aria-hidden="true"></canvas>
-            <p class="bx-stage-cta" id="bx-stage-cta">Toque para falar com o Jarvis</p>
+            <p class="bx-stage-cta" id="bx-stage-cta">Toque para falar com a Zyra</p>
           </div>
 
           <div class="bx-console" id="bx-console">
             <div class="bx-console-top">
               <div class="bx-con-text">
-                <p class="bx-con-name">Jarvis <span class="bx-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span></p>
+                <p class="bx-con-name">Zyra <span class="bx-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span></p>
                 <p class="bx-con-status" id="bx-con-status">Toque na constelação ou pergunte algo</p>
               </div>
               <div class="bx-con-ctrl">
@@ -503,7 +503,7 @@
             <div class="bx-chat" id="bx-chat" aria-live="polite"></div>
             <div class="bx-ask">
               <button type="button" class="bx-mic" id="bx-mic" aria-label="Falar"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2.5" width="6" height="10" rx="3" fill="currentColor"/><path d="M4.5 9.5a5.5 5.5 0 0 0 11 0M10 15v2.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></button>
-              <input type="text" id="bx-ask-input" placeholder="Pergunte ao Jarvis…" aria-label="Pergunte ao Jarvis" autocomplete="off">
+              <input type="text" id="bx-ask-input" placeholder="Pergunte à Zyra…" aria-label="Pergunte à Zyra" autocomplete="off">
               <button type="button" class="bx-send" id="bx-send" aria-label="Enviar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10 L17 3 L13 17 L10 11 Z" fill="currentColor"/></svg></button>
             </div>
             <div class="bx-sugg" id="bx-sugg"></div>
@@ -825,7 +825,7 @@
       requestAnimationFrame(frame);
       if (!built) { built = build(); if (!built) return; }
       energy += (target - energy) * 0.05;
-      const live = target > 1 || ptr.on || energy > 1.02; // idle = still picture, it only moves while Jarvis talks or listens
+      const live = target > 1 || ptr.on || energy > 1.02; // idle = still picture, it only moves while Zyra talks or listens
       if (live) t += 0.016;
       const pulse = 1 + (energy - 1) * 0.06 * Math.sin(t * 6);
       ctx.clearRect(0, 0, W, H);
@@ -954,7 +954,7 @@
 
   let dayIndex = 0;
   let wxAnimate = false;
-  // while Jarvis reads the weather, the card shows the day he is talking about ("hoje", "sábado"…)
+  // while Zyra reads the weather, the card shows the day she is talking about ("hoje", "sábado"…)
   const dayInSpeech = (text) => {
     const r = dash.data('weather_r'); if (r.status !== 'ok') return -1;
     const t = ' ' + String(text || '').toLowerCase() + ' ';
@@ -1467,7 +1467,7 @@
     setAiTab(aiTab);
   };
 
-  /* ================= Jarvis: the constellation you talk to ================= */
+  /* ================= Zyra: the constellation you talk to ================= */
   const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9%$., ]+/g, ' ').replace(/\s+/g, ' ').trim();
   const jarvis = (() => {
     const synth = window.speechSynthesis;
@@ -1482,7 +1482,7 @@
     const FEMALE = /(luciana|francisca|brenda|elza|giovanna|leila|leticia|letícia|manuela|yara|thalita|maria|raquel|fernanda|vitoria|vitória|joana|catarina|female|femin|google português)/i;
     let voices = [];
     const AC = window.AudioContext || window.webkitAudioContext;
-    const NEURAL_VOICES = [['n:alex', 'Jarvis · masculina (neural)'], ['n:dora', 'Jarvis · feminina (neural)']];
+    const NEURAL_VOICES = [['n:dora', 'Zyra · feminina (neural)'], ['n:alex', 'Zyra · masculina (neural)']];
     let picked = null;
     try { picked = localStorage.getItem('bx-voice'); } catch (e) { }
     const loadVoices = () => {
@@ -1978,7 +1978,7 @@
       if (/^(pausa|pause|espera|aguarda)\b/.test(n)) return { act: 'pause' };
       if (/^(continu|retoma|segue|prossig|pode continuar|volta)/.test(n)) return { act: 'resume' };
       if (/^(proxim|pula|avanca)/.test(n)) return { act: 'next' };
-      if (/^(bom dia|boa tarde|boa noite|ola|oi|e ai|fala jarvis|jarvis|hey|opa)\b/.test(n) || /(briefing|comec|me atualiza|o que (aconteceu|ta rolando|esta acontecendo)|resumo do dia|le tudo|ler tudo)/.test(n)) return { act: 'briefing' };
+      if (/^(bom dia|boa tarde|boa noite|ola|oi|e ai|fala zyra|zyra|fala jarvis|jarvis|hey|opa)\b/.test(n) || /(briefing|comec|me atualiza|o que (aconteceu|ta rolando|esta acontecendo)|resumo do dia|le tudo|ler tudo)/.test(n)) return { act: 'briefing' };
       if (/(dossie completo|capitulo)/.test(n)) return { act: 'from', from: 'dossie-completo' };
       if (/(clima|tempo|chov|chuva|temperatura|calor|frio|guarda chuva|previsao|graus)/.test(n)) return weatherAnswer(n);
       const mk = marketAnswer(n); if (mk) return mk;
@@ -1999,7 +1999,7 @@
     (async () => { try { if (window.claude && typeof window.claude.use === 'function') mind = await window.claude.use('sample'); } catch (e) { mind = null; } })();
     const contextText = () => corpus().map((c) => '- ' + c.text).join('\n').slice(0, 14000);
     const askMind = async (raw) => {
-      const prompt = 'Você é o Jarvis, assistente pessoal do Dheryck. Fale em português do Brasil, direto e acolhedor, em no máximo 4 frases curtas, sem listas nem markdown. Responda só com base no briefing de hoje abaixo; se a resposta não estiver nele, diga isso em uma frase.\n\nBRIEFING DE HOJE:\n' + contextText() + '\n\nPERGUNTA: ' + raw;
+      const prompt = 'Você é a Zyra, assistente pessoal do Dheryck. Fale em português do Brasil, direto e acolhedor, em no máximo 4 frases curtas, sem listas nem markdown. Responda só com base no briefing de hoje abaixo; se a resposta não estiver nele, diga isso em uma frase.\n\nBRIEFING DE HOJE:\n' + contextText() + '\n\nPERGUNTA: ' + raw;
       const r = await mind(prompt, { cache: false, modelTier: 'quick' });
       return String(r && r.text || '').trim();
     };

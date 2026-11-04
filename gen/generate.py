@@ -69,7 +69,7 @@ RULES = """REGRAS DE PESQUISA
 - Tudo do dia: mercado = último fechamento disponível, com a data; notícias = últimas 24 a 48 horas. Fato antigo só como contexto e com a data.
 - Nada inventado. Dado não encontrado fica de fora. Gráfico só com pontos verificados.
 - Separe fato de interpretação. Sem previsões de preço e sem recomendação de investimento. Política com tom equilibrado.
-- Os textos serão lidos em voz alta pelo Jarvis: frases curtas (até 25 palavras), com vírgulas e pontos. Escreva em português do Brasil."""
+- Os textos serão lidos em voz alta pela Zyra: frases curtas (até 25 palavras), com vírgulas e pontos. Escreva em português do Brasil."""
 
 SPEC = {
     'market': 'market — 4 linhas, ids "usd", "ibov", "btc", "selic": id, label ("Dólar (USD/BRL)", "Ibovespa", "Bitcoin", "Selic"), value (texto formatado, ex.: "R$ 5,444", "167.921,80 pts", "US$ 78.404", "13,75% a.a."), delta (ex.: "+1,05%", "-0,75%", "estável"), trend ("up", "down" ou "flat"), note (uma frase com a data do fechamento), why (2 a 4 frases com o motivo do movimento), source.',

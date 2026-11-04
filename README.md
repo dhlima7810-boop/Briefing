@@ -1,6 +1,6 @@
 # Briefing Diário
 
-Painel pessoal com o resumo da manhã (clima em Guarulhos, mercado, notícias, IA, geopolítica) e narração em voz (Alex e Dora).
+Painel pessoal com o resumo da manhã (clima em Guarulhos, mercado, notícias, IA, geopolítica) e narração em voz da Zyra (Dora ou Alex).
 
 Site: **https://dhlima7810-boop.github.io/Briefing/**
 

@@ -157,8 +157,8 @@
   .bx-con-opts { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 12px; font-size: 12px; color: var(--dim); }
   .bx-con-opts label { display: inline-flex; align-items: center; gap: 8px; }
   .bx-con-opts select { background: #111; border: 1px solid var(--hair); border-radius: 10px; color: var(--text); font-size: 12px; padding: 5px 8px; max-width: 230px; }
-  .bx-wave { display: inline-flex; gap: 3px; align-items: center; height: 16px; margin-left: 4px; }
-  .bx-wave i { display: block; width: 3px; height: 4px; border-radius: 2px; background: var(--iris-soft); }
+  .bx-wave { display: inline-flex; gap: 3px; align-items: center; height: 16px; margin-left: 4px; vertical-align: middle; contain: layout; }
+  .bx-wave i { display: block; width: 3px; height: 16px; border-radius: 2px; background: var(--iris-soft); transform: scaleY(.25); }
 
   /* ---------- ticker ---------- */
   .bx-ticker { position: relative; z-index: 1; overflow: hidden; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); background: rgba(0, 0, 0, .35); }
@@ -419,7 +419,7 @@
   @keyframes bx-bolt { 0%, 91%, 100% { opacity: 0; } 92%, 96% { opacity: 1; } }
   @keyframes bx-glow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: .85; } }
   @keyframes bx-dash { to { stroke-dashoffset: -32; } }
-  @keyframes bx-bar { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+  @keyframes bx-bar { 0%, 100% { transform: scaleY(.25); } 50% { transform: scaleY(1); } } /* transform only: nothing around it moves */
   @keyframes bx-beat { 0%, 100% { box-shadow: 0 0 0 0 currentColor; } 50% { box-shadow: 0 0 0 5px transparent; } }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -954,6 +954,21 @@
 
   let dayIndex = 0;
   let wxAnimate = false;
+  // while Jarvis reads the weather, the card shows the day he is talking about ("hoje", "sábado"…)
+  const dayInSpeech = (text) => {
+    const r = dash.data('weather_r'); if (r.status !== 'ok') return -1;
+    const t = ' ' + String(text || '').toLowerCase() + ' ';
+    if (/\bhoje\b/.test(t)) return 0;
+    if (/\bamanh[ãa]\b/.test(t) && r.data.length > 1) return 1;
+    let best = -1, at = 1e9;
+    r.data.forEach((d, i) => {
+      const full = String(d.weekday || '').toLowerCase(); if (!full) return;
+      const k = Math.min(...[full, full.split('-')[0]].map((w) => { const m = t.search(new RegExp('(^|[^a-zà-ú])' + w + '([^a-zà-ú]|$)')); return m < 0 ? 1e9 : m; }));
+      if (k < at) { at = k; best = i; }
+    });
+    return best;
+  };
+  const showDay = (i) => { if (i < 0 || i === dayIndex) return false; dayIndex = i; wxAnimate = true; drawWeather(); return true; };
   const drawWeather = () => {
     const days = document.getElementById('bx-days');
     const wx = document.getElementById('bx-wx');
@@ -1740,12 +1755,16 @@
       pointEl = e || null;
       if (pointEl) { pointEl.classList.add('bx-point'); goPoint(pointEl); }
     };
-    const follow = (seg, text) => { const e = pointFor(seg, text); if (e) setPoint(e); };
+    const follow = (seg, text) => {
+      if (seg.el && seg.el.id === 'bx-wx' && showDay(dayInSpeech(text))) { setPoint(null); seg._pts = null; }
+      const e = pointFor(seg, text); if (e) setPoint(e);
+    };
     const sentencesOf = (text) => { const t = String(text || ''); const parts = t.match(/[^.!?]+[.!?]*\s*/g) || [t]; let at = 0; const tot = t.length || 1; return parts.map((p) => { const o = { at: at / tot, text: p }; at += p.length; return o; }); };
     let followRaf = 0;
     const trackNeural = (seg, src, buf) => {
       cancelAnimationFrame(followRaf);
       const marks = sentencesOf(seg.text); const t0 = N.ctx.currentTime; let k = 0; // the first sentence is the block itself
+      if (seg.el && seg.el.id === 'bx-wx' && marks[0]) follow(seg, marks[0].text);
       const tick = () => {
         if (N.src !== src) return;
         const pos = (N.ctx.currentTime - t0) * src.playbackRate.value / (buf.duration || 1);
@@ -1766,6 +1785,7 @@
       if (!seg || !seg.el) return;
       if (seg.el.dataset.aikind && seg.el.dataset.aikind !== aiTab) setAiTab(seg.el.dataset.aikind);
       if (seg.el.classList.contains('bx-hide')) seg.el.classList.remove('bx-hide');
+      if (seg.el.id === 'bx-wx' && seg.key === 'clima' && showDay(0)) seg._pts = null; // the weather reading starts on today
       seg.el.classList.add('bx-now');
       const sec = seg.el.closest('.bx-sec'); if (sec) sec.classList.add('bx-reached');
       const target = seg.el; requestAnimationFrame(() => goBlock(target)); // the screen goes to the block being read
@@ -1780,7 +1800,7 @@
       if (!ok) { voiceFail(); gi++; pi = 0; clearTimeout(timer); timer = setTimeout(speakPhrase, 400); return; }
       if (pi === 0) { list = phrases(seg.text); focusSeg(seg); setUI(); }
       const ph = list[pi];
-      if (ph && pi > 0) follow(seg, ph.text);
+      if (ph && (pi > 0 || (seg.el && seg.el.id === 'bx-wx'))) follow(seg, ph.text);
       if (!ph) { gi++; pi = 0; clearTimeout(timer); timer = setTimeout(speakPhrase, 650); return; }
       const my = ++token;
       const u = new SpeechSynthesisUtterance(ph.text);

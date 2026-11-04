@@ -1,0 +1,42 @@
+[
+ {
+  "id": "usd",
+  "label": "Dólar (USD/BRL)",
+  "value": "R$ 5,490",
+  "delta": "+1,01%",
+  "trend": "up",
+  "note": "Fechamento de terça-feira, 03/11/2026. Chegou a passar de R$ 5,50 no pregão.",
+  "why": "Investidores voltaram do feriado com dúvidas fiscais. Ainda não se sabe quem comandará a Fazenda no novo mandato de Lula. O Focus elevou a projeção de Selic para o fim de 2026.",
+  "source": "Gazeta Brasil; CNN Brasil"
+ },
+ {
+  "id": "ibov",
+  "label": "Ibovespa",
+  "value": "164.993 pts",
+  "delta": "-1,74%",
+  "trend": "down",
+  "note": "Fechamento de terça-feira, 03/11/2026. Sexta queda seguida.",
+  "why": "Pesaram as incertezas fiscais e a indefinição da equipe econômica. A queda do petróleo derrubou Petrobras e PRIO. A Cogna caiu 12,66% após rebaixamento do Citi.",
+  "source": "Gazeta Brasil; Brasil 61"
+ },
+ {
+  "id": "btc",
+  "label": "Bitcoin",
+  "value": "US$ 78.404",
+  "delta": "+2,5%",
+  "trend": "up",
+  "note": "Cotação de 04/11/2026 às 05h56, variação em 24 horas.",
+  "why": "O bitcoin caiu a US$ 75,7 mil durante a apuração nos EUA. Depois recuperou, com a definição do resultado. Os ETFs à vista tiveram o terceiro dia seguido de saídas.",
+  "source": "Bit Notícias"
+ },
+ {
+  "id": "selic",
+  "label": "Selic",
+  "value": "13,75% a.a.",
+  "delta": "estável",
+  "trend": "flat",
+  "note": "Taxa em vigor desde 16/09/2026. O Copom anuncia a decisão hoje, 04/11, à noite.",
+  "why": "O Copom termina hoje a reunião de dois dias. O Focus de outubro previa corte para 13,50%. A alta do dólar e as dúvidas fiscais tornaram o cenário mais incerto.",
+  "source": "Rankia; CNN Brasil"
+ }
+]

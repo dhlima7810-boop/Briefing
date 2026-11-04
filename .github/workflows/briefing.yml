@@ -1,0 +1,105 @@
+name: Briefing diário
+
+on:
+  schedule:
+    - cron: '20 8 * * 1-5'   # 05:20 em Brasília (UTC-3), segunda a sexta
+  workflow_dispatch:
+    inputs:
+      skip_generate:
+        description: 'Só republicar (não chama a API, usa os dados já salvos)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # gravar os JSON do dia de volta no repositório
+  pages: write
+  id-token: write
+
+concurrency:
+  group: briefing
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q anthropic jsonschema numpy sherpa-onnx soundfile espeakng-loader phonemizer-fork
+
+      - name: Gerar dados do dia (Claude)
+        if: ${{ !inputs.skip_generate }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DATA_DIR: site/data
+        run: python3 gen/generate.py
+
+      - name: Salvar os JSON do dia no repositório
+        if: ${{ !inputs.skip_generate }}
+        run: |
+          git config user.name "briefing-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data/*.json
+          git diff --cached --quiet || (git commit -q -m "Dados de $(TZ=America/Sao_Paulo date +%F)" && git push)
+
+      # Regra de ouro: nunca tocar o áudio de ontem com os dados de hoje.
+      # O áudio não vai para o repositório; ele é gerado agora, junto com os dados.
+      # Se a voz falhar, o site sai sem narração em vez de narração velha.
+      - name: Preparar sem narração (padrão seguro)
+        run: |
+          rm -rf site/data/audio
+          echo '[]' > site/data/narration.json
+
+      - name: Baixar o modelo de voz Kokoro (com cache)
+        id: kokoro
+        uses: actions/cache@v4
+        with:
+          path: kokoro-multi-lang-v1_0
+          key: kokoro-multi-lang-v1_0
+
+      - name: Descompactar o modelo
+        if: steps.kokoro.outputs.cache-hit != 'true'
+        run: |
+          curl -sSL -o k.tar.bz2 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2
+          tar xjf k.tar.bz2 && rm k.tar.bz2
+
+      - name: Narrar (Alex e Dora em paralelo)
+        id: voz
+        continue-on-error: true
+        env:
+          VOZ_FILES: '1'
+          VOZ_THREADS: '2'
+        run: |
+          mkdir -p /tmp/voz
+          VOZ_ONLY=alex python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & a=$!
+          VOZ_ONLY=dora python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & d=$!
+          wait $a && wait $d
+          mv /tmp/voz/audio site/data/audio
+          cp /tmp/voz/narration.json site/data/narration.json
+
+      - name: Aviso se a voz falhou
+        if: steps.voz.outcome == 'failure'
+        run: echo "::warning::A narração falhou; o site sai hoje sem voz (dados normais)."
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

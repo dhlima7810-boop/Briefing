@@ -1,0 +1,2092 @@
+<link rel="stylesheet" href="fonts.css">
+<style>
+  #dash-root { --dash-gutter: 0; }
+
+  .bx {
+    --void: #000000;
+    --bone: #ffffff;
+    --text: #e4e4e6;
+    --muted: #a6a6ab;
+    --dim: #6e6e74;
+    --iris: #8052ff;
+    --iris-soft: #a98bff;
+    --saffron: #ffb829;
+    --verdant: #15846e;
+    --mint: #34c9a3;
+    --sky: #5fb8ff;
+    --rose: #ff7ac9;
+    --hair: rgba(255, 255, 255, 0.1);
+    --sans: "BX Inter", Inter, var(--font-anthropic-sans, system-ui), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --serif: var(--font-anthropic-serif, Georgia), Georgia, "Times New Roman", serif;
+    position: relative;
+    overflow: hidden;
+    background: var(--void);
+    color: var(--text);
+    font-family: var(--sans);
+    font-feature-settings: "ss01" on, "cv11" on;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    isolation: isolate;
+  }
+  .bx *, .bx *::before, .bx *::after { box-sizing: border-box; }
+  :where(.bx) :where(p, h1, h2, h3, h4, ol, ul) { margin: 0; padding: 0; }
+  .bx button, .bx select { font-family: inherit; color: inherit; }
+  .bx-num { font-family: var(--serif); font-weight: 400; font-variant-numeric: lining-nums tabular-nums; }
+
+  /* ---------- living background ---------- */
+  .bx-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .bx-spark { position: absolute; display: block; width: var(--s, 10px); height: var(--s, 10px); opacity: var(--o, .4); }
+  .bx-spark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .bx-aura { position: absolute; inset: -10% -20%; z-index: 0; pointer-events: none; transition: opacity 1.2s ease; opacity: .8; }
+  .bx-blob {
+    position: absolute; width: var(--w, 720px); height: var(--w, 720px); left: var(--x, 0); top: var(--y, 0);
+    border-radius: 50%; mix-blend-mode: screen; opacity: var(--a, .28);
+    background: radial-gradient(circle at center, var(--c, #8052ff) 0%, transparent 62%);
+    transition: background 1.6s ease, opacity 1.2s ease;
+  }
+  .bx-sec.bx-live .bx-aura, .bx-hero.bx-live .bx-aura { opacity: 1; }
+
+  .bx-wrap { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+
+  /* ---------- nav ---------- */
+  .bx-nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-top: 24px; padding-bottom: 24px; }
+  .bx-logo { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--bone); white-space: nowrap; }
+  .bx-logo svg { width: 18px; height: 18px; }
+  .bx-links { display: flex; gap: 26px; }
+  .bx-links button { background: none; border: 0; padding: 4px 0; cursor: pointer; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); transition: color .2s ease; }
+  .bx-links button:hover, .bx-links button:focus-visible { color: var(--bone); outline: none; }
+  @media (max-width: 900px) { .bx-links { display: none; } }
+
+  /* ---------- buttons ---------- */
+  .bx-btn {
+    display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer;
+    background: var(--iris); color: var(--bone);
+    font-size: 13px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    padding: 14px 20px; border-radius: 24px; white-space: nowrap;
+    transition: transform .2s ease, box-shadow .3s ease, background .2s ease;
+  }
+  .bx-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 34px rgba(128, 82, 255, .45); }
+  .bx-btn:focus-visible, .bx-icon:focus-visible { outline: 2px solid var(--saffron); outline-offset: 3px; }
+  .bx-ghost { background: none; border: 0; cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 12px 4px; transition: color .2s ease; }
+  .bx-ghost:hover { color: var(--bone); }
+  .bx-orb { position: relative; width: 12px; height: 12px; border-radius: 50%; background: var(--bone); flex: 0 0 auto; }
+  .bx-orb::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, .7); opacity: 0; }
+  .bx-nospeech .bx-voice-only { display: none !important; }
+
+  /* ---------- Jarvis console ---------- */
+  .bx-jv { min-width: 0; }
+  .bx-console { min-width: 0; margin-top: 8px; border: 1px solid var(--hair); border-radius: 24px; padding: 16px 18px; background: rgba(10, 10, 14, .62); backdrop-filter: blur(8px); }
+  .bx-hint { display: flex; align-items: center; gap: 12px; margin-top: 30px; font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 470px; }
+  .bx-hint-dot { flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: var(--iris); box-shadow: 0 0 0 0 rgba(128, 82, 255, .6); }
+  .bx-stage { cursor: pointer; border-radius: 24px; outline: none; }
+  .bx-stage:focus-visible { box-shadow: 0 0 0 2px var(--saffron); }
+  .bx-stage-cta { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 10px 18px; border-radius: 9999px; background: rgba(0, 0, 0, .55); border: 1px solid rgba(169, 139, 255, .45); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--bone); white-space: nowrap; pointer-events: none; transition: opacity .4s ease; backdrop-filter: blur(4px); }
+  .bx.bx-awake .bx-stage-cta { opacity: 0; }
+  .bx-chat { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; margin-top: 12px; scroll-behavior: smooth; }
+  .bx-chat:empty { display: none; }
+  .bx-msg { font-size: 14px; line-height: 1.5; padding: 9px 13px; border-radius: 16px; max-width: 92%; animation: bx-rise .35s cubic-bezier(.2, .7, .2, 1); }
+  .bx-msg.you { align-self: flex-end; background: rgba(255, 255, 255, .09); color: var(--bone); border-bottom-right-radius: 6px; }
+  .bx-msg.jv { align-self: flex-start; background: rgba(128, 82, 255, .16); color: var(--text); border-bottom-left-radius: 6px; }
+  .bx-msg.jv b { color: var(--bone); font-weight: 600; }
+  .bx-ask { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+  .bx-ask input { flex: 1 1 auto; min-width: 0; background: #0d0d11; border: 1px solid var(--hair); border-radius: 24px; padding: 11px 16px; color: var(--bone); font-size: 15px; font-family: inherit; outline: none; transition: border-color .2s ease; }
+  .bx-ask input:focus { border-color: rgba(169, 139, 255, .6); }
+  .bx-mic, .bx-send { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--hair); background: none; cursor: pointer; display: grid; place-items: center; color: var(--text); transition: all .2s ease; }
+  .bx-mic svg, .bx-send svg { width: 18px; height: 18px; }
+  .bx-send { background: var(--iris); border-color: var(--iris); color: #fff; }
+  .bx-mic:hover, .bx-send:hover { transform: translateY(-1px); }
+  .bx-mic.on { background: var(--saffron); border-color: var(--saffron); color: #000; }
+  .bx-nomic .bx-mic { display: none; }
+  .bx-sugg { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .bx-sugg button { border: 1px solid var(--hair); background: none; border-radius: 9999px; padding: 6px 12px; cursor: pointer; font-size: 12px; color: var(--muted); transition: all .2s ease; }
+  .bx-sugg button:hover { color: var(--bone); border-color: rgba(255, 255, 255, .3); }
+
+  /* ---------- AI: headlines and behind the scenes ---------- */
+  .bx-ai-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+  .bx-ai-tab { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--hair); background: none; border-radius: 9999px; padding: 10px 18px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); transition: all .2s ease; }
+  .bx-ai-tab .c { font-size: 12px; color: inherit; opacity: .7; }
+  .bx-ai-tab:hover { color: var(--bone); border-color: rgba(255, 255, 255, .3); }
+  .bx-ai-tab[aria-selected="true"] { background: var(--bone); color: #000; border-color: var(--bone); }
+  .bx-ai-tab[data-k="Bastidores"][aria-selected="true"] { background: var(--saffron); border-color: var(--saffron); }
+  .bx-ai-note { font-size: 13px; color: var(--dim); margin: -18px 0 26px; }
+  .bx-ai-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); column-gap: 52px; }
+  .bx-ai { position: relative; border-top: 1px solid var(--hair); padding: 24px 0 26px; cursor: pointer; }
+  .bx-ai.bx-hide { display: none; }
+  .bx-ai.bx-pop { animation: bx-rise .45s cubic-bezier(.2, .7, .2, 1) backwards; }
+  .bx-ai::before { content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 0; background: var(--iris); transition: width .6s cubic-bezier(.2, .7, .2, 1); }
+  .bx-ai[data-aikind="Bastidores"]::before { background: var(--saffron); }
+  .bx-ai:hover::before, .bx-ai.bx-open::before { width: 100%; }
+  .bx-ai-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .bx-badge { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; border-radius: 9999px; padding: 4px 10px; border: 1px solid currentColor; }
+  .bx-badge.ok { color: var(--mint); }
+  .bx-badge.rep { color: var(--saffron); }
+  .bx-badge.dis { color: var(--rose); }
+  .bx-ai-actor { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .bx-ai-date { margin-left: auto; font-size: 12px; color: var(--dim); }
+  .bx-ai-head { font-size: clamp(20px, 2vw, 25px); font-weight: 500; line-height: 1.25; letter-spacing: -0.02em; color: var(--bone); margin-bottom: 10px; transition: filter .5s ease, opacity .5s ease; }
+  .bx-ai-sum { font-size: 16px; line-height: 1.55; color: var(--text); }
+  .bx-ai.bx-secret .bx-ai-head, .bx-ai.bx-secret .bx-ai-sum { filter: blur(7px); opacity: .7; user-select: none; }
+  .bx-ai.bx-secret:hover .bx-ai-head, .bx-ai.bx-secret:hover .bx-ai-sum, .bx-ai.bx-secret.bx-now .bx-ai-head, .bx-ai.bx-secret.bx-now .bx-ai-sum { filter: blur(0); opacity: 1; }
+  .bx-reveal-tag { display: none; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--saffron); margin-bottom: 8px; }
+  .bx-ai.bx-secret .bx-reveal-tag { display: block; }
+  .bx-ai-body { padding-top: 16px; }
+  .bx-ai-body p { font-size: 16px; line-height: 1.6; color: var(--text); max-width: 640px; }
+  .bx-apply { margin-top: 14px; border-left: 2px solid var(--iris); padding: 4px 0 4px 14px; }
+  .bx-ai[data-aikind="Bastidores"] .bx-apply { border-left-color: var(--saffron); }
+  .bx-apply .bx-k { margin-bottom: 4px; }
+  .bx-ai-src { margin-top: 12px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+  .bx-ai-src a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .bx-console-top { display: flex; align-items: center; gap: 16px; }
+  .bx-big-orb {
+    position: relative; width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer; flex: 0 0 auto;
+    background: radial-gradient(circle at 35% 30%, #b9a2ff 0%, #8052ff 45%, #3a1f9e 100%);
+    box-shadow: 0 0 0 0 rgba(128, 82, 255, .5);
+    display: grid; place-items: center;
+  }
+  .bx-big-orb svg { width: 20px; height: 20px; }
+  .bx-big-orb::before, .bx-big-orb::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1.5px solid rgba(169, 139, 255, .6); opacity: 0; }
+  .bx-con-text { flex: 1 1 auto; min-width: 0; }
+  .bx-con-name { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 4px; }
+  .bx-con-status { font-size: 16px; color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bx-con-ctrl { display: flex; gap: 6px; }
+  .bx-icon { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--hair); background: none; cursor: pointer; display: grid; place-items: center; color: var(--muted); transition: color .2s ease, border-color .2s ease; }
+  .bx-icon:hover { color: var(--bone); border-color: rgba(255, 255, 255, .3); }
+  .bx-icon svg { width: 14px; height: 14px; }
+  .bx-con-bar { margin-top: 14px; height: 3px; border-radius: 3px; background: var(--hair); overflow: hidden; }
+  .bx-con-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--iris), var(--saffron)); transition: width .6s ease; }
+  .bx-con-opts { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 12px; font-size: 12px; color: var(--dim); }
+  .bx-con-opts label { display: inline-flex; align-items: center; gap: 8px; }
+  .bx-con-opts select { background: #111; border: 1px solid var(--hair); border-radius: 10px; color: var(--text); font-size: 12px; padding: 5px 8px; max-width: 230px; }
+  .bx-wave { display: inline-flex; gap: 3px; align-items: center; height: 16px; margin-left: 4px; }
+  .bx-wave i { display: block; width: 3px; height: 4px; border-radius: 2px; background: var(--iris-soft); }
+
+  /* ---------- ticker ---------- */
+  .bx-ticker { position: relative; z-index: 1; overflow: hidden; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); background: rgba(0, 0, 0, .35); }
+  .bx-ticker-track { display: flex; width: max-content; }
+  .bx-tick { display: inline-flex; align-items: baseline; gap: 12px; padding: 14px 34px; white-space: nowrap; }
+  .bx-tick .k { font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-size: 11px; }
+  .bx-tick .v { color: var(--bone); font-size: 17px; }
+  .bx-tick .d { font-weight: 600; font-size: 13px; }
+  .bx-ticker:hover .bx-ticker-track { animation-play-state: paused; }
+  .bx-up { color: var(--mint); }
+  .bx-down { color: var(--saffron); }
+  .bx-flat { color: var(--muted); }
+
+  /* ---------- hero ---------- */
+  .bx-hero { position: relative; }
+  .bx-hero-in { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 24px; align-items: center; padding-top: 56px; padding-bottom: 80px; }
+  .bx-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 24px; }
+  .bx-display { font-weight: 500; font-size: clamp(48px, 7.4vw, 104px); line-height: 1.0; letter-spacing: -0.045em; color: var(--bone); margin-bottom: 28px; }
+  .bx-rot { display: inline-block; color: var(--saffron); }
+  .bx-rot.bx-swap { animation: bx-swap .6s cubic-bezier(.2, .7, .2, 1); }
+  .bx-lead { font-size: 18px; line-height: 1.55; color: var(--text); max-width: 500px; }
+  .bx-stage { position: relative; height: clamp(320px, 40vw, 540px); }
+  .bx-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+  .bx-stage-cap { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); pointer-events: none; }
+  @media (max-width: 900px) {
+    .bx-hero-in { grid-template-columns: minmax(0, 1fr); padding-top: 24px; padding-bottom: 56px; }
+    .bx-stage { height: 280px; order: -1; }
+  }
+
+  /* ---------- sections ---------- */
+  .bx-sec { position: relative; padding: 120px 0 30px; scroll-margin-top: 20px; }
+  .bx-label { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+  .bx-label .n { color: var(--iris-soft); }
+  .bx-label::after { content: ""; flex: 0 0 60px; height: 1px; background: currentColor; opacity: .35; }
+  .bx-h2 { font-weight: 500; font-size: clamp(40px, 5.4vw, 76px); line-height: 1.03; letter-spacing: -0.045em; color: var(--bone); margin-bottom: 18px; }
+  .bx-sub { font-size: 18px; line-height: 1.55; color: var(--muted); max-width: 600px; margin-bottom: 56px; }
+  .bx-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 60px; align-items: start; }
+  @media (max-width: 900px) { .bx-cols { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
+
+  /* ---------- weather ---------- */
+  .bx-days { display: flex; flex-direction: column; }
+  .bx-day {
+    display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 14px;
+    width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--hair);
+    padding: 15px 0; cursor: pointer; color: var(--muted); font-size: 22px; font-weight: 500; letter-spacing: -0.02em;
+    transition: color .2s ease, padding-left .3s ease;
+  }
+  .bx-day svg { width: 26px; height: 26px; opacity: .65; transition: opacity .2s ease, transform .3s ease; }
+  .bx-day .t { font-size: 15px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+  .bx-day:hover { color: var(--bone); padding-left: 6px; }
+  .bx-day:hover svg { opacity: 1; transform: scale(1.1); }
+  .bx-day[aria-selected="true"] { color: var(--bone); padding-left: 8px; }
+  .bx-day[aria-selected="true"] svg { opacity: 1; }
+  .bx-day[aria-selected="true"] .t { color: var(--bone); }
+  .bx-day:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
+  .bx-wx { min-height: 560px; }
+  .bx-wx-in { animation: bx-rise .55s cubic-bezier(.2, .7, .2, 1); }
+
+  .bx-scene { position: relative; height: 210px; border-radius: 24px; overflow: hidden; margin-bottom: 26px; border: 1px solid var(--hair); background: linear-gradient(180deg, var(--sky1, #0a1430), var(--sky2, #04060c)); transition: background 1s ease; }
+  .bx-scene[data-kind="sun"] { --sky1: #2a1a05; --sky2: #0a0603; }
+  .bx-scene[data-kind="partly"] { --sky1: #14213d; --sky2: #05070d; }
+  .bx-scene[data-kind="cloudy"] { --sky1: #171a24; --sky2: #07080b; }
+  .bx-scene[data-kind="rain"] { --sky1: #0c1830; --sky2: #03060c; }
+  .bx-scene[data-kind="storm"] { --sky1: #120d26; --sky2: #020205; }
+  .bx-sun { position: absolute; width: 96px; height: 96px; left: 62%; top: 34px; border-radius: 50%; background: radial-gradient(circle, #ffd56b 0%, #ffb829 55%, rgba(255, 184, 41, 0) 72%); }
+  .bx-rays { position: absolute; inset: -46px; }
+  .bx-rays i { position: absolute; left: 50%; top: 50%; width: 2px; height: 26px; margin-left: -1px; margin-top: -94px; background: linear-gradient(#ffb829, transparent); transform-origin: 1px 94px; border-radius: 2px; opacity: .8; }
+  .bx-cloud { position: absolute; left: var(--cx, 10%); top: var(--cy, 30px); width: var(--cw, 150px); opacity: var(--co, .9); }
+  .bx-cloud svg { display: block; width: 100%; height: auto; }
+  .bx-drop { position: absolute; top: -20px; width: 1.5px; height: var(--h, 16px); left: var(--l, 50%); background: linear-gradient(transparent, rgba(160, 200, 255, .85)); border-radius: 2px; }
+  .bx-flash { position: absolute; inset: 0; background: rgba(200, 190, 255, .0); pointer-events: none; }
+  .bx-bolt { position: absolute; left: 38%; top: 58px; width: 34px; opacity: 0; }
+  .bx-scene-tag { position: absolute; left: 18px; bottom: 14px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255, 255, 255, .75); }
+
+  .bx-wx-when { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .bx-wx-num { font-size: clamp(78px, 10vw, 132px); line-height: .95; letter-spacing: -0.04em; color: var(--bone); }
+  .bx-wx-num .lo { font-size: .36em; color: var(--muted); letter-spacing: -0.02em; }
+  .bx-wx-cond { font-size: 26px; font-weight: 500; letter-spacing: -0.02em; color: var(--iris-soft); margin: 12px 0 20px; }
+  .bx-rain { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+  .bx-rain .bar { flex: 1 1 auto; max-width: 260px; height: 4px; border-radius: 4px; background: var(--hair); overflow: hidden; }
+  .bx-rain .fill { height: 100%; width: 0; background: var(--sky); border-radius: 4px; transition: width .9s cubic-bezier(.2, .7, .2, 1); }
+  .bx-rain .pct { color: var(--sky); font-weight: 600; }
+  .bx-wx-tip { font-size: 18px; line-height: 1.55; color: var(--text); max-width: 540px; }
+  .bx-wxchart { position: relative; margin-top: 40px; min-height: 150px; }
+
+  /* ---------- market ---------- */
+  .bx-mkt { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); column-gap: 60px; }
+  .bx-m { position: relative; border-top: 1px solid var(--hair); padding: 26px 0 28px; cursor: pointer; }
+  .bx-m::before { content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 0; background: var(--iris); transition: width .6s cubic-bezier(.2, .7, .2, 1); }
+  .bx-m:hover::before, .bx-m.bx-open::before { width: 100%; }
+  .bx-m-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .bx-m-label { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .bx-m-val { font-size: clamp(38px, 4.6vw, 58px); line-height: 1; letter-spacing: -0.02em; color: var(--bone); }
+  .bx-m-delta { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; white-space: nowrap; padding-bottom: 6px; }
+  .bx-pulse { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .bx-m-note { font-size: 15px; color: var(--muted); margin-top: 12px; }
+  .bx-spark-line { margin-top: 14px; height: 46px; }
+  .bx-spark-line svg { display: block; width: 100%; height: 46px; overflow: visible; }
+  .bx-more { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; background: none; border: 0; padding: 0; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--iris-soft); }
+  .bx-more .chev, .bx-acc-head .chev { display: inline-block; transition: transform .35s ease, color .3s ease; }
+  .bx-open .bx-more .chev, .bx-open > .bx-acc-head .chev { transform: rotate(180deg); }
+  .bx-acc-body { max-height: 0; overflow: hidden; transition: max-height .6s cubic-bezier(.2, .7, .2, 1); }
+  .bx-open > .bx-acc-body, .bx-open .bx-m-why { max-height: 900px; }
+  .bx-m-why p { font-size: 17px; line-height: 1.6; color: var(--text); padding-top: 14px; max-width: 640px; }
+
+  /* ---------- news ---------- */
+  .bx-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .bx-chip { border: 1px solid var(--hair); background: none; border-radius: 9999px; padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); transition: all .2s ease; }
+  .bx-chip:hover { color: var(--bone); border-color: rgba(255, 255, 255, .3); }
+  .bx-chip[aria-pressed="true"] { background: var(--bone); color: #000; border-color: var(--bone); }
+  .bx-news { border-bottom: 1px solid var(--hair); }
+  .bx-n { border-top: 1px solid var(--hair); }
+  .bx-n.bx-hide { display: none; }
+  .bx-n.bx-pop { animation: bx-rise .45s cubic-bezier(.2, .7, .2, 1); }
+  .bx-acc-head { display: grid; grid-template-columns: 64px minmax(0, 1fr) 24px; gap: 18px; align-items: baseline; width: 100%; background: none; border: 0; padding: 28px 0; text-align: left; cursor: pointer; }
+  .bx-acc-head:focus-visible { outline: 2px solid var(--saffron); outline-offset: 2px; }
+  .bx-n-idx { font-size: 28px; color: var(--dim); transition: color .3s ease; }
+  .bx-n:hover .bx-n-idx, .bx-open .bx-n-idx { color: var(--iris-soft); }
+  .bx-n-tag { display: block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 8px; }
+  .bx-n-head { display: block; font-size: clamp(22px, 2.4vw, 30px); font-weight: 500; line-height: 1.22; letter-spacing: -0.025em; color: var(--bone); transition: transform .3s ease; }
+  .bx-n:hover .bx-n-head { transform: translateX(6px); }
+  .bx-acc-head .chev { color: var(--dim); font-size: 16px; }
+  .bx-open > .bx-acc-head .chev { color: var(--iris-soft); }
+  .bx-n-body { padding: 0 0 30px 82px; }
+  .bx-n-sum { font-size: 18px; line-height: 1.55; color: var(--bone); max-width: 720px; margin-bottom: 22px; }
+  .bx-n-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 940px; margin-bottom: 18px; }
+  .bx-k { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--iris-soft); margin-bottom: 8px; }
+  .bx-v { font-size: 16px; line-height: 1.6; color: var(--text); }
+  .bx-meta { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+  @media (max-width: 760px) {
+    .bx-acc-head { grid-template-columns: 40px minmax(0, 1fr) 20px; gap: 12px; }
+    .bx-n-body { padding-left: 52px; }
+    .bx-n-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* ---------- dossier blocks ---------- */
+  .bx-dos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 48px; }
+  .bx-blk { border-top: 2px solid var(--c, var(--iris)); padding-top: 24px; }
+  .bx-blk-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--c, var(--iris)); margin-bottom: 14px; }
+  .bx-blk-label .country { color: var(--muted); }
+  .bx-blk-title { font-size: 26px; line-height: 1.15; letter-spacing: -0.025em; font-weight: 500; color: var(--bone); margin-bottom: 14px; }
+  .bx-blk-sum { font-size: 16px; line-height: 1.55; color: var(--text); margin-bottom: 26px; }
+  .bx-ev { position: relative; padding-left: 24px; }
+  .bx-ev::before { content: ""; position: absolute; left: 3px; top: 0; bottom: 0; width: 1px; background: var(--hair); }
+  .bx-e { position: relative; padding: 0 0 18px; }
+  .bx-e-head { display: block; width: 100%; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; }
+  .bx-e-head::before { content: ""; position: absolute; left: -24px; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--c, var(--iris)); transition: box-shadow .3s ease; }
+  .bx-e:hover .bx-e-head::before, .bx-e.bx-open .bx-e-head::before { box-shadow: 0 0 0 5px rgba(128, 82, 255, .25); }
+  .bx-e-date { display: block; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin-bottom: 4px; }
+  .bx-e-text { display: block; font-size: 16px; line-height: 1.45; color: var(--bone); }
+  .bx-e .bx-acc-body p { font-size: 15px; line-height: 1.6; color: var(--text); padding-top: 8px; }
+
+  /* ---------- full dossier (a document) ---------- */
+  .bx-doc { position: relative; margin-top: 110px; border: 1px solid var(--hair); border-radius: 24px; background: rgba(8, 8, 11, .72); overflow: hidden; }
+  .bx-doc-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; padding: 38px clamp(20px, 4vw, 56px) 30px; border-bottom: 1px solid var(--hair); }
+  .bx-doc-stamp { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--saffron); border: 1px solid rgba(255, 184, 41, .5); border-radius: 6px; padding: 4px 8px; margin-bottom: 16px; }
+  .bx-doc-title { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4vw, 52px); line-height: 1.08; letter-spacing: -0.02em; color: var(--bone); }
+  .bx-doc-meta { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .bx-doc-body { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 48px; padding: 36px clamp(20px, 4vw, 56px) 50px; }
+  .bx-toc { display: flex; flex-direction: column; gap: 2px; align-self: start; }
+  .bx-toc button { display: grid; grid-template-columns: 28px 1fr; gap: 8px; text-align: left; background: none; border: 0; padding: 10px 0; cursor: pointer; color: var(--muted); font-size: 14px; line-height: 1.35; border-bottom: 1px solid var(--hair); transition: color .2s ease; }
+  .bx-toc button span:first-child { color: var(--dim); font-variant-numeric: tabular-nums; }
+  .bx-toc button:hover, .bx-toc button.on { color: var(--bone); }
+  .bx-toc button.on span:first-child { color: var(--saffron); }
+  .bx-ch { padding: 6px 0 34px; scroll-margin-top: 30px; }
+  .bx-ch + .bx-ch { border-top: 1px solid var(--hair); padding-top: 34px; }
+  .bx-ch-sec { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--iris-soft); margin-bottom: 10px; }
+  .bx-ch-title { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.2; color: var(--bone); margin-bottom: 14px; }
+  .bx-ch-body { font-family: var(--serif); font-size: 19px; line-height: 1.7; color: #dcdcdf; max-width: 720px; }
+  .bx-ch:first-child .bx-ch-body::first-letter { float: left; font-size: 3.3em; line-height: .9; padding: 6px 10px 0 0; color: var(--saffron); }
+  @media (max-width: 860px) { .bx-doc-body { grid-template-columns: minmax(0, 1fr); gap: 24px; } .bx-toc { display: none; } }
+
+  /* ---------- geopolitics ---------- */
+  .bx-geo-intro { font-size: clamp(20px, 2vw, 26px); line-height: 1.45; color: var(--bone); max-width: 800px; margin-bottom: 56px; }
+  .bx-chartbox { position: relative; min-height: 340px; }
+  .bx-chart-title { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .bx-chart-title .t { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .bx-chart-title .h { font-size: 12px; color: var(--dim); }
+  .bx-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .bx-chart .pt { cursor: pointer; }
+  .bx-note { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; margin-top: 18px; min-height: 64px; }
+  .bx-note .big { font-size: 38px; color: var(--bone); }
+  .bx-note .lab { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); }
+  .bx-note .txt { grid-column: 1 / -1; font-size: 17px; line-height: 1.55; color: var(--text); max-width: 760px; }
+  .bx-tip { position: absolute; pointer-events: none; z-index: 3; background: #0d0d10; border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px; padding: 10px 12px; font-size: 13px; color: var(--bone); opacity: 0; transform: translateY(4px); transition: opacity .15s ease, transform .15s ease; white-space: nowrap; }
+  .bx-tip.on { opacity: 1; transform: none; }
+  .bx-tip .d { color: var(--muted); font-size: 12px; margin-bottom: 2px; }
+  .bx-points { margin-top: 70px; border-bottom: 1px solid var(--hair); }
+  .bx-p { border-top: 1px solid var(--hair); }
+  .bx-p .bx-acc-head { grid-template-columns: minmax(0, 1fr) 24px; }
+  .bx-p-head { font-size: clamp(20px, 2vw, 27px); font-weight: 500; letter-spacing: -0.02em; color: var(--bone); }
+  .bx-p .bx-acc-body p { font-size: 17px; line-height: 1.6; color: var(--text); max-width: 780px; padding-bottom: 28px; }
+
+  /* ---------- forces map + reading of the day ---------- */
+  .bx-forces { margin-top: 110px; }
+  .bx-forces-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 50px; align-items: start; }
+  @media (max-width: 960px) { .bx-forces-grid { grid-template-columns: minmax(0, 1fr); } }
+  .bx-fmap { position: relative; min-height: 360px; }
+  .bx-fmap svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .bx-fmap .node { cursor: pointer; }
+  .bx-fmap .link { fill: none; stroke-linecap: round; transition: opacity .35s ease, stroke-width .35s ease; }
+  .bx-fside h3 { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 8px; }
+  .bx-fside .front { font-size: 30px; font-weight: 500; letter-spacing: -0.03em; color: var(--bone); margin-bottom: 20px; }
+  .bx-fitem { border-top: 1px solid var(--hair); padding: 16px 0; animation: bx-rise .45s cubic-bezier(.2, .7, .2, 1) both; }
+  .bx-fitem .a { display: flex; justify-content: space-between; gap: 12px; font-size: 16px; font-weight: 600; color: var(--bone); margin-bottom: 6px; }
+  .bx-fitem .e { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+  .bx-fitem p { font-size: 15px; line-height: 1.55; color: var(--text); }
+  .bx-concl { margin-top: 110px; padding-bottom: 50px; }
+  .bx-concl-text { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.6vw, 50px); line-height: 1.22; letter-spacing: -0.015em; color: var(--bone); max-width: 1080px; }
+  .bx-concl-text .w { opacity: .14; transition: opacity .5s ease; }
+  .bx-concl-text .w.on { opacity: 1; }
+  .bx-concl-quote { font-family: var(--serif); font-size: 120px; line-height: .6; color: var(--iris); height: 50px; }
+
+  .bx-foot { position: relative; z-index: 1; border-top: 1px solid var(--hair); margin-top: 90px; padding: 34px 0 40px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+  .bx-ph { color: var(--muted); }
+  .bx-failed { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+  .bx-failed::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--saffron); }
+
+  /* ---------- reading along ---------- */
+  /* while the briefing is read: what is still ahead stays dim; each block lights up when Jarvis reaches it and stays lit */
+  .bx-step, .bx-seg, .bx-sec { transition: opacity .7s ease, box-shadow .7s ease, background-color .7s ease; }
+  .bx.bx-reading .bx-sec:not(.bx-reached) { opacity: .22; }
+  .bx.bx-reading .bx-seg:not(.bx-now):not(.bx-heard) { opacity: .3; }
+  .bx.bx-reading .bx-seg.bx-now { opacity: 1; border-radius: 8px; background-color: rgba(128, 82, 255, .06); outline: 1px solid rgba(128, 82, 255, .55); outline-offset: 10px; box-shadow: 0 0 0 10px rgba(128, 82, 255, .06), 0 0 56px 6px rgba(128, 82, 255, .16); }
+  @media (max-width: 640px) { .bx.bx-reading .bx-seg.bx-now { outline-offset: 6px; box-shadow: 0 0 0 6px rgba(128, 82, 255, .06), 0 0 36px 4px rgba(128, 82, 255, .16); } }
+  .bx.bx-reading .bx-seg.bx-heard { opacity: 1; }
+  .bx-heard .bx-acc-body { max-height: 900px; }
+  .bx-point { transition: color .5s ease, text-shadow .5s ease, box-shadow .5s ease; }
+  .bx.bx-reading .bx-point, .bx-now .bx-point { position: relative; color: var(--bone) !important; text-shadow: 0 0 22px rgba(169, 139, 255, .45); }
+  .bx.bx-reading .bx-point::before, .bx-now .bx-point::before { content: ""; position: absolute; left: -14px; top: .2em; bottom: .2em; width: 3px; border-radius: 2px; background: var(--iris); box-shadow: 0 0 12px var(--iris); }
+  .bx-now .bx-acc-body { max-height: 900px; }
+  .bx-now { position: relative; }
+
+  /* ---------- motion ---------- */
+  @keyframes bx-float {
+    0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    50% { transform: translate3d(var(--dx, 20px), var(--dy, -30px), 0) rotate(calc(var(--r, 90deg) / 2)); }
+    100% { transform: translate3d(0, 0, 0) rotate(var(--r, 90deg)); }
+  }
+  @keyframes bx-drift {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(var(--mx, 120px), var(--my, -80px), 0) scale(1.18); }
+    66% { transform: translate3d(calc(var(--mx, 120px) * -0.7), calc(var(--my, -80px) * -0.6), 0) scale(.9); }
+    100% { transform: translate3d(0, 0, 0) scale(1); }
+  }
+  @keyframes bx-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes bx-swap { from { opacity: 0; transform: translateY(.35em); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+  @keyframes bx-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes bx-ring2 { 0% { box-shadow: 0 0 0 0 rgba(128, 82, 255, .55); } 100% { box-shadow: 0 0 0 12px rgba(128, 82, 255, 0); } }
+  @keyframes bx-ring { 0% { opacity: .9; transform: scale(.7); } 100% { opacity: 0; transform: scale(1.8); } }
+  @keyframes bx-spin { to { transform: rotate(360deg); } }
+  @keyframes bx-cloud { from { transform: translateX(-30px); } to { transform: translateX(30px); } }
+  @keyframes bx-fall { from { transform: translateY(0); } to { transform: translateY(260px); } }
+  @keyframes bx-flash { 0%, 91%, 100% { background: rgba(200, 190, 255, 0); } 92% { background: rgba(200, 190, 255, .35); } 94% { background: rgba(200, 190, 255, .05); } 96% { background: rgba(200, 190, 255, .28); } }
+  @keyframes bx-bolt { 0%, 91%, 100% { opacity: 0; } 92%, 96% { opacity: 1; } }
+  @keyframes bx-glow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: .85; } }
+  @keyframes bx-dash { to { stroke-dashoffset: -32; } }
+  @keyframes bx-bar { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+  @keyframes bx-beat { 0%, 100% { box-shadow: 0 0 0 0 currentColor; } 50% { box-shadow: 0 0 0 5px transparent; } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bx-spark { animation: bx-float var(--t, 22s) ease-in-out var(--delay, 0s) infinite; }
+    .bx-blob { animation: bx-drift var(--t, 26s) ease-in-out var(--delay, 0s) infinite; }
+    .bx-ticker-track { animation: bx-marquee 50s linear infinite; }
+    .bx-orb::after { animation: bx-ring 2.4s ease-out infinite; }
+    .bx-big-orb::before { animation: bx-ring 3s ease-out infinite; }
+    .bx-big-orb::after { animation: bx-ring 3s ease-out 1.5s infinite; }
+    .bx.bx-speaking .bx-big-orb::before, .bx.bx-speaking .bx-big-orb::after { animation-duration: 1.1s; }
+    .bx.bx-speaking .bx-wave i { animation: bx-bar .9s ease-in-out infinite; }
+    .bx.bx-speaking .bx-wave i:nth-child(2) { animation-delay: .15s; }
+    .bx.bx-speaking .bx-wave i:nth-child(3) { animation-delay: .3s; }
+    .bx.bx-speaking .bx-wave i:nth-child(4) { animation-delay: .45s; }
+    .bx-pulse { animation: bx-beat 2s ease-in-out infinite; }
+    .bx-hint-dot { animation: bx-ring2 2s ease-out infinite; }
+    .bx-mic.on { animation: bx-ring2 1.2s ease-out infinite; }
+    .bx-sun { animation: bx-glow 4s ease-in-out infinite; }
+    .bx-rays { animation: bx-spin 40s linear infinite; }
+    .bx-cloud { animation: bx-cloud var(--ct, 9s) ease-in-out var(--cd, 0s) infinite alternate; }
+    .bx-drop { animation: bx-fall var(--d, .9s) linear var(--dl, 0s) infinite; }
+    .bx-scene[data-kind="storm"] .bx-flash { animation: bx-flash 6s linear infinite; }
+    .bx-scene[data-kind="storm"] .bx-bolt { animation: bx-bolt 6s linear infinite; }
+    .bx-fmap .flow { stroke-dasharray: 4 12; animation: bx-dash 1.4s linear infinite; }
+    .bx-js .bx-reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s cubic-bezier(.2, .7, .2, 1), transform .9s cubic-bezier(.2, .7, .2, 1); }
+    .bx-js .bx-reveal.bx-in { opacity: 1; transform: none; }
+  }
+</style>
+
+<div class="bx" id="briefing">
+  <div class="bx-field" aria-hidden="true"></div>
+
+  <div class="bx-wrap">
+    <nav class="bx-nav" aria-label="Seções">
+      <div class="bx-logo">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 L18 17 L2 17 Z" fill="none" stroke="#8052ff" stroke-width="2" stroke-linejoin="round"/><path d="M10 8 L13.5 15 L6.5 15 Z" fill="#15846e"/></svg>
+        Briefing
+      </div>
+      <div class="bx-links">
+        <button type="button" data-go="clima">Clima</button>
+        <button type="button" data-go="mercado">Mercado</button>
+        <button type="button" data-go="noticias">Notícias</button>
+        <button type="button" data-go="ia">IA</button>
+        <button type="button" data-go="dossie">Dossiê</button>
+        <button type="button" data-go="geopolitica">Geopolítica</button>
+      </div>
+      <button type="button" class="bx-btn" id="bx-nav-jarvis"><span class="bx-orb"></span>Jarvis</button>
+    </nav>
+  </div>
+
+  <div class="bx-ticker" aria-label="Mercado">
+    <div class="bx-ticker-track" id="bx-ticker" data-source="market"></div>
+  </div>
+
+  <header class="bx-hero bx-step" id="topo">
+    <div class="bx-aura" data-aura="hero" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <div class="bx-hero-in">
+        <div>
+          <p class="bx-eyebrow" id="bx-today">Briefing diário</p>
+          <h1 class="bx-display">O estado do <span class="bx-rot" id="bx-rot">mundo</span>, antes do seu café.</h1>
+          <p class="bx-lead">Clima, mercado, notícias, inteligência artificial, o dossiê de poder e a geopolítica financeira do dia, com o motivo por trás de cada número.</p>
+          <p class="bx-hint"><span class="bx-hint-dot"></span>Toque na constelação. O Jarvis te dá bom dia, lê o briefing e responde o que você perguntar.</p>
+        </div>
+        <div class="bx-jv">
+          <div class="bx-stage" id="bx-stage" role="button" tabindex="0" aria-label="Falar com o Jarvis">
+            <canvas id="bx-brain" aria-hidden="true"></canvas>
+            <p class="bx-stage-cta" id="bx-stage-cta">Toque para falar com o Jarvis</p>
+          </div>
+
+          <div class="bx-console" id="bx-console">
+            <div class="bx-console-top">
+              <div class="bx-con-text">
+                <p class="bx-con-name">Jarvis <span class="bx-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span></p>
+                <p class="bx-con-status" id="bx-con-status">Toque na constelação ou pergunte algo</p>
+              </div>
+              <div class="bx-con-ctrl">
+                <button type="button" class="bx-icon" id="bx-pause" aria-label="Pausar"><svg viewBox="0 0 20 20"><rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/></svg></button>
+                <button type="button" class="bx-icon" id="bx-next" aria-label="Próxima seção"><svg viewBox="0 0 20 20"><path d="M4 4 L12 10 L4 16 Z M14 4 H16.5 V16 H14 Z" fill="currentColor"/></svg></button>
+                <button type="button" class="bx-icon" id="bx-stop" aria-label="Parar"><svg viewBox="0 0 20 20"><rect x="5" y="5" width="10" height="10" rx="1.5" fill="currentColor"/></svg></button>
+              </div>
+            </div>
+            <div class="bx-con-bar"><div class="bx-con-fill" id="bx-con-fill"></div></div>
+            <div class="bx-chat" id="bx-chat" aria-live="polite"></div>
+            <div class="bx-ask">
+              <button type="button" class="bx-mic" id="bx-mic" aria-label="Falar"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2.5" width="6" height="10" rx="3" fill="currentColor"/><path d="M4.5 9.5a5.5 5.5 0 0 0 11 0M10 15v2.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></button>
+              <input type="text" id="bx-ask-input" placeholder="Pergunte ao Jarvis…" aria-label="Pergunte ao Jarvis" autocomplete="off">
+              <button type="button" class="bx-send" id="bx-send" aria-label="Enviar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10 L17 3 L13 17 L10 11 Z" fill="currentColor"/></svg></button>
+            </div>
+            <div class="bx-sugg" id="bx-sugg"></div>
+            <div class="bx-con-opts">
+              <label>Voz <select id="bx-voice"></select></label>
+              <label>Ritmo <select id="bx-rate"><option value="0.88">Calmo</option><option value="0.96" selected>Natural</option><option value="1.06">Rápido</option></select></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="bx-sec bx-reveal" id="clima">
+    <div class="bx-aura" data-aura="clima" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <p class="bx-label"><span class="n">01</span> Clima</p>
+      <h2 class="bx-h2">Guarulhos, SP</h2>
+      <p class="bx-sub">Hoje e os próximos cinco dias. Toque num dia, ou num ponto do gráfico, e o céu muda junto.</p>
+      <div class="bx-cols">
+        <div>
+          <div class="bx-days" id="bx-days" role="tablist" aria-label="Dias" data-source="weather_r"></div>
+          <div class="bx-wxchart" id="bx-wxchart" data-source="weather_r"></div>
+        </div>
+        <div class="bx-wx bx-step" id="bx-wx"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-sec bx-reveal" id="mercado">
+    <div class="bx-aura" data-aura="mercado" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <p class="bx-label"><span class="n">02</span> Mercado</p>
+      <h2 class="bx-h2">Dólar, Ibovespa, Bitcoin e Selic</h2>
+      <p class="bx-sub">O fechamento mais recente e, ao tocar, o porquê de cada movimento.</p>
+      <div class="bx-mkt" id="bx-mkt"></div>
+    </div>
+  </section>
+
+  <section class="bx-sec bx-reveal" id="noticias">
+    <div class="bx-aura" data-aura="noticias" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <p class="bx-label"><span class="n">03</span> Briefing internacional</p>
+      <h2 class="bx-h2">Notícias Internacionais</h2>
+      <p class="bx-sub">As cinco notícias que mais pesam hoje. Filtre por região e abra cada uma.</p>
+      <div class="bx-chips" id="bx-chips" role="group" aria-label="Filtrar por região"></div>
+      <div class="bx-news" id="bx-news"></div>
+    </div>
+  </section>
+
+  <section class="bx-sec bx-reveal" id="ia">
+    <div class="bx-aura" data-aura="ia" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <p class="bx-label"><span class="n">04</span> Inteligência artificial</p>
+      <h2 class="bx-h2">IA: manchetes e bastidores</h2>
+      <p class="bx-sub">O que foi anunciado e o que circula nos corredores dos laboratórios. Cada item diz se é confirmado, reportado ou disputado, e como aplicar.</p>
+      <div class="bx-ai-tabs" id="bx-ai-tabs" role="tablist" aria-label="Tipo de notícia"></div>
+      <div class="bx-ai-list" id="bx-ai-list" data-source="ai_news"></div>
+    </div>
+  </section>
+
+  <section class="bx-sec bx-reveal" id="dossie">
+    <div class="bx-aura" data-aura="dossie" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <p class="bx-label"><span class="n">05</span> Inteligência</p>
+      <h2 class="bx-h2">Dossiê Diário de Poder</h2>
+      <p class="bx-sub">Washington, Brasília e a leitura cruzada entre as duas capitais. Toque num evento para abrir o detalhe.</p>
+      <div class="bx-dos" id="bx-dos"></div>
+
+      <article class="bx-doc" id="dossie-completo">
+        <div class="bx-doc-head">
+          <div>
+            <span class="bx-doc-stamp">Dossiê completo · uso pessoal</span>
+            <h3 class="bx-doc-title">O que mudou, quem move e o que observar</h3>
+            <p class="bx-doc-meta" id="bx-doc-meta">Leitura de alguns minutos</p>
+          </div>
+          <button type="button" class="bx-btn bx-voice-only" id="bx-doc-listen"><span class="bx-orb"></span>Ouvir o dossiê</button>
+        </div>
+        <div class="bx-doc-body">
+          <nav class="bx-toc" id="bx-toc" aria-label="Capítulos"></nav>
+          <div id="bx-chapters" data-source="dossier_full"></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="bx-sec bx-reveal" id="geopolitica">
+    <div class="bx-aura" data-aura="geo" aria-hidden="true"></div>
+    <div class="bx-wrap">
+      <p class="bx-label"><span class="n">06</span> Análise</p>
+      <h2 class="bx-h2">Geopolítica Financeira</h2>
+      <p class="bx-geo-intro bx-step" id="bx-geo-intro" data-source="geopolitics" data-row="0" data-field="intro">—</p>
+
+      <div class="bx-chartbox">
+        <div class="bx-chart-title"><span class="t">Ibovespa, em pontos</span><span class="h">Passe o mouse ou toque nos pontos</span></div>
+        <div class="bx-chart" id="bx-chart" data-source="ibov_trend"></div>
+        <div class="bx-note" id="bx-note"></div>
+      </div>
+
+      <div class="bx-points" id="bx-points"></div>
+
+      <div class="bx-forces" id="forcas">
+        <p class="bx-label"><span class="n">07</span> Mapa de forças</p>
+        <h2 class="bx-h2">Quem pressiona o quê</h2>
+        <p class="bx-sub">Cada frente do noticiário empurra um conjunto de ativos. Toque numa frente, ou num ativo, para ver a ligação e o motivo.</p>
+        <div class="bx-forces-grid">
+          <div class="bx-fmap" id="bx-fmap" data-source="forces"></div>
+          <div class="bx-fside bx-step" id="bx-fside" data-source="forces"></div>
+        </div>
+      </div>
+
+      <div class="bx-concl bx-step" id="leitura">
+        <p class="bx-label">Leitura do dia</p>
+        <div class="bx-concl-quote" aria-hidden="true">“</div>
+        <p class="bx-concl-text" id="bx-concl" data-source="geopolitics" data-row="0" data-field="conclusion">—</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="bx-wrap">
+    <footer class="bx-foot">
+      <span>Fontes: InfoMoney · O Povo · Diário de Pernambuco · Movimento Econômico · O Liberal · Jornal do Comércio · Canal Rural · Notícias ao Minuto</span>
+      <span>Dias úteis · 06:30</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+  const root = document.getElementById('briefing');
+  root.classList.add('bx-js');
+
+  /* ================= helpers ================= */
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined && text !== null) n.textContent = String(text);
+    return n;
+  };
+  const mark = (n, attrs) => { Object.keys(attrs).forEach((k) => n.setAttribute(k, attrs[k])); return n; };
+  const fmtInt = (v) => Number(v).toLocaleString('pt-BR');
+  const trendClass = (t) => (t === 'up' ? 'bx-up' : t === 'down' ? 'bx-down' : 'bx-flat');
+  const arrow = (t) => (t === 'up' ? '▲' : t === 'down' ? '▼' : '—');
+  const reduced = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const placeholder = (box, res) => {
+    box.replaceChildren(res.status === 'error' || res.status === 'missing' ? el('p', 'bx-failed', 'Falha ao carregar') : el('p', 'bx-ph dash-skeleton', ''));
+  };
+  const svgNS = 'http://www.w3.org/2000/svg';
+  // the dashboard hands nested lists to the page as JSON text: accept both
+  const arr = (v) => {
+    if (Array.isArray(v)) return v;
+    if (typeof v === 'string' && v.trim().startsWith('[')) { try { const p = JSON.parse(v); return Array.isArray(p) ? p : []; } catch (e) { return []; } }
+    return [];
+  };
+
+  dash.calc('weather_r', {
+    title: 'Clima arredondado',
+    description: 'Máximas e mínimas da previsão arredondadas para o grau inteiro.',
+    inputs: ['weather'],
+    fn: (weather) => weather.map((d) => ({
+      day_label: d.day_label, weekday: d.weekday, date: d.date, condition: d.condition,
+      high: Math.round(Number(d.high)), low: Math.round(Number(d.low)), precip: Number(d.precip), tip: d.tip
+    }))
+  });
+
+  /* ================= navigation ================= */
+  root.querySelectorAll('[data-go]').forEach((b) => {
+    b.addEventListener('click', () => {
+      const target = document.getElementById(b.getAttribute('data-go'));
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      dash.setLink(target.id);
+    });
+  });
+
+  /* ================= today + rotating word ================= */
+  const todayLong = (() => {
+    const s = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  })();
+  document.getElementById('bx-today').textContent = 'Briefing diário · ' + todayLong;
+  (() => {
+    const words = ['mundo', 'mercado', 'poder', 'dólar', 'clima'];
+    const rot = document.getElementById('bx-rot');
+    let i = 0;
+    const timer = setInterval(() => {
+      if (!rot.isConnected) { clearInterval(timer); return; }
+      i = (i + 1) % words.length;
+      rot.classList.remove('bx-swap'); void rot.offsetWidth;
+      rot.textContent = words[i];
+      rot.classList.add('bx-swap');
+    }, 2600);
+  })();
+
+  /* ================= living background ================= */
+  // drifting outlined triangles over the whole page
+  (() => {
+    const field = root.querySelector('.bx-field');
+    const colors = ['#8052ff', '#ffb829', '#15846e', '#a98bff', '#5fb8ff', '#ff7ac9'];
+    for (let i = 0; i < 70; i++) {
+      const s = el('span', 'bx-spark');
+      s.style.left = (Math.random() * 100).toFixed(2) + '%';
+      s.style.top = (Math.random() * 100).toFixed(2) + '%';
+      s.style.setProperty('--s', (6 + Math.random() * 14).toFixed(1) + 'px');
+      s.style.setProperty('--o', (0.18 + Math.random() * 0.45).toFixed(2));
+      s.style.setProperty('--t', (16 + Math.random() * 22).toFixed(1) + 's');
+      s.style.setProperty('--delay', (-Math.random() * 30).toFixed(1) + 's');
+      s.style.setProperty('--dx', ((Math.random() - 0.5) * 140).toFixed(0) + 'px');
+      s.style.setProperty('--dy', ((Math.random() - 0.5) * 160).toFixed(0) + 'px');
+      s.style.setProperty('--r', ((Math.random() < 0.5 ? -1 : 1) * (90 + Math.random() * 270)).toFixed(0) + 'deg');
+      const c = colors[i % colors.length];
+      s.innerHTML = '<svg viewBox="0 0 20 20"><path d="M10 2 L18 17 L2 17 Z" fill="none" stroke="' + c + '" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+      field.appendChild(s);
+    }
+  })();
+
+  // a slow aurora behind every section, in that section's colours
+  const AURA = {
+    hero: ['#8052ff', '#15846e', '#5fb8ff'],
+    clima: ['#5fb8ff', '#8052ff', '#15846e'],
+    mercado: ['#15846e', '#ffb829', '#8052ff'],
+    noticias: ['#8052ff', '#ff7ac9', '#5fb8ff'],
+    ia: ['#a98bff', '#ffb829', '#34c9a3'],
+    dossie: ['#ffb829', '#8052ff', '#ff7ac9'],
+    geo: ['#8052ff', '#ffb829', '#15846e']
+  };
+  const SKY = {
+    sun: ['#ffb829', '#ff7a29', '#8052ff'],
+    partly: ['#5fb8ff', '#ffb829', '#8052ff'],
+    cloudy: ['#7a86a8', '#8052ff', '#5fb8ff'],
+    rain: ['#3f7fff', '#5fb8ff', '#8052ff'],
+    storm: ['#5a2dff', '#8052ff', '#ff7ac9']
+  };
+  const auras = {};
+  root.querySelectorAll('[data-aura]').forEach((a) => {
+    const key = a.getAttribute('data-aura');
+    const cols = AURA[key];
+    const blobs = cols.map((c, i) => {
+      const b = el('span', 'bx-blob');
+      b.style.setProperty('--c', c);
+      b.style.setProperty('--w', (620 + Math.random() * 420).toFixed(0) + 'px');
+      b.style.setProperty('--x', [6, 46, 22][i] + Math.random() * 14 + '%');
+      b.style.setProperty('--y', [0, 18, 46][i] + Math.random() * 10 + '%');
+      b.style.setProperty('--a', (0.2 + Math.random() * 0.12).toFixed(2));
+      b.style.setProperty('--t', (20 + Math.random() * 16).toFixed(1) + 's');
+      b.style.setProperty('--delay', (-Math.random() * 20).toFixed(1) + 's');
+      b.style.setProperty('--mx', ((Math.random() - 0.5) * 260).toFixed(0) + 'px');
+      b.style.setProperty('--my', ((Math.random() - 0.5) * 200).toFixed(0) + 'px');
+      a.appendChild(b);
+      return b;
+    });
+    auras[key] = blobs;
+  });
+  const tintAura = (key, cols) => { (auras[key] || []).forEach((b, i) => b.style.setProperty('--c', cols[i % cols.length])); };
+
+  /* ================= hero constellation ================= */
+  const brain = (() => {
+    const stage = document.getElementById('bx-stage');
+    const canvas = document.getElementById('bx-brain');
+    const ctx = canvas.getContext('2d');
+    const colors = ['#8052ff', '#ffb829', '#15846e', '#a98bff', '#5fb8ff', '#ff7ac9', '#ffffff'];
+    let W = 0, H = 0, pts = [], links = [];
+    let energy = 1, target = 1;
+    const ptr = { x: -9999, y: -9999, on: false };
+    const build = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = stage.clientWidth; H = stage.clientHeight;
+      if (W < 10 || H < 10) return false;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      pts = [];
+      const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.42;
+      const n = W < 500 ? 200 : 300;
+      for (let i = 0; i < n; i++) {
+        let x, y, tries = 0;
+        do {
+          const a = Math.random() * Math.PI * 2;
+          const r = Math.sqrt(Math.random());
+          const lobe = 1 + 0.08 * Math.sin(a * 7) + 0.05 * Math.sin(a * 13);
+          x = Math.cos(a) * r * R * 1.18 * lobe;
+          y = Math.sin(a) * r * R * 0.82 * lobe;
+          tries++;
+        } while (Math.abs(x) < R * 0.035 && tries < 5);
+        const side = x < 0 ? -1 : 1;
+        pts.push({ bx: cx + x + side * R * 0.04, by: cy + y, x: cx + x, y: cy + y, ox: 0, oy: 0,
+          ph: Math.random() * Math.PI * 2, sp: 0.35 + Math.random() * 0.8, amp: 2 + Math.random() * 6,
+          size: 1.6 + Math.random() * 3.6, rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 0.02,
+          c: colors[Math.floor(Math.random() * colors.length)], a: 0.45 + Math.random() * 0.55 });
+      }
+      for (let i = 0; i < 40; i++) {
+        pts.push({ bx: Math.random() * W, by: Math.random() * H, x: 0, y: 0, ox: 0, oy: 0,
+          ph: Math.random() * 6.3, sp: 0.2 + Math.random() * 0.4, amp: 8 + Math.random() * 14,
+          size: 1.4 + Math.random() * 2.4, rot: Math.random() * 6.3, vr: (Math.random() - 0.5) * 0.02,
+          c: colors[Math.floor(Math.random() * colors.length)], a: 0.2 + Math.random() * 0.3, stray: true });
+      }
+      links = [];
+      const inner = pts.filter((p) => !p.stray);
+      const maxD = R * 0.16;
+      inner.forEach((p, i) => {
+        let made = 0;
+        for (let j = i + 1; j < inner.length && made < 2; j++) {
+          const q = inner[j];
+          if (Math.hypot(p.bx - q.bx, p.by - q.by) < maxD) { links.push([p, q]); made++; }
+        }
+      });
+      return true;
+    };
+    const tri = (p) => {
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha = p.a; ctx.strokeStyle = p.c; ctx.lineWidth = 1.2;
+      const s = p.size * (0.9 + (energy - 1) * 0.35);
+      ctx.beginPath(); ctx.moveTo(0, -s); ctx.lineTo(s * 0.87, s * 0.5); ctx.lineTo(-s * 0.87, s * 0.5); ctx.closePath();
+      ctx.stroke(); ctx.restore();
+    };
+    let t = 0, built = false;
+    const frame = () => {
+      if (!canvas.isConnected) return;
+      requestAnimationFrame(frame);
+      if (!built) { built = build(); if (!built) return; }
+      t += 0.016;
+      energy += (target - energy) * 0.05;
+      const pulse = 1 + (energy - 1) * 0.06 * Math.sin(t * 6);
+      ctx.clearRect(0, 0, W, H);
+      const cx = W / 2, cy = H / 2;
+      for (const p of pts) {
+        const wob = p.amp * energy;
+        const x = cx + (p.bx - cx) * pulse + Math.cos(t * p.sp * energy + p.ph) * wob;
+        const y = cy + (p.by - cy) * pulse + Math.sin(t * p.sp * energy + p.ph * 1.3) * wob;
+        if (ptr.on) {
+          const dx = x - ptr.x, dy = y - ptr.y, d = Math.hypot(dx, dy), r = 90;
+          if (d < r && d > 0.01) { const f = (1 - d / r) * 34; p.ox += (dx / d * f - p.ox) * 0.2; p.oy += (dy / d * f - p.oy) * 0.2; }
+          else { p.ox *= 0.92; p.oy *= 0.92; }
+        } else { p.ox *= 0.92; p.oy *= 0.92; }
+        p.x = x + p.ox; p.y = y + p.oy;
+        p.rot += p.vr * energy;
+      }
+      ctx.lineWidth = 0.6; ctx.strokeStyle = '#8052ff';
+      ctx.globalAlpha = Math.min(0.4, 0.1 + (energy - 1) * 0.08);
+      ctx.beginPath();
+      for (const [p, q] of links) { ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); }
+      ctx.stroke();
+      for (const p of pts) tri(p);
+      ctx.globalAlpha = 1;
+    };
+    requestAnimationFrame(frame);
+    stage.addEventListener('pointermove', (e) => { const r = stage.getBoundingClientRect(); ptr.x = e.clientX - r.left; ptr.y = e.clientY - r.top; ptr.on = true; target = Math.max(target, 1.5); });
+    stage.addEventListener('pointerleave', () => { ptr.on = false; target = jarvis.active() ? 2.4 : 1; });
+    stage.addEventListener('click', () => { energy = 3.2; jarvis.wake(); });
+    stage.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); energy = 3.2; jarvis.wake(); } });
+    if (window.ResizeObserver) new ResizeObserver(() => { built = false; }).observe(stage);
+    return { setEnergy: (v) => { target = v; } };
+  })();
+
+  /* ================= scroll reveal ================= */
+  (() => {
+    const items = root.querySelectorAll('.bx-reveal');
+    if (!('IntersectionObserver' in window)) { items.forEach((n) => n.classList.add('bx-in')); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('bx-in'); io.unobserve(e.target); } });
+    }, { root: document, rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+    items.forEach((n) => io.observe(n));
+  })();
+
+  /* ================= ticker ================= */
+  const drawTicker = () => {
+    const box = document.getElementById('bx-ticker');
+    const res = dash.data('market');
+    if (res.status !== 'ok') { placeholder(box, res); return; }
+    box.replaceChildren();
+    for (let copy = 0; copy < 2; copy++) {
+      for (let k = 0; k < 2; k++) {
+        res.data.forEach((r, i) => {
+          const item = el('span', 'bx-tick');
+          if (copy === 1) item.setAttribute('aria-hidden', 'true');
+          item.append(
+            mark(el('span', 'k', r.label), { 'data-row': i, 'data-field': 'label' }),
+            mark(el('span', 'v bx-num', r.value), { 'data-row': i, 'data-field': 'value' }),
+            mark(el('span', 'd ' + trendClass(r.trend), r.delta), { 'data-row': i, 'data-field': 'delta' }));
+          box.appendChild(item);
+        });
+      }
+    }
+  };
+
+  /* ================= weather ================= */
+  const kindOf = (c) => {
+    const s = String(c || '').toLowerCase();
+    if (s.includes('forte') || s.includes('tempest')) return 'storm';
+    if (s.includes('chuv') || s.includes('garoa')) return 'rain';
+    if (s.includes('poucas') || s.includes('parcial')) return 'partly';
+    if (s.includes('nubl') || s.includes('nuvem') || s.includes('encoberto')) return 'cloudy';
+    if (s.includes('sol') || s.includes('limpo')) return 'sun';
+    return 'partly';
+  };
+  const CLOUD = '<svg viewBox="0 0 120 60"><path d="M30 52 H96 a18 18 0 0 0 0-36 a24 24 0 0 0-44-6 a16 16 0 0 0-22 14 a14 14 0 0 0 0 28 Z" fill="FILL"/></svg>';
+  const ICON = {
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="#ffb829" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>',
+    partly: '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="3.5" stroke="#ffb829"/><path d="M8 19h9a3.5 3.5 0 0 0 0-7 4.5 4.5 0 0 0-8.6 1.2A3 3 0 0 0 8 19Z" stroke="#e4e4e6"/></svg>',
+    cloudy: '<svg viewBox="0 0 24 24" fill="none" stroke="#e4e4e6" stroke-width="1.6" stroke-linecap="round"><path d="M7 18h10a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.3A3.5 3.5 0 0 0 7 18Z"/></svg>',
+    rain: '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M7 14h10a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.3A3.5 3.5 0 0 0 7 14Z" stroke="#e4e4e6"/><path d="M9 17l-1 3M13 17l-1 3M17 17l-1 3" stroke="#5fb8ff"/></svg>',
+    storm: '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13h10a4 4 0 0 0 0-8 5 5 0 0 0-9.6 1.3A3.5 3.5 0 0 0 7 13Z" stroke="#e4e4e6"/><path d="M12.5 14l-2 4h3l-2 4" stroke="#a98bff"/></svg>'
+  };
+  const LABEL = { sun: 'Céu aberto', partly: 'Sol entre nuvens', cloudy: 'Céu encoberto', rain: 'Chuva', storm: 'Temporal' };
+  const buildScene = (kind) => {
+    const scene = el('div', 'bx-scene');
+    scene.setAttribute('data-kind', kind);
+    scene.setAttribute('aria-hidden', 'true');
+    const cloud = (x, y, w, o, fill, ct, cd) => {
+      const c = el('span', 'bx-cloud');
+      c.style.setProperty('--cx', x); c.style.setProperty('--cy', y + 'px'); c.style.setProperty('--cw', w + 'px');
+      c.style.setProperty('--co', o); c.style.setProperty('--ct', ct + 's'); c.style.setProperty('--cd', cd + 's');
+      c.innerHTML = CLOUD.replace('FILL', fill);
+      scene.appendChild(c);
+    };
+    const sun = () => {
+      const s = el('span', 'bx-sun');
+      const rays = el('span', 'bx-rays');
+      for (let i = 0; i < 12; i++) { const r = el('i'); r.style.transform = 'rotate(' + (i * 30) + 'deg)'; rays.appendChild(r); }
+      s.appendChild(rays); scene.appendChild(s);
+    };
+    const rain = (n, heavy) => {
+      for (let i = 0; i < n; i++) {
+        const d = el('span', 'bx-drop');
+        d.style.setProperty('--l', (Math.random() * 100).toFixed(1) + '%');
+        d.style.setProperty('--h', (heavy ? 18 + Math.random() * 14 : 10 + Math.random() * 10).toFixed(0) + 'px');
+        d.style.setProperty('--d', (heavy ? 0.5 + Math.random() * 0.3 : 0.8 + Math.random() * 0.5).toFixed(2) + 's');
+        d.style.setProperty('--dl', (-Math.random() * 1.5).toFixed(2) + 's');
+        scene.appendChild(d);
+      }
+    };
+    if (kind === 'sun') { sun(); cloud('8%', 128, 90, 0.25, '#ffffff', 14, -3); }
+    if (kind === 'partly') { sun(); cloud('44%', 70, 170, 0.85, '#e8ecf5', 10, 0); cloud('12%', 112, 120, 0.5, '#cfd6e6', 13, -4); }
+    if (kind === 'cloudy') { cloud('4%', 40, 190, 0.55, '#9aa3b8', 12, 0); cloud('38%', 70, 230, 0.8, '#c7cdd9', 9, -3); cloud('64%', 30, 160, 0.45, '#8f97ab', 14, -6); }
+    if (kind === 'rain') { cloud('6%', 20, 210, 0.75, '#8d97ad', 11, 0); cloud('42%', 34, 240, 0.9, '#a9b1c4', 9, -2); rain(46, false); }
+    if (kind === 'storm') {
+      cloud('0%', 12, 240, 0.85, '#4b4d63', 8, 0); cloud('40%', 24, 260, 0.95, '#5d5f78', 7, -2); cloud('70%', 8, 180, 0.7, '#3f4157', 9, -4);
+      rain(80, true);
+      const f = el('span', 'bx-flash'); scene.appendChild(f);
+      const b = el('span', 'bx-bolt');
+      b.innerHTML = '<svg viewBox="0 0 34 70"><path d="M20 0 L4 38 H16 L10 70 L30 26 H18 Z" fill="#d9ccff"/></svg>';
+      scene.appendChild(b);
+    }
+    scene.appendChild(el('span', 'bx-scene-tag', LABEL[kind]));
+    return scene;
+  };
+
+  let dayIndex = 0;
+  let wxAnimate = false;
+  const drawWeather = () => {
+    const days = document.getElementById('bx-days');
+    const wx = document.getElementById('bx-wx');
+    const res = dash.data('weather_r');
+    if (res.status !== 'ok') { placeholder(days, res); placeholder(wx, res); document.getElementById('bx-wxchart').replaceChildren(); return; }
+    const rows = res.data;
+    if (dayIndex >= rows.length) dayIndex = 0;
+
+    days.replaceChildren();
+    rows.forEach((d, i) => {
+      const b = el('button', 'bx-day');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', i === dayIndex ? 'true' : 'false');
+      const ic = el('span'); ic.innerHTML = ICON[kindOf(d.condition)];
+      const t = el('span', 't');
+      t.append(mark(el('span', '', d.high), { 'data-row': i, 'data-field': 'high' }), document.createTextNode('° / '),
+        mark(el('span', '', d.low), { 'data-row': i, 'data-field': 'low' }), document.createTextNode('°'));
+      b.append(ic, mark(el('span', '', d.day_label), { 'data-row': i, 'data-field': 'day_label' }), t);
+      b.addEventListener('click', () => { if (dayIndex !== i) { dayIndex = i; wxAnimate = true; drawWeather(); } });
+      b.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        dayIndex = (dayIndex + (e.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length;
+        wxAnimate = true; drawWeather();
+        days.children[dayIndex].focus();
+      });
+      days.appendChild(b);
+    });
+
+    const d = rows[dayIndex];
+    const kind = kindOf(d.condition);
+    tintAura('clima', SKY[kind]);
+    const card = el('div', wxAnimate ? 'bx-wx-in' : '');
+    mark(card, { 'data-source': 'weather_r', 'data-row': dayIndex });
+    const when = el('p', 'bx-wx-when');
+    when.append(mark(el('span', '', d.day_label), { 'data-field': 'day_label' }), document.createTextNode(' · '),
+      mark(el('span', '', d.weekday), { 'data-field': 'weekday' }));
+    const num = el('p', 'bx-wx-num bx-num');
+    const lo = el('span', 'lo');
+    lo.append(document.createTextNode(' / '), mark(el('span', '', d.low), { 'data-field': 'low' }), document.createTextNode('°'));
+    num.append(mark(el('span', '', d.high), { 'data-field': 'high' }), document.createTextNode('°'), lo);
+    const cond = mark(el('p', 'bx-wx-cond', d.condition), { 'data-field': 'condition' });
+    const rain = el('div', 'bx-rain');
+    const bar = el('span', 'bar'); const fill = el('span', 'fill'); bar.append(fill);
+    const pct = el('span', 'pct'); pct.append(mark(el('span', '', d.precip), { 'data-field': 'precip' }), document.createTextNode('%'));
+    rain.append(el('span', '', 'Chance de chuva'), bar, pct);
+    const tip = mark(el('p', 'bx-wx-tip', d.tip), { 'data-field': 'tip' });
+    card.append(buildScene(kind), when, num, cond, rain, tip);
+    wx.replaceChildren(card);
+    requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = Math.max(0, Math.min(100, d.precip)) + '%'; }));
+    wxAnimate = false;
+    drawWxChart(rows);
+  };
+
+  const drawWxChart = (rows) => {
+    const box = document.getElementById('bx-wxchart');
+    const w = Math.max(box.clientWidth, 260), h = 150;
+    const m = { t: 22, r: 14, b: 26, l: 14 };
+    box.replaceChildren();
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('aria-hidden', 'true');
+    const x = d3.scalePoint(rows.map((d) => d.day_label), [m.l + 16, w - m.r - 16]);
+    const y = d3.scaleLinear([d3.min(rows, (d) => d.low) - 2, d3.max(rows, (d) => d.high) + 3], [h - m.b, m.t]);
+    svg.append('path').datum(rows).attr('d', d3.area().x((d) => x(d.day_label)).y0((d) => y(d.low)).y1((d) => y(d.high))).attr('fill', 'rgba(95,184,255,0.12)');
+    svg.append('path').datum(rows).attr('d', d3.line().x((d) => x(d.day_label)).y((d) => y(d.high))).attr('fill', 'none').attr('stroke', '#8052ff').attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    svg.append('path').datum(rows).attr('d', d3.line().x((d) => x(d.day_label)).y((d) => y(d.low))).attr('fill', 'none').attr('stroke', '#6e6e74').attr('stroke-width', 1.5).attr('stroke-dasharray', '3 4');
+    const g = svg.selectAll('g.day').data(rows).join('g').attr('class', 'day').style('cursor', 'pointer')
+      .on('click', (e, d) => { dayIndex = rows.indexOf(d); wxAnimate = true; drawWeather(); });
+    g.append('rect').attr('x', (d) => x(d.day_label) - 22).attr('y', 0).attr('width', 44).attr('height', h).attr('fill', 'transparent');
+    g.append('circle').attr('cx', (d) => x(d.day_label)).attr('cy', (d) => y(d.high)).attr('r', (d, i) => (i === dayIndex ? 6 : 3.5))
+      .attr('fill', (d, i) => (i === dayIndex ? '#8052ff' : '#000')).attr('stroke', '#8052ff').attr('stroke-width', 2);
+    g.append('text').attr('x', (d) => x(d.day_label)).attr('y', (d) => y(d.high) - 11).attr('text-anchor', 'middle')
+      .attr('fill', (d, i) => (i === dayIndex ? '#ffffff' : '#a6a6ab')).attr('font-size', 12).text((d) => d.high + '°');
+    g.append('text').attr('x', (d) => x(d.day_label)).attr('y', h - 6).attr('text-anchor', 'middle')
+      .attr('fill', (d, i) => (i === dayIndex ? '#ffb829' : '#a6a6ab')).attr('font-size', 11).text((d) => d.day_label.slice(0, 3));
+  };
+
+  /* ================= market ================= */
+  const openMarket = new Set();
+  const drawSpark = (box) => {
+    const res = dash.data('ibov_trend');
+    if (res.status !== 'ok') return;
+    const rows = res.data.map((d) => Number(d.points));
+    const w = Math.max(box.clientWidth, 200), h = 46;
+    box.replaceChildren();
+    mark(box, { 'data-source': 'ibov_trend' });
+    const svg = d3.select(box).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('preserveAspectRatio', 'none').attr('aria-hidden', 'true');
+    const x = d3.scaleLinear([0, rows.length - 1], [4, w - 4]);
+    const y = d3.scaleLinear([d3.min(rows), d3.max(rows)], [h - 6, 6]);
+    svg.append('path').attr('d', d3.line().x((v, i) => x(i)).y((v) => y(v))(rows)).attr('fill', 'none').attr('stroke', '#ffb829').attr('stroke-width', 1.8).attr('vector-effect', 'non-scaling-stroke');
+    svg.append('circle').attr('cx', x(rows.length - 1)).attr('cy', y(rows[rows.length - 1])).attr('r', 3).attr('fill', '#ffb829');
+  };
+  const drawMarket = () => {
+    const box = document.getElementById('bx-mkt');
+    const res = dash.data('market');
+    if (res.status !== 'ok') { placeholder(box, res); return; }
+    box.replaceChildren();
+    res.data.forEach((r, i) => {
+      const row = el('div', 'bx-m bx-step' + (openMarket.has(i) ? ' bx-open' : ''));
+      mark(row, { 'data-source': 'market', 'data-row': i });
+      row.dataset.step = 'm' + i;
+      const top = el('div', 'bx-m-top');
+      const left = el('div');
+      left.append(mark(el('p', 'bx-m-label', r.label), { 'data-field': 'label' }), mark(el('p', 'bx-m-val bx-num', r.value), { 'data-field': 'value' }));
+      const delta = el('p', 'bx-m-delta ' + trendClass(r.trend));
+      delta.append(el('span', 'bx-pulse'), document.createTextNode(arrow(r.trend) + ' '), mark(el('span', '', r.delta), { 'data-field': 'delta' }));
+      top.append(left, delta);
+      row.append(top, mark(el('p', 'bx-m-note', r.note), { 'data-field': 'note' }));
+      if (/ibov/i.test(r.id || r.label)) { const sp = el('div', 'bx-spark-line'); row.append(sp); requestAnimationFrame(() => drawSpark(sp)); }
+      const more = el('button', 'bx-more');
+      more.type = 'button';
+      more.setAttribute('aria-expanded', openMarket.has(i) ? 'true' : 'false');
+      more.append(document.createTextNode('Por que isso aconteceu '), el('span', 'chev', '▾'));
+      const why = el('div', 'bx-acc-body bx-m-why');
+      why.append(mark(el('p', '', r.why), { 'data-field': 'why' }));
+      row.append(more, why);
+      row.addEventListener('click', () => {
+        const open = row.classList.toggle('bx-open');
+        if (open) openMarket.add(i); else openMarket.delete(i);
+        more.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      box.appendChild(row);
+    });
+  };
+
+  /* ================= news ================= */
+  const openNews = new Set([0]);
+  let newsFilter = 'Todas';
+  const drawNews = () => {
+    const box = document.getElementById('bx-news');
+    const chips = document.getElementById('bx-chips');
+    const res = dash.data('news');
+    if (res.status !== 'ok') { placeholder(box, res); chips.replaceChildren(); return; }
+    const tags = ['Todas'].concat(Array.from(new Set(res.data.map((r) => r.tag))));
+    chips.replaceChildren();
+    tags.forEach((tg) => {
+      const c = el('button', 'bx-chip', tg);
+      c.type = 'button';
+      c.setAttribute('aria-pressed', tg === newsFilter ? 'true' : 'false');
+      c.addEventListener('click', () => {
+        newsFilter = tg;
+        chips.querySelectorAll('.bx-chip').forEach((x) => x.setAttribute('aria-pressed', x.textContent === tg ? 'true' : 'false'));
+        box.querySelectorAll('.bx-n').forEach((n) => {
+          const show = tg === 'Todas' || n.dataset.tag === tg;
+          n.classList.toggle('bx-hide', !show);
+          if (show) { n.classList.remove('bx-pop'); void n.offsetWidth; n.classList.add('bx-pop'); }
+        });
+      });
+      chips.appendChild(c);
+    });
+    box.replaceChildren();
+    res.data.forEach((r, i) => {
+      const item = el('article', 'bx-n bx-step' + (openNews.has(i) ? ' bx-open' : ''));
+      mark(item, { 'data-source': 'news', 'data-row': i });
+      item.dataset.tag = r.tag;
+      item.dataset.step = 'n' + i;
+      if (newsFilter !== 'Todas' && r.tag !== newsFilter) item.classList.add('bx-hide');
+      const head = el('button', 'bx-acc-head');
+      head.type = 'button';
+      head.setAttribute('aria-expanded', openNews.has(i) ? 'true' : 'false');
+      const mid = el('span');
+      mid.append(mark(el('span', 'bx-n-tag', r.tag), { 'data-field': 'tag' }), mark(el('span', 'bx-n-head', r.headline), { 'data-field': 'headline' }));
+      head.append(el('span', 'bx-n-idx bx-num', String(i + 1).padStart(2, '0')), mid, el('span', 'chev', '▾'));
+      const body = el('div', 'bx-acc-body');
+      const inner = el('div', 'bx-n-body');
+      const grid = el('div', 'bx-n-grid');
+      const a = el('div'); a.append(el('p', 'bx-k', 'O que aconteceu'), mark(el('p', 'bx-v', r.what), { 'data-field': 'what' }));
+      const b = el('div'); b.append(el('p', 'bx-k', 'Por que importa'), mark(el('p', 'bx-v', r.why), { 'data-field': 'why' }));
+      grid.append(a, b);
+      const meta = el('p', 'bx-meta');
+      meta.append(mark(el('span', '', r.source), { 'data-field': 'source' }), document.createTextNode(' · '), mark(el('span', '', r.date), { 'data-field': 'date' }));
+      inner.append(mark(el('p', 'bx-n-sum', r.summary), { 'data-field': 'summary' }), grid, meta);
+      body.append(inner);
+      item.append(head, body);
+      head.addEventListener('click', () => {
+        const open = item.classList.toggle('bx-open');
+        if (open) openNews.add(i); else openNews.delete(i);
+        head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      box.appendChild(item);
+    });
+  };
+
+  /* ================= dossier blocks ================= */
+  const openEvents = new Set();
+  const blockColor = { A: '#8052ff', B: '#ffb829', C: '#34c9a3' };
+  const drawDossier = () => {
+    const box = document.getElementById('bx-dos');
+    const res = dash.data('dossier');
+    if (res.status !== 'ok') { placeholder(box, res); return; }
+    box.replaceChildren();
+    res.data.forEach((r, i) => {
+      const blk = el('div', 'bx-blk bx-step');
+      mark(blk, { 'data-source': 'dossier', 'data-row': i });
+      blk.dataset.step = 'd' + i;
+      blk.style.setProperty('--c', blockColor[r.block] || '#8052ff');
+      const label = el('p', 'bx-blk-label');
+      const left = el('span');
+      left.append(document.createTextNode('Bloco '), mark(el('span', '', r.block), { 'data-field': 'block' }));
+      label.append(left, mark(el('span', 'country', r.country), { 'data-field': 'country' }));
+      const title = el('h3', 'bx-blk-title', String(r.title).replace(/^Bloco [ABC] — /, ''));
+      const sum = mark(el('p', 'bx-blk-sum', r.summary), { 'data-field': 'summary' });
+      const ev = el('div', 'bx-ev');
+      arr(r.events).forEach((e, j) => {
+        const key = i + ':' + j;
+        const item = el('div', 'bx-e' + (openEvents.has(key) ? ' bx-open' : ''));
+        const head = el('button', 'bx-e-head');
+        head.type = 'button';
+        head.setAttribute('aria-expanded', openEvents.has(key) ? 'true' : 'false');
+        head.append(el('span', 'bx-e-date', e.date), el('span', 'bx-e-text', e.headline));
+        const body = el('div', 'bx-acc-body');
+        body.append(el('p', '', e.detail));
+        item.append(head, body);
+        head.addEventListener('click', () => {
+          const open = item.classList.toggle('bx-open');
+          if (open) openEvents.add(key); else openEvents.delete(key);
+          head.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        ev.appendChild(item);
+      });
+      blk.append(label, title, sum, ev);
+      box.appendChild(blk);
+    });
+  };
+
+  /* ================= full dossier ================= */
+  const drawMemo = () => {
+    const box = document.getElementById('bx-chapters');
+    const toc = document.getElementById('bx-toc');
+    const meta = document.getElementById('bx-doc-meta');
+    const res = dash.data('dossier_full');
+    if (res.status !== 'ok') { placeholder(box, res); toc.replaceChildren(); return; }
+    const rows = res.data.slice().sort((a, b) => Number(a.order) - Number(b.order));
+    const words = rows.reduce((n, r) => n + String(r.body).split(/\s+/).length, 0);
+    meta.textContent = rows.length + ' capítulos · cerca de ' + Math.max(1, Math.round(words / 200)) + ' minutos de leitura';
+    box.replaceChildren(); toc.replaceChildren();
+    rows.forEach((r, i) => {
+      const idx = res.data.indexOf(r);
+      const ch = el('section', 'bx-ch bx-step');
+      ch.id = 'cap-' + (i + 1);
+      ch.dataset.step = 'c' + i;
+      mark(ch, { 'data-row': idx });
+      ch.append(mark(el('p', 'bx-ch-sec', r.section), { 'data-field': 'section' }),
+        mark(el('h4', 'bx-ch-title', r.title), { 'data-field': 'title' }),
+        mark(el('p', 'bx-ch-body', r.body), { 'data-field': 'body' }));
+      box.appendChild(ch);
+      const b = el('button');
+      b.type = 'button';
+      b.append(el('span', '', String(i + 1).padStart(2, '0')), el('span', '', r.section));
+      b.addEventListener('click', () => {
+        toc.querySelectorAll('button').forEach((x) => x.classList.remove('on'));
+        b.classList.add('on');
+        ch.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      toc.appendChild(b);
+    });
+  };
+
+  /* ================= geopolitics ================= */
+  const openPoints = new Set();
+  const drawGeo = () => {
+    const intro = document.getElementById('bx-geo-intro');
+    const box = document.getElementById('bx-points');
+    const res = dash.data('geopolitics');
+    if (res.status !== 'ok') { intro.textContent = '—'; placeholder(box, res); return; }
+    const r = res.data[0];
+    intro.textContent = r.intro;
+    drawConclusion(r.conclusion);
+    box.replaceChildren();
+    arr(r.points).forEach((p, i) => {
+      const item = el('div', 'bx-p bx-step' + (openPoints.has(i) ? ' bx-open' : ''));
+      item.dataset.step = 'p' + i;
+      const head = el('button', 'bx-acc-head');
+      head.type = 'button';
+      head.setAttribute('aria-expanded', openPoints.has(i) ? 'true' : 'false');
+      head.append(el('span', 'bx-p-head', p.heading), el('span', 'chev', '▾'));
+      const body = el('div', 'bx-acc-body');
+      body.append(el('p', '', p.body));
+      item.append(head, body);
+      head.addEventListener('click', () => {
+        const open = item.classList.toggle('bx-open');
+        if (open) openPoints.add(i); else openPoints.delete(i);
+        head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      box.appendChild(item);
+    });
+  };
+
+  // the reading of the day lights up word by word as it comes into view
+  let conclSeen = false;
+  const drawConclusion = (text) => {
+    const p = document.getElementById('bx-concl');
+    p.replaceChildren();
+    String(text).split(/(\s+)/).forEach((part) => {
+      if (/^\s+$/.test(part) || part === '') p.append(document.createTextNode(part));
+      else p.append(el('span', 'w' + (conclSeen || reduced() ? ' on' : ''), part));
+    });
+    if (conclSeen || reduced()) return;
+    const light = () => {
+      if (conclSeen) return;
+      conclSeen = true;
+      p.querySelectorAll('.w').forEach((w, i) => setTimeout(() => w.classList.add('on'), 40 * i));
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { light(); io.disconnect(); } }, { root: document, threshold: 0.3 });
+      io.observe(p);
+    } else light();
+  };
+
+  let chartPick = 1;
+  let chartDrawn = false;
+  const drawNote = (rows) => {
+    const note = document.getElementById('bx-note');
+    const d = rows[chartPick];
+    note.replaceChildren();
+    mark(note, { 'data-source': 'ibov_trend', 'data-row': chartPick });
+    const big = el('span', 'big bx-num'); big.append(mark(el('span', '', fmtInt(d.points)), { 'data-field': 'points' }), document.createTextNode(' pts'));
+    const lab = el('span', 'lab');
+    lab.append(mark(el('span', '', d.label), { 'data-field': 'label' }), document.createTextNode(' · '), mark(el('span', '', d.date), { 'data-field': 'date' }));
+    note.append(big, lab, mark(el('p', 'txt', d.note), { 'data-field': 'note' }));
+  };
+  const drawChart = () => {
+    const box = document.getElementById('bx-chart');
+    const note = document.getElementById('bx-note');
+    const res = dash.data('ibov_trend');
+    if (res.status !== 'ok') { box.replaceChildren(); note.replaceChildren(); if (res.status === 'error') box.append(el('p', 'bx-failed', 'Falha ao carregar')); return; }
+    const rows = res.data.map((d) => ({ ...d, points: Number(d.points) }));
+    if (chartPick >= rows.length) chartPick = rows.length - 1;
+    const w = Math.max(box.clientWidth, 300);
+    const h = Math.max(240, Math.min(340, w * 0.36));
+    const m = { t: 44, r: 30, b: 34, l: 30 };
+    box.replaceChildren();
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('aria-hidden', 'true');
+    const x = d3.scalePoint(rows.map((d) => d.date), [m.l + 40, w - m.r - 40]);
+    const lo = d3.min(rows, (d) => d.points), hi = d3.max(rows, (d) => d.points);
+    const pad = (hi - lo) * 0.25 || 1000;
+    const y = d3.scaleLinear([lo - pad, hi + pad], [h - m.b, m.t]);
+    const ticks = y.ticks(4);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', (v) => y(v)).attr('y2', (v) => y(v)).attr('stroke', 'rgba(255,255,255,0.07)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l).attr('y', (v) => y(v) - 6).attr('fill', '#6e6e74').attr('font-size', 11).text((v) => fmtInt(v));
+    const grad = svg.append('defs').append('linearGradient').attr('id', 'bx-ibov-fade').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+    [[0, .32], [.5, .1], [1, 0]].forEach(([o, a]) => grad.append('stop').attr('offset', o).attr('stop-color', '#8052ff').attr('stop-opacity', a));
+    svg.append('path').datum(rows).attr('d', d3.area().x((d) => x(d.date)).y0(h - m.b).y1((d) => y(d.points))).attr('fill', 'url(#bx-ibov-fade)');
+    const path = svg.append('path').datum(rows).attr('d', d3.line().x((d) => x(d.date)).y((d) => y(d.points))).attr('fill', 'none').attr('stroke', '#8052ff').attr('stroke-width', 2.5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    if (!chartDrawn && !reduced()) {
+      const len = path.node().getTotalLength();
+      path.attr('stroke-dasharray', len + ' ' + len).attr('stroke-dashoffset', len).transition().duration(1600).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0).on('end', () => path.attr('stroke-dasharray', null));
+    }
+    chartDrawn = true;
+    const dropPct = (rows[rows.length - 1].points / rows[0].points - 1) * 100;
+    svg.append('text').attr('x', (x(rows[0].date) + x(rows[rows.length - 1].date)) / 2).attr('y', m.t - 18).attr('text-anchor', 'middle').attr('fill', '#ffb829').attr('font-size', 13).attr('font-weight', 600)
+      .text(dropPct.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '% do recorde ao último fechamento');
+    svg.append('g').selectAll('text').data(rows).join('text').attr('x', (d) => x(d.date)).attr('y', h - 10).attr('text-anchor', 'middle').attr('fill', (d, i) => (i === chartPick ? '#ffffff' : '#a6a6ab')).attr('font-size', 12).text((d) => d.date);
+    const tip = el('div', 'bx-tip');
+    box.appendChild(tip);
+    const g = svg.selectAll('g.pt').data(rows).join('g').attr('class', 'pt');
+    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', 22).attr('fill', 'transparent');
+    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 14 : 0)).attr('fill', 'rgba(255,184,41,0.18)');
+    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 7 : 5.5)).attr('fill', '#000').attr('stroke', '#ffb829').attr('stroke-width', 2.5);
+    g.append('text').attr('x', (d) => x(d.date)).attr('y', (d) => y(d.points) - 16).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-size', 14).text((d) => fmtInt(d.points));
+    g.on('mouseenter', (e, d) => {
+      tip.replaceChildren(el('div', 'd', d.label + ' · ' + d.date), el('div', '', fmtInt(d.points) + ' pts'));
+      const px = x(d.date) / w * box.clientWidth, py = y(d.points) / h * box.clientHeight;
+      tip.style.left = Math.min(Math.max(px + 16, 0), box.clientWidth - 180) + 'px';
+      tip.style.top = Math.max(py - 24, 0) + 'px';
+      tip.classList.add('on');
+    }).on('mouseleave', () => tip.classList.remove('on')).on('click', (e, d) => { chartPick = rows.indexOf(d); drawChart(); });
+    drawNote(res.data);
+  };
+
+  /* ================= forces map ================= */
+  let forceSel = { kind: 'front', name: null };
+  const effClass = (e) => (/sob|sobe/i.test(e) ? 'bx-up' : /cai|perd/i.test(e) ? 'bx-down' : 'bx-flat');
+  const effColor = (e) => (/sob/i.test(e) ? '#34c9a3' : '#ffb829');
+  const drawForces = () => {
+    const box = document.getElementById('bx-fmap');
+    const side = document.getElementById('bx-fside');
+    const res = dash.data('forces');
+    if (res.status !== 'ok') { placeholder(box, res); side.replaceChildren(); return; }
+    const rows = res.data;
+    const fronts = Array.from(new Set(rows.map((r) => r.front)));
+    const assets = Array.from(new Set(rows.map((r) => r.asset)));
+    if (!forceSel.name) forceSel = { kind: 'front', name: fronts[0] };
+    const w = Math.max(box.clientWidth, 320);
+    const narrow = w < 560;
+    const fs = narrow ? 12 : 15;
+    const h = Math.max(fronts.length, assets.length) * (narrow ? 58 : 70) + 40;
+    const lx = narrow ? 118 : Math.max(180, w * 0.27);
+    const rx = w - (narrow ? 96 : Math.max(150, w * 0.24));
+    const fy = d3.scalePoint(fronts, [40, h - 40]).padding(0.3);
+    const ay = d3.scalePoint(assets, [30, h - 30]).padding(0.2);
+    box.replaceChildren();
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('aria-hidden', 'true');
+    const isOn = (r) => (forceSel.kind === 'front' ? r.front === forceSel.name : r.asset === forceSel.name);
+    const lk = d3.linkHorizontal().source((r) => [lx + 10, fy(r.front)]).target((r) => [rx - 10, ay(r.asset)]);
+    svg.append('g').selectAll('path').data(rows).join('path').attr('class', 'link').attr('d', lk)
+      .attr('stroke', (r) => effColor(r.effect)).attr('stroke-width', (r) => (isOn(r) ? 2.4 : 1)).attr('opacity', (r) => (isOn(r) ? 0.95 : 0.14));
+    svg.append('g').selectAll('path').data(rows.filter(isOn)).join('path').attr('class', 'link flow').attr('d', lk)
+      .attr('stroke', '#ffffff').attr('stroke-width', 2).attr('opacity', 0.55);
+    const fg = svg.append('g').selectAll('g').data(fronts).join('g').attr('class', 'node')
+      .on('click', (e, f) => { forceSel = { kind: 'front', name: f }; drawForces(); });
+    fg.append('circle').attr('cx', lx).attr('cy', (f) => fy(f)).attr('r', (f) => (forceSel.kind === 'front' && forceSel.name === f ? 9 : 6))
+      .attr('fill', (f) => (forceSel.kind === 'front' && forceSel.name === f ? '#8052ff' : '#000')).attr('stroke', '#8052ff').attr('stroke-width', 2);
+    fg.append('text').attr('x', lx - 16).attr('y', (f) => fy(f) + 5).attr('text-anchor', 'end').attr('font-size', fs).attr('font-weight', 600)
+      .attr('fill', (f) => (forceSel.kind === 'front' && forceSel.name === f ? '#ffffff' : '#a6a6ab')).text((f) => f);
+    const ag = svg.append('g').selectAll('g').data(assets).join('g').attr('class', 'node')
+      .on('click', (e, a) => { forceSel = { kind: 'asset', name: a }; drawForces(); });
+    ag.append('circle').attr('cx', rx).attr('cy', (a) => ay(a)).attr('r', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? 9 : 6))
+      .attr('fill', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? '#ffb829' : '#000')).attr('stroke', '#ffb829').attr('stroke-width', 2);
+    ag.append('text').attr('x', rx + 16).attr('y', (a) => ay(a) + 5).attr('font-size', fs).attr('font-weight', 600)
+      .attr('fill', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? '#ffffff' : '#a6a6ab')).text((a) => a);
+
+    side.replaceChildren();
+    side.append(el('h3', '', forceSel.kind === 'front' ? 'Frente' : 'Ativo'), el('p', 'front', forceSel.name));
+    rows.forEach((r, i) => {
+      if (!isOn(r)) return;
+      const it = el('div', 'bx-fitem');
+      mark(it, { 'data-row': i });
+      it.style.animationDelay = (side.children.length * 0.06) + 's';
+      const a = el('p', 'a');
+      a.append(mark(el('span', '', forceSel.kind === 'front' ? r.asset : r.front), { 'data-field': forceSel.kind === 'front' ? 'asset' : 'front' }),
+        mark(el('span', 'e ' + effClass(r.effect), r.effect), { 'data-field': 'effect' }));
+      it.append(a, mark(el('p', '', r.note), { 'data-field': 'note' }));
+      side.appendChild(it);
+    });
+  };
+
+  /* ================= AI: headlines and behind the scenes ================= */
+  let aiTab = 'Manchete';
+  const openAI = new Set();
+  const revealed = new Set();
+  const badge = (st) => { const c = /confirm/i.test(st) ? 'ok' : /disput/i.test(st) ? 'dis' : 'rep'; return el('span', 'bx-badge ' + c, st); };
+  const setAiTab = (k) => {
+    aiTab = k;
+    const tabs = document.getElementById('bx-ai-tabs');
+    tabs.querySelectorAll('.bx-ai-tab').forEach((t) => t.setAttribute('aria-selected', t.dataset.k === k ? 'true' : 'false'));
+    document.getElementById('bx-ai-list').querySelectorAll('.bx-ai').forEach((n) => {
+      const show = n.dataset.aikind === k;
+      n.classList.toggle('bx-hide', !show);
+      if (show) { n.classList.remove('bx-pop'); void n.offsetWidth; n.classList.add('bx-pop'); }
+    });
+    const note = document.getElementById('bx-ai-note');
+    if (note) note.textContent = k === 'Bastidores' ? 'Bastidores são informações reportadas por veículos com fontes próprias, muitas vezes anônimas. Passe o mouse ou toque para revelar.' : 'Anúncios oficiais e números reportados pelas próprias empresas.';
+  };
+  const drawAI = () => {
+    const tabs = document.getElementById('bx-ai-tabs');
+    const list = document.getElementById('bx-ai-list');
+    const res = dash.data('ai_news');
+    if (res.status !== 'ok') { placeholder(list, res); tabs.replaceChildren(); return; }
+    const rows = res.data;
+    const kinds = [['Manchete', 'Manchetes'], ['Bastidores', 'Bastidores']];
+    tabs.replaceChildren();
+    kinds.forEach(([k, label]) => {
+      const t = el('button', 'bx-ai-tab');
+      t.type = 'button'; t.dataset.k = k; t.setAttribute('role', 'tab');
+      t.append(document.createTextNode(label), el('span', 'c', String(rows.filter((r) => r.kind === k).length)));
+      t.addEventListener('click', () => setAiTab(k));
+      tabs.appendChild(t);
+    });
+    let note = document.getElementById('bx-ai-note');
+    if (!note) { note = el('p', 'bx-ai-note'); note.id = 'bx-ai-note'; tabs.after(note); }
+    list.replaceChildren();
+    rows.forEach((r, i) => {
+      const item = el('article', 'bx-ai bx-step' + (openAI.has(i) ? ' bx-open' : '') + (r.kind === 'Bastidores' && !revealed.has(i) ? ' bx-secret' : ''));
+      mark(item, { 'data-row': i });
+      item.dataset.aikind = r.kind;
+      item.dataset.step = 'ai' + i;
+      const top = el('div', 'bx-ai-top');
+      top.append(mark(badge(r.status), { 'data-field': 'status' }), mark(el('span', 'bx-ai-actor', r.actor), { 'data-field': 'actor' }),
+        mark(el('span', 'bx-ai-date', r.date), { 'data-field': 'date' }));
+      const body = el('div', 'bx-acc-body');
+      const inner = el('div', 'bx-ai-body');
+      const apply = el('div', 'bx-apply');
+      apply.append(el('p', 'bx-k', 'Como aplicar'), mark(el('p', '', r.apply), { 'data-field': 'apply' }));
+      const src = el('p', 'bx-ai-src');
+      src.append(document.createTextNode('Fonte: '), mark(el('span', '', r.source), { 'data-field': 'source' }));
+      if (r.url && /^https:\/\//.test(r.url)) {
+        const a = el('a', '', 'ver resumo');
+        a.href = r.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.addEventListener('click', (e) => e.stopPropagation());
+        src.append(document.createTextNode(' · '), a);
+      }
+      inner.append(mark(el('p', '', r.detail), { 'data-field': 'detail' }), apply, src);
+      body.append(inner);
+      item.append(top, el('p', 'bx-reveal-tag', 'Fofoca de corredor · toque para revelar'),
+        mark(el('h3', 'bx-ai-head', r.headline), { 'data-field': 'headline' }),
+        mark(el('p', 'bx-ai-sum', r.summary), { 'data-field': 'summary' }), body);
+      item.addEventListener('click', () => {
+        if (item.classList.contains('bx-secret')) { item.classList.remove('bx-secret'); revealed.add(i); }
+        const open = item.classList.toggle('bx-open');
+        if (open) openAI.add(i); else openAI.delete(i);
+      });
+      if (r.kind !== aiTab) item.classList.add('bx-hide');
+      list.appendChild(item);
+    });
+    setAiTab(aiTab);
+  };
+
+  /* ================= Jarvis: the constellation you talk to ================= */
+  const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9%$., ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const jarvis = (() => {
+    const synth = window.speechSynthesis;
+    const ok = !!synth && typeof window.SpeechSynthesisUtterance === 'function';
+    if (!ok && !(window.AudioContext || window.webkitAudioContext)) root.classList.add('bx-nospeech');
+    const $ = (id) => document.getElementById(id);
+    const status = $('bx-con-status'), fillBar = $('bx-con-fill'), voiceSel = $('bx-voice'), rateSel = $('bx-rate');
+    const chat = $('bx-chat'), input = $('bx-ask-input'), micBtn = $('bx-mic'), pauseBtn = $('bx-pause');
+
+    /* ---- voices ---- */
+    const MALE = /(antonio|antônio|daniel|felipe|thiago|tiago|donato|fabio|fábio|humberto|julio|júlio|nicolau|valerio|valério|leonardo|ricardo|paulo|duarte|cristiano|macerio|male|mascul)/i;
+    const FEMALE = /(luciana|francisca|brenda|elza|giovanna|leila|leticia|letícia|manuela|yara|thalita|maria|raquel|fernanda|vitoria|vitória|joana|catarina|female|femin|google português)/i;
+    let voices = [];
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const NEURAL_VOICES = [['n:alex', 'Jarvis · masculina (neural)'], ['n:dora', 'Jarvis · feminina (neural)']];
+    const loadVoices = () => {
+      const all = ok ? synth.getVoices().filter((v) => /^pt/i.test(v.lang)) : [];
+      const score = (v) => (MALE.test(v.name) ? 100 : FEMALE.test(v.name) ? 0 : 40) + (/natural|neural|online|premium|enhanced/i.test(v.name) ? 20 : 0) + (/pt[-_]BR/i.test(v.lang) ? 10 : 0);
+      voices = all.sort((x, y) => score(y) - score(x));
+      const keep = voiceSel.value;
+      voiceSel.replaceChildren();
+      const nr = dash.data('narration'); // neural voices only when today's recorded narration exists
+      if (AC && nr.status === 'ok' && nr.data.length) NEURAL_VOICES.forEach(([v, l]) => voiceSel.append(new Option(l, v)));
+      voices.forEach((v) => {
+        const tag = MALE.test(v.name) ? ' · masculina' : FEMALE.test(v.name) ? ' · feminina' : '';
+        voiceSel.append(new Option('Aparelho · ' + v.name.replace(/Microsoft |Google |\(.*?\)| - .*$/g, '').trim() + tag, v.name));
+      });
+      if (!voiceSel.options.length) voiceSel.append(new Option('Voz padrão do aparelho', ''));
+      voiceSel.value = keep && [...voiceSel.options].some((o) => o.value === keep) ? keep : voiceSel.options[0].value;
+    };
+    loadVoices();
+    dash.onData(loadVoices);
+    if (ok) { if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices); else synth.onvoiceschanged = loadVoices; }
+    const voice = () => voices.find((v) => v.name === voiceSel.value) || voices[0] || null;
+
+    /* ---- neural voices: the briefing is narrated every morning and played here, the same on any device ---- */
+    const N = { ctx: null, src: null, cache: new Map() };
+    const neuralName = () => (AC && String(voiceSel.value || '').startsWith('n:') ? voiceSel.value.slice(2) : null);
+    const narration = () => { const r = dash.data('narration'); return r.status === 'ok' && r.data.length ? r.data : null; };
+    const unit = (key) => { const n = narration(); return n && key ? n.find((u) => u.key === key) || null : null; };
+    const voiceData = (name) => dash.data('voice_' + name);
+    const ensureCtx = () => {
+      if (!AC) return null;
+      if (!N.ctx) { try { N.ctx = new AC(); } catch (e) { return null; } }
+      if (N.ctx.state === 'suspended' && !N.src) N.ctx.resume().catch(() => {});
+      return N.ctx;
+    };
+    const unlock = () => {
+      const c = ensureCtx(); if (!c) return;
+      try { const b = c.createBuffer(1, 1, 22050); const x = c.createBufferSource(); x.buffer = b; x.connect(c.destination); x.start(0); } catch (e) { }
+      const nn = neuralName(); if (nn && !window.__bxAudioUrl) voiceData(nn);
+    };
+    const waitVoice = (name) => new Promise((res) => {
+      const t0 = Date.now();
+      const tick = () => {
+        const r = voiceData(name);
+        if (r.status === 'ok') return res(r.data);
+        if (r.status === 'error' || r.status === 'missing' || r.status === 'declined' || Date.now() - t0 > 90000) return res(null);
+        setTimeout(tick, 250);
+      };
+      tick();
+    });
+    const getBuffer = async (key) => {
+      const name = neuralName(); const c = ensureCtx();
+      if (!name || !c || !key || !unit(key)) return null;
+      const ck = name + ':' + key;
+      if (N.cache.has(ck)) return N.cache.get(ck);
+      let u8;
+      if (window.__bxAudioUrl) {
+        const r = await fetch(window.__bxAudioUrl(name, key));
+        if (!r.ok) return null;
+        u8 = new Uint8Array(await r.arrayBuffer());
+      } else {
+        const rows = await waitVoice(name);
+        const row = rows && rows.find((r) => r.key === key);
+        if (!row || !row.mp3) return null;
+        const bin = atob(row.mp3); u8 = new Uint8Array(bin.length);
+        for (let k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+      }
+      const buf = await new Promise((res, rej) => { const pr = c.decodeAudioData(u8.buffer, res, rej); if (pr && pr.then) pr.then(res, rej); });
+      N.cache.set(ck, buf);
+      return buf;
+    };
+    const stopNeural = () => {
+      if (N.src) { N.src.onended = null; try { N.src.stop(); } catch (e) { } N.src = null; }
+      if (N.ctx && N.ctx.state === 'suspended') N.ctx.resume().catch(() => {});
+    };
+    const isMale = (v) => !!v && MALE.test(v.name);
+
+    /* ---- speech text ---- */
+    const MONTHS = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+    const MON3 = { jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5, jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11 };
+    const speakable = (s) => String(s || '')
+      .replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/g, (m, d, mo, y) => Number(d) + ' de ' + MONTHS[Number(mo) - 1] + ' de ' + y)
+      .replace(/(\d{1,2})\/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\/(\d{4})/gi, (m, d, mo, y) => Number(d) + ' de ' + MONTHS[MON3[mo.toLowerCase()]] + ' de ' + y)
+      .replace(/\b(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\/(\d{4})/gi, (m, mo, y) => MONTHS[MON3[mo.toLowerCase()]] + ' de ' + y)
+      .replace(/(\d{1,2})\/(\d{1,2})(?!\d)/g, (m, d, mo) => (Number(mo) >= 1 && Number(mo) <= 12 ? Number(d) + ' de ' + MONTHS[Number(mo) - 1] : m))
+      .replace(/US\$\s?([\d.,]+)\s?(bi|bilhões)\b/gi, '$1 bilhões de dólares')
+      .replace(/US\$\s?([\d.,]+)/g, '$1 dólares')
+      .replace(/R\$\s?([\d.,]+)/g, '$1 reais')
+      .replace(/\bpts\b/g, 'pontos').replace(/a\.a\./g, 'ao ano')
+      .replace(/\bEUA\b/g, 'Estados Unidos').replace(/\bBTC\b/g, 'Bitcoin').replace(/\bB3\b/g, 'B 3').replace(/\bIA\b/g, 'I A')
+      .replace(/\bSEC\b/g, 'S E C').replace(/\bIPO\b/g, 'I P O').replace(/\bDOGE\b/g, 'Doge')
+      .replace(/(\w)\s?–\s?(\w)/g, '$1 e $2')
+      .replace(/[▾▲▼·]/g, ',')
+      .replace(/\s+/g, ' ').trim();
+    const deltaWords = (r) => {
+      const v = String(r.delta || '').replace(/^[+−-]/, '');
+      if (r.trend === 'up') return 'em alta de ' + v;
+      if (r.trend === 'down') return 'em queda de ' + v;
+      return v;
+    };
+    const ORD = ['Primeira', 'Segunda', 'Terceira', 'Quarta', 'Quinta', 'Sexta'];
+    const greet = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; };
+    const q = (sel) => root.querySelector(sel);
+    const statusWords = (r) => (/confirm/i.test(r.status) ? '' : /disput/i.test(r.status) ? 'Informação disputada. ' : 'Segundo ' + r.source + '. ');
+
+    /* ---- the briefing as a script ---- */
+    const scriptFromNarration = (from) => {
+      const n = narration(); const S = [];
+      if (!n) return S;
+      const h = new Date().getHours();
+      const openKey = h < 12 ? 'open_m' : h < 18 ? 'open_t' : 'open_n';
+      const weekend = [0, 6].includes(new Date().getDay());
+      const push = (u) => {
+        if (!u) return;
+        const seg = { el: q(u.target), text: u.text, key: u.key };
+        const last = S[S.length - 1];
+        if (last && last.id === u.section) last.segs.push(seg); else S.push({ id: u.section, title: u.title, segs: [seg] });
+      };
+      push(n.find((u) => u.key === openKey));
+      n.filter((u) => u.kind === 'brief').sort((x, y) => Number(x.seq) - Number(y.seq)).forEach(push);
+      push(n.find((u) => u.key === (weekend ? 'fecho_fds' : 'fecho_dia')));
+      if (from) { const k = S.findIndex((x) => x.id === from); if (k > 0) return S.slice(k); }
+      return S;
+    };
+    const buildScript = (from) => {
+      if (neuralName() && narration()) { const S2 = scriptFromNarration(from); if (S2.length) return S2; }
+      const S = [];
+      const sec = (id, title, segs) => { if (segs.length) S.push({ id, title, segs }); };
+      const part = (fn) => { try { fn(); } catch (e) { console.error(e); } };
+      const w = dash.data('weather_r'), m = dash.data('market'), n = dash.data('news'), ai = dash.data('ai_news'), dd = dash.data('dossier');
+      const memo = dash.data('dossier_full'), g = dash.data('geopolitics'), f = dash.data('forces');
+      const weekend = [0, 6].includes(new Date().getDay());
+      sec('topo', 'Abertura', [{ el: q('#topo'), text: greet() + ', Dheryck. Aqui é o seu briefing de ' + todayLong.toLowerCase() + '. Vou direto ao ponto, e com calma. Se quiser perguntar algo, é só falar.' }]);
+      part(() => {
+        if (w.status === 'ok' && w.data.length) {
+          const d0 = w.data[0];
+          const rest = w.data.slice(1);
+          const hottest = rest.reduce((a, b) => (b.high > a.high ? b : a), rest[0] || d0);
+          const wettest = rest.reduce((a, b) => (b.precip > a.precip ? b : a), rest[0] || d0);
+          sec('clima', 'Clima', [{ el: q('#bx-wx'), text: 'Primeiro, o tempo em Guarulhos. Hoje, ' + d0.condition.toLowerCase() + '. Máxima de ' + d0.high + ' graus, mínima de ' + d0.low + '. Chance de chuva de ' + d0.precip + ' por cento. ' + d0.tip + ' Nos próximos dias, o mais quente é ' + hottest.weekday.toLowerCase() + ', com ' + hottest.high + ' graus. E fique atento a ' + wettest.weekday.toLowerCase() + ': ' + wettest.condition.toLowerCase() + ', com ' + wettest.precip + ' por cento de chance de chuva.' }]);
+        }
+      });
+      part(() => {
+        if (m.status === 'ok') sec('mercado', 'Mercado', m.data.map((r, i) => ({ el: q('[data-step="m' + i + '"]'), text: (i === 0 ? 'Agora, o mercado. E hoje ele conta uma história. ' : '') + r.label + ': ' + r.value + ', ' + deltaWords(r) + '. ' + r.why })));
+      });
+      part(() => {
+        if (n.status === 'ok') sec('noticias', 'Notícias', n.data.map((r, i) => ({ el: q('[data-step="n' + i + '"]'), text: (i === 0 ? 'Vamos às cinco notícias que mais pesam hoje. ' : '') + (ORD[i] || 'Próxima') + '. ' + r.headline + '. ' + r.what + ' Por que importa: ' + r.why })));
+      });
+      part(() => {
+        if (ai.status === 'ok') {
+          const segs = [];
+          const man = ai.data.map((r, i) => ({ r, i })).filter((x) => x.r.kind !== 'Bastidores');
+          const bas = ai.data.map((r, i) => ({ r, i })).filter((x) => x.r.kind === 'Bastidores');
+          man.forEach(({ r, i }, k) => segs.push({ el: q('[data-step="ai' + i + '"]'), text: (k === 0 ? 'Agora, inteligência artificial. Primeiro, as manchetes. ' : '') + r.headline + '. ' + statusWords(r) + r.summary + ' ' + r.detail + ' Como aplicar: ' + r.apply }));
+          bas.forEach(({ r, i }, k) => segs.push({ el: q('[data-step="ai' + i + '"]'), text: (k === 0 ? 'E agora, os bastidores. O que circula nos corredores e ainda não é oficial. ' : '') + r.headline + '. ' + statusWords(r) + r.summary + ' ' + r.detail }));
+          sec('ia', 'Inteligência artificial', segs);
+        }
+      });
+      part(() => {
+        if (dd.status === 'ok') sec('dossie', 'Dossiê de poder', dd.data.map((r, i) => ({ el: q('[data-step="d' + i + '"]'), text: (i === 0 ? 'Agora, o dossiê de poder. ' : '') + 'Bloco ' + r.block + ', ' + r.country + '. ' + r.summary })));
+      });
+      part(() => {
+        if (memo.status === 'ok') {
+          const rows = memo.data.slice().sort((a, b) => Number(a.order) - Number(b.order));
+          sec('dossie-completo', 'Dossiê completo', rows.map((r, i) => ({ el: q('[data-step="c' + i + '"]'), text: (i === 0 ? 'E agora, o dossiê completo, em ' + rows.length + ' capítulos. ' : '') + 'Capítulo ' + (i + 1) + '. ' + r.title + '. ' + r.body })));
+        }
+      });
+      part(() => {
+        if (g.status === 'ok') {
+          const r = g.data[0];
+          const segs = [{ el: q('#bx-geo-intro'), text: 'Para fechar, a geopolítica financeira. ' + r.intro }];
+          arr(r.points).forEach((p, i) => segs.push({ el: q('[data-step="p' + i + '"]'), text: String(p.heading).replace(/^\d+\.\s*/, '') + '. ' + p.body }));
+          if (f.status === 'ok') {
+            const fronts = Array.from(new Set(f.data.map((x) => x.front)));
+            segs.push({ el: q('#bx-fside'), text: 'No mapa de forças: ' + fronts.map((fr) => fr + ' pressiona ' + f.data.filter((x) => x.front === fr).map((x) => x.asset + ', que ' + x.effect).join('; ')).join('. ') + '.' });
+          }
+          segs.push({ el: q('#leitura'), text: 'A leitura do dia. ' + r.conclusion + ' É isso. ' + (weekend ? 'Bom fim de semana.' : 'Tenha um ótimo dia.') });
+          sec('geopolitica', 'Geopolítica', segs);
+        }
+      });
+      if (from) { const k = S.findIndex((s) => s.id === from); if (k > 0) return S.slice(k); }
+      return S;
+    };
+
+    const phrases = (text) => {
+      const t = speakable(text);
+      const parts = t.match(/[^.!?;:,—]+[.!?;:,—]*/g) || [t];
+      const out = [];
+      parts.forEach((p) => {
+        const s = p.trim();
+        if (!s) return;
+        const end = s.slice(-1);
+        const pause = /[.!?]/.test(end) ? 620 : /[;:]/.test(end) ? 420 : end === '—' ? 340 : end === ',' ? 260 : 200;
+        const prev = out[out.length - 1];
+        if (prev && prev.text.length < 22 && prev.pause <= 260) { prev.text += ' ' + s; prev.pause = pause; }
+        else out.push({ text: s, pause });
+      });
+      return out;
+    };
+
+    /* ---- player ---- */
+    let script = [], si = 0, gi = 0, pi = 0, list = [], state = 'idle', mode = 'briefing', timer = 0, token = 0;
+    let voiceOk = false, warned = false;
+    const voiceFail = () => {
+      if (warned) return;
+      warned = true;
+      addMsg('jv', 'O navegador não liberou a minha voz aqui. Toque de novo na constelação; se continuar mudo, abra este dashboard no Chrome ou no Edge, que têm vozes em português. Enquanto isso, eu destaco cada parte na tela.');
+    };
+    let saved = null; // where a briefing stopped for a question
+    const totalSegs = () => script.reduce((n, s) => n + s.segs.length, 0);
+    const doneSegs = () => script.slice(0, si).reduce((n, s) => n + s.segs.length, 0) + gi;
+    let listening = false;
+    const setUI = () => {
+      root.classList.toggle('bx-speaking', mode === 'briefing' && (state === 'playing' || state === 'paused'));
+      root.classList.toggle('bx-reading', mode === 'briefing' && (state === 'playing' || state === 'paused'));
+      pauseBtn.setAttribute('aria-label', state === 'playing' ? 'Pausar' : 'Retomar');
+      pauseBtn.innerHTML = state === 'playing'
+        ? '<svg viewBox="0 0 20 20"><rect x="5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="11.5" y="4" width="3.5" height="12" rx="1" fill="currentColor"/></svg>'
+        : '<svg viewBox="0 0 20 20"><path d="M6 4 L16 10 L6 16 Z" fill="currentColor"/></svg>';
+      if (listening) status.textContent = 'Ouvindo… pode falar';
+      else if (state === 'idle') {
+        const v = voice();
+        status.textContent = (saved ? 'Briefing pausado · diga "continua" para seguir' : 'Toque na constelação ou pergunte algo') + (!neuralName() && ok && v && !isMale(v) && voices.length ? ' · sem voz masculina neste aparelho' : '');
+      } else {
+        const s = script[si];
+        status.textContent = (state === 'paused' ? 'Pausado · ' : mode === 'answer' ? 'Respondendo' : 'Lendo · ') + (mode === 'answer' ? '' : (s ? s.title : ''));
+      }
+      const tot = totalSegs();
+      fillBar.style.width = mode === 'briefing' && state !== 'idle' && tot ? Math.round(doneSegs() / tot * 100) + '%' : '0%';
+      brain.setEnergy(listening ? 1.8 : state === 'playing' ? 2.4 : 1);
+      root.querySelectorAll('.bx-live').forEach((x) => x.classList.remove('bx-live'));
+      if (mode === 'briefing' && state !== 'idle' && script[si]) { const host = document.getElementById(script[si].id); const s2 = host && host.closest('.bx-sec, .bx-hero'); if (s2) s2.classList.add('bx-live'); }
+    };
+    /* ---- following the reading on screen: go to the block, then to the exact point being spoken ---- */
+    const normW = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter((w) => w.length > 3);
+    const HEAD = 76;
+    const scrollToY = (y) => window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: reduced() ? 'auto' : 'smooth' });
+    const goBlock = (e) => {
+      if (!e || !e.getBoundingClientRect) return;
+      const r = e.getBoundingClientRect(), vh = window.innerHeight;
+      if (e.matches('.bx-sec, .bx-hero')) { scrollToY(scrollY + r.top - 10); return; }
+      if (r.height < vh * 0.7) scrollToY(scrollY + r.top - Math.max(HEAD, (vh - r.height) * 0.35));
+      else scrollToY(scrollY + r.top - HEAD);
+    };
+    const goPoint = (e) => {
+      const r = e.getBoundingClientRect(), vh = window.innerHeight;
+      if (r.top >= HEAD && r.bottom <= vh * 0.88) return; // already in view: the screen stays put
+      scrollToY(scrollY + r.top - Math.max(HEAD, (vh - Math.min(r.height, vh * 0.6)) * 0.4));
+    };
+    const pointsOf = (seg) => {
+      if (seg._pts) return seg._pts;
+      const out = [];
+      if (seg.el && !seg.el.matches('.bx-sec, .bx-hero')) seg.el.querySelectorAll('*').forEach((x) => {
+        const own = [...x.childNodes].filter((c) => c.nodeType === 3).map((c) => c.textContent).join(' ').trim();
+        if (own.length > 14) out.push({ el: x, words: new Set(normW(x.textContent)) });
+      });
+      return (seg._pts = out);
+    };
+    const pointFor = (seg, text) => {
+      const w = normW(text); if (w.length < 2) return null;
+      let best = null, score = 0;
+      pointsOf(seg).forEach((p) => { const s = w.filter((x) => p.words.has(x)).length / w.length; if (s > score) { score = s; best = p.el; } });
+      return score >= 0.5 ? best : null;
+    };
+    let pointEl = null;
+    const setPoint = (e) => {
+      if (e === pointEl) return;
+      if (pointEl) pointEl.classList.remove('bx-point');
+      pointEl = e || null;
+      if (pointEl) { pointEl.classList.add('bx-point'); goPoint(pointEl); }
+    };
+    const follow = (seg, text) => { const e = pointFor(seg, text); if (e) setPoint(e); };
+    const sentencesOf = (text) => { const t = String(text || ''); const parts = t.match(/[^.!?]+[.!?]*\s*/g) || [t]; let at = 0; const tot = t.length || 1; return parts.map((p) => { const o = { at: at / tot, text: p }; at += p.length; return o; }); };
+    let followRaf = 0;
+    const trackNeural = (seg, src, buf) => {
+      cancelAnimationFrame(followRaf);
+      const marks = sentencesOf(seg.text); const t0 = N.ctx.currentTime; let k = 0; // the first sentence is the block itself
+      const tick = () => {
+        if (N.src !== src) return;
+        const pos = (N.ctx.currentTime - t0) * src.playbackRate.value / (buf.duration || 1);
+        while (k + 1 < marks.length && marks[k + 1].at <= pos + 0.01) { k++; follow(seg, marks[k].text); }
+        followRaf = requestAnimationFrame(tick);
+      };
+      followRaf = requestAnimationFrame(tick);
+    };
+    const clearNow = () => { root.querySelectorAll('.bx-now').forEach((x) => { if (x.classList.contains('bx-seg')) x.classList.add('bx-heard'); x.classList.remove('bx-now'); }); setPoint(null); };
+    const resetReading = () => root.querySelectorAll('.bx-seg, .bx-heard, .bx-reached').forEach((x) => x.classList.remove('bx-seg', 'bx-heard', 'bx-reached'));
+    const markReading = (sections) => {
+      // every block the briefing will read gets dimmed until reached (sections and containers of other blocks are handled separately)
+      const els = []; sections.forEach((s) => s.segs.forEach((g) => { if (g.el && !els.includes(g.el)) els.push(g.el); }));
+      els.forEach((e) => { if (e.matches('.bx-sec, .bx-hero') || els.some((o) => o !== e && e.contains(o))) return; e.classList.add('bx-seg'); });
+    };
+    const focusSeg = (seg) => {
+      clearNow();
+      if (!seg || !seg.el) return;
+      if (seg.el.dataset.aikind && seg.el.dataset.aikind !== aiTab) setAiTab(seg.el.dataset.aikind);
+      if (seg.el.classList.contains('bx-hide')) seg.el.classList.remove('bx-hide');
+      seg.el.classList.add('bx-now');
+      const sec = seg.el.closest('.bx-sec'); if (sec) sec.classList.add('bx-reached');
+      const target = seg.el; requestAnimationFrame(() => goBlock(target)); // the screen goes to the block being read
+    };
+    const speakPhrase = () => {
+      if (state !== 'playing') return;
+      const sec = script[si];
+      if (!sec) { finish(); return; }
+      const seg = sec.segs[gi];
+      if (!seg) { si++; gi = 0; pi = 0; list = []; setUI(); clearTimeout(timer); timer = setTimeout(speakPhrase, 1100); return; }
+      if (pi === 0 && seg.key && neuralName() && !seg.noNeural) { playNeural(seg); return; }
+      if (!ok) { voiceFail(); gi++; pi = 0; clearTimeout(timer); timer = setTimeout(speakPhrase, 400); return; }
+      if (pi === 0) { list = phrases(seg.text); focusSeg(seg); setUI(); }
+      const ph = list[pi];
+      if (ph && pi > 0) follow(seg, ph.text);
+      if (!ph) { gi++; pi = 0; clearTimeout(timer); timer = setTimeout(speakPhrase, 650); return; }
+      const my = ++token;
+      const u = new SpeechSynthesisUtterance(ph.text);
+      u.lang = 'pt-BR';
+      const v = voice(); if (v) u.voice = v;
+      u.rate = Number(rateSel.value) || 0.96;
+      u.pitch = v && isMale(v) ? 0.95 : 0.86;
+      const go = () => {
+        if (my !== token || state !== 'playing') return;
+        pi++;
+        clearTimeout(timer);
+        timer = setTimeout(speakPhrase, ph.pause / (u.rate || 1));
+      };
+      let began = false;
+      u.onstart = () => { began = true; voiceOk = true; };
+      if (!voiceOk) setTimeout(() => { if (!began && my === token && state === 'playing') { voiceFail(); } }, 4000);
+      u.onend = go;
+      u.onerror = (e) => { if (e && (e.error === 'interrupted' || e.error === 'canceled')) return; go(); };
+      synth.speak(u);
+    };
+    const nextSeg = () => { const sec = script[si]; if (!sec) return null; if (sec.segs[gi + 1]) return sec.segs[gi + 1]; const ns = script[si + 1]; return ns ? ns.segs[0] : null; };
+    const playNeural = (seg) => {
+      const my = ++token;
+      focusSeg(seg); setUI();
+      const nn = neuralName();
+      if (!N.cache.has(nn + ':' + seg.key) && voiceData(nn).status !== 'ok') status.textContent = 'Preparando a voz…';
+      getBuffer(seg.key).then((buf) => {
+        if (my !== token || state !== 'playing') return;
+        if (!buf) { seg.noNeural = true; speakPhrase(); return; }
+        const src = N.ctx.createBufferSource();
+        src.buffer = buf;
+        src.playbackRate.value = (Number(rateSel.value) || 0.96) / 0.96;
+        src.connect(N.ctx.destination);
+        N.src = src; voiceOk = true; setUI();
+        src.onended = () => {
+          if (N.src !== src) return;
+          N.src = null;
+          if (my !== token || state !== 'playing') return;
+          gi++; pi = 0; clearTimeout(timer); timer = setTimeout(speakPhrase, 600);
+        };
+        src.start(0); trackNeural(seg, src, buf);
+        const nx = nextSeg(); if (nx && nx.key) getBuffer(nx.key).catch(() => {});
+      }).catch(() => { if (my !== token || state !== 'playing') return; seg.noNeural = true; speakPhrase(); });
+    };
+    const cut = () => { token++; clearTimeout(timer); if (ok) synth.cancel(); stopNeural(); };
+    const canTalk = () => ok || !!(neuralName() && N.ctx);
+    const finish = () => {
+      const was = mode;
+      state = 'idle'; token++; stopNeural(); clearNow();
+      if (was === 'briefing') { saved = null; resetReading(); }
+      mode = 'briefing';
+      setUI();
+    };
+    const play = (sections, m) => {
+      cut();
+      script = sections; si = 0; gi = 0; pi = 0; list = []; mode = m;
+      if (m === 'briefing') { resetReading(); markReading(sections); }
+      if (!canTalk()) { state = 'idle'; setUI(); return; }
+      state = 'playing'; setUI(); speakPhrase();
+    };
+    const holdBriefing = () => {
+      if (mode === 'briefing' && state !== 'idle') saved = { script, si, gi };
+      cut();
+      state = 'idle'; clearNow();
+    };
+    const pause = () => { if (state !== 'playing') return; state = 'paused'; if (N.src) { N.ctx.suspend().catch(() => {}); setUI(); return; } token++; clearTimeout(timer); if (ok) synth.cancel(); setUI(); };
+    const resume = () => {
+      if (mode === 'answer' && state !== 'idle' && saved) { cut(); state = 'idle'; clearNow(); }
+      if (state === 'paused') { state = 'playing'; setUI(); if (N.src) { N.ctx.resume().catch(() => {}); return true; } speakPhrase(); return true; }
+      if (state === 'idle' && saved && canTalk()) { script = saved.script; si = saved.si; gi = saved.gi; pi = 0; list = []; mode = 'briefing'; saved = null; state = 'playing'; setUI(); speakPhrase(); return true; }
+      return false;
+    };
+    const stop = () => { saved = null; cut(); state = 'idle'; mode = 'briefing'; clearNow(); resetReading(); setUI(); };
+    const next = () => {
+      if (state === 'idle' || mode !== 'briefing') return;
+      cut();
+      si++; gi = 0; pi = 0; list = [];
+      if (si >= script.length) { finish(); return; }
+      state = 'playing'; setUI(); speakPhrase();
+    };
+    const startBriefing = (from) => { saved = null; play(buildScript(from), 'briefing'); };
+
+    /* ---- conversation ---- */
+    const addMsg = (who, text) => {
+      const b = el('div', 'bx-msg ' + who);
+      b.textContent = text;
+      chat.appendChild(b);
+      while (chat.children.length > 14) chat.removeChild(chat.firstChild);
+      chat.scrollTop = chat.scrollHeight;
+    };
+    const say = (text, target, key) => {
+      addMsg('jv', text);
+      const k = key && unit(key) ? key : null;
+      if (!ok && !(k && neuralName())) return;
+      play([{ id: 'answer', title: 'Resposta', segs: [{ el: target || null, text, key: k }] }], 'answer');
+      if (target) { target.classList.add('bx-now'); setTimeout(() => target.classList.remove('bx-now'), 9000); }
+    };
+
+    const STOP = new Set('a o os as um uma de da do das dos e em no na nos nas que qual quais quem como por para pra pro com sem se sobre isso esse essa este esta me te voce vc eu ele ela hoje agora ja tem ter foi ser sao era fala diz dizer conta quero saber mais muito pouco porque pq qual quanto quanta custa custo vale fazer faz fez sabe acha acontece aconteceu'.split(' '));
+    const words = (s) => norm(s).split(' ').filter((w) => w.length > 2 && !STOP.has(w));
+    const corpus = () => {
+      const C = [];
+      const add = (text, target, key) => { if (text) C.push({ text: String(text), target, key, w: words(text) }); };
+      const part = (fn) => { try { fn(); } catch (e) { console.error(e); } };
+      const m = dash.data('market'), n = dash.data('news'), ai = dash.data('ai_news'), dd = dash.data('dossier'), memo = dash.data('dossier_full'), g = dash.data('geopolitics'), f = dash.data('forces');
+      part(() => { if (m.status === 'ok') m.data.forEach((r, i) => add(r.label + ': ' + r.value + ', ' + deltaWords(r) + '. ' + r.why, q('[data-step="m' + i + '"]'), 'm' + i)); });
+      part(() => { if (n.status === 'ok') n.data.forEach((r, i) => add(r.headline + '. ' + r.what + ' Por que importa: ' + r.why, q('[data-step="n' + i + '"]'), 'n' + i)); });
+      part(() => { if (ai.status === 'ok') ai.data.forEach((r, i) => add(r.actor + '. ' + r.headline + '. ' + statusWords(r) + r.summary + ' ' + r.detail + ' Como aplicar: ' + r.apply, q('[data-step="ai' + i + '"]'), 'ai' + i)); });
+      part(() => { if (dd.status === 'ok') dd.data.forEach((r, i) => { add('Bloco ' + r.block + ', ' + r.country + '. ' + r.summary, q('[data-step="d' + i + '"]'), 'd' + i); arr(r.events).forEach((e, j) => add(e.date + '. ' + e.headline + '. ' + e.detail, q('[data-step="d' + i + '"]'), 'd' + i + 'e' + j)); }); });
+      part(() => { if (memo.status === 'ok') memo.data.slice().sort((a, b) => a.order - b.order).forEach((r, i) => add(r.title + '. ' + r.body, q('[data-step="c' + i + '"]'), 'c' + i)); });
+      part(() => { if (g.status === 'ok') { const r = g.data[0]; add(r.intro, q('#bx-geo-intro'), 'geo_intro'); arr(r.points).forEach((p, i) => add(String(p.heading).replace(/^\d+\.\s*/, '') + '. ' + p.body, q('[data-step="p' + i + '"]'), 'p' + i)); add('A leitura do dia: ' + r.conclusion, q('#leitura'), 'leitura'); } });
+      part(() => { if (f.status === 'ok') f.data.forEach((r) => add(r.front + ' pressiona ' + r.asset + ', que ' + r.effect + '. ' + r.note, q('#bx-fside'), 'forces')); });
+      return C;
+    };
+    const search = (qq) => {
+      const qw = words(qq);
+      if (!qw.length) return null;
+      let best = null, bestS = 0, bestX = 0;
+      corpus().forEach((c) => {
+        let s = 0, x = 0;
+        qw.forEach((w) => { const stem = w.slice(0, Math.max(5, w.length - 2)); if (c.w.includes(w)) { s += 2; x++; } else if (w.length >= 5 && c.w.some((t) => t.startsWith(stem))) s += 1; });
+        if (s > bestS) { bestS = s; best = c; bestX = x; }
+      });
+      const need = qw.length >= 3 ? 4 : 2;
+      return bestX >= 1 && bestS >= need ? best : null;
+    };
+    const DAYS = { domingo: 0, segunda: 1, terca: 2, quarta: 3, quinta: 4, sexta: 5, sabado: 6 };
+    const weatherAnswer = (n) => {
+      const w = dash.data('weather_r');
+      if (w.status !== 'ok') return { text: 'Ainda estou carregando a previsão.' };
+      const rows = w.data;
+      let idx = 0;
+      if (/amanha/.test(n)) idx = 1;
+      else { const dn = Object.keys(DAYS).find((d) => n.includes(d)); if (dn) { const k = rows.findIndex((r) => norm(r.weekday).startsWith(dn)); if (k >= 0) idx = k; } }
+      if (/semana|proximos dias|resto/.test(n)) {
+        const t = rows.map((r) => r.day_label + ': ' + r.condition.toLowerCase() + ', ' + r.high + ' graus').join('. ');
+        return { text: 'A semana em Guarulhos. ' + t + '.', target: q('#bx-wx'), key: 'week' };
+      }
+      const d = rows[idx];
+      dayIndex = idx; wxAnimate = true; safe(drawWeather);
+      const rain = /chov|chuva|guarda/.test(n);
+      return { text: (rain ? (d.precip >= 60 ? 'Sim, a chance é alta. ' : d.precip >= 35 ? 'Pode chover. ' : 'Pouco provável. ') : '') + d.day_label + ', ' + d.weekday.toLowerCase() + ': ' + d.condition.toLowerCase() + ', máxima de ' + d.high + ' e mínima de ' + d.low + ' graus, com ' + d.precip + ' por cento de chance de chuva. ' + d.tip, target: q('#bx-wx'), key: 'w' + idx };
+    };
+    const marketAnswer = (n) => {
+      const m = dash.data('market');
+      if (m.status !== 'ok') return null;
+      const pick = (re) => m.data.findIndex((r) => re.test(norm(r.id + ' ' + r.label)));
+      let i = -1;
+      if (/dolar|cambio/.test(n)) i = pick(/usd|dolar/);
+      else if (/ibov|bolsa|acoes/.test(n)) i = pick(/ibov/);
+      else if (/bitcoin|cripto|btc/.test(n)) i = pick(/btc|bitcoin/);
+      else if (/selic|juro|copom/.test(n)) i = pick(/selic/);
+      if (i >= 0) { const r = m.data[i]; return { text: r.label + ': ' + r.value + ', ' + deltaWords(r) + '. ' + r.why, target: q('[data-step="m' + i + '"]'), key: 'm' + i }; }
+      if (/mercado/.test(n)) return { text: 'O mercado no último fechamento. ' + m.data.map((r) => r.label + ', ' + r.value + ', ' + deltaWords(r)).join('. ') + '. Pergunte sobre qualquer um e eu explico o motivo.', target: q('#mercado'), key: 'list_market' };
+      return null;
+    };
+    const aiAnswer = (n) => {
+      const ai = dash.data('ai_news');
+      if (ai.status !== 'ok') return null;
+      const hit = ai.data.findIndex((r) => norm(r.actor).split(' ').some((a) => a.length > 3 && n.includes(a)));
+      const wantGossip = /bastidor|fofoca|corredor|rumor|vazou|vazamento/.test(n);
+      if (hit >= 0 && !wantGossip) { const r = ai.data[hit]; return { text: r.headline + '. ' + statusWords(r) + r.summary + ' ' + r.detail + ' Como aplicar: ' + r.apply, target: q('[data-step="ai' + hit + '"]'), key: 'ai' + hit }; }
+      const kind = wantGossip ? 'Bastidores' : 'Manchete';
+      setAiTab(kind);
+      const rows = ai.data.filter((r) => r.kind === kind);
+      return { text: (wantGossip ? 'Nos bastidores da IA hoje: ' : 'As manchetes de IA hoje: ') + rows.map((r) => r.headline).join('. ') + '. Quer que eu detalhe alguma?', target: q('#ia'), key: wantGossip ? 'list_ai_bas' : 'list_ai_man' };
+    };
+    const answer = (raw) => {
+      const n = norm(raw);
+      if (/^(para|pare|parar|chega|silencio|cala|stop)\b/.test(n)) return { act: 'stop' };
+      if (/^(pausa|pause|espera|aguarda)\b/.test(n)) return { act: 'pause' };
+      if (/^(continu|retoma|segue|prossig|pode continuar|volta)/.test(n)) return { act: 'resume' };
+      if (/^(proxim|pula|avanca)/.test(n)) return { act: 'next' };
+      if (/^(bom dia|boa tarde|boa noite|ola|oi|e ai|fala jarvis|jarvis|hey|opa)\b/.test(n) || /(briefing|comec|me atualiza|o que (aconteceu|ta rolando|esta acontecendo)|resumo do dia|le tudo|ler tudo)/.test(n)) return { act: 'briefing' };
+      if (/(dossie completo|capitulo)/.test(n)) return { act: 'from', from: 'dossie-completo' };
+      if (/(clima|tempo|chov|chuva|temperatura|calor|frio|guarda chuva|previsao|graus)/.test(n)) return weatherAnswer(n);
+      const mk = marketAnswer(n); if (mk) return mk;
+      if (/(inteligencia artificial|\bia\b|\bai\b|openai|anthropic|claude|gpt|gemini|deepmind|chatgpt|bastidor|fofoca|corredor|github|revolut|apple|modelo)/.test(n)) { const a = aiAnswer(n); if (a) return a; }
+      if (/(noticias|manchetes|mundo|internacional)/.test(n)) {
+        const ns = dash.data('news');
+        if (ns.status === 'ok') return { text: 'As cinco notícias de hoje. ' + ns.data.map((r, i) => (ORD[i] || 'Próxima') + ': ' + r.headline).join('. ') + '. Quer que eu explique alguma?', target: q('#noticias'), key: 'list_news' };
+      }
+      if (/(mapa de forcas|quem pressiona)/.test(n)) { const f = dash.data('forces'); if (f.status === 'ok') return { text: f.data.map((r) => r.front + ' pressiona ' + r.asset + ', que ' + r.effect).join('. ') + '.', target: q('#forcas'), key: 'forces' }; }
+      if (/(leitura do dia|conclus|resumo final)/.test(n)) { const g = dash.data('geopolitics'); if (g.status === 'ok') return { text: 'A leitura do dia. ' + g.data[0].conclusion, target: q('#leitura'), key: 'leitura' }; }
+      const hit = search(raw);
+      if (hit) return { text: hit.text, target: hit.target, key: hit.key };
+      return { text: 'Isso não está no briefing de hoje. Posso falar de clima, mercado, notícias, inteligência artificial, dossiê ou geopolítica.', key: 'ph_not_found' };
+    };
+
+    /* Claude as the brain, where this page is allowed to ask it */
+    let mind = null;
+    (async () => { try { if (window.claude && typeof window.claude.use === 'function') mind = await window.claude.use('sample'); } catch (e) { mind = null; } })();
+    const contextText = () => corpus().map((c) => '- ' + c.text).join('\n').slice(0, 14000);
+    const askMind = async (raw) => {
+      const prompt = 'Você é o Jarvis, assistente pessoal do Dheryck. Fale em português do Brasil, direto e acolhedor, em no máximo 4 frases curtas, sem listas nem markdown. Responda só com base no briefing de hoje abaixo; se a resposta não estiver nele, diga isso em uma frase.\n\nBRIEFING DE HOJE:\n' + contextText() + '\n\nPERGUNTA: ' + raw;
+      const r = await mind(prompt, { cache: false, modelTier: 'quick' });
+      return String(r && r.text || '').trim();
+    };
+
+    const handle = async (raw) => {
+      const text = String(raw || '').trim();
+      if (!text) return;
+      root.classList.add('bx-awake');
+      unlock();
+      addMsg('you', text);
+      const a = answer(text);
+      if (a.act === 'stop') { stop(); say('Tudo bem. Estou aqui quando precisar.', null, 'ph_stop'); return; }
+      if (a.act === 'pause') { pause(); return; }
+      if (a.act === 'resume') { if (!resume()) say('Não tenho nada pausado. Quer que eu comece o briefing?', null, 'ph_nothing'); return; }
+      if (a.act === 'next') { next(); return; }
+      if (a.act === 'briefing') { addMsg('jv', greet() + ', Dheryck. Vamos ao briefing.'); startBriefing(); return; }
+      if (a.act === 'from') { startBriefing(a.from); return; }
+      holdBriefing();
+      if (mind) {
+        status.textContent = 'Pensando…';
+        try { const t = await askMind(text); if (t) { say(t, a.target); return; } } catch (e) { if (e && e.code === 'not_granted') mind = null; }
+      }
+      say(a.text, a.target, a.key);
+      if (saved) setTimeout(() => { if (state === 'idle' && saved) setUI(); }, 50);
+    };
+
+    /* ---- the constellation is the way in ---- */
+    const wake = () => { try { wakeInner(); } catch (e) { console.error(e); addMsg('jv', 'Tive um problema para começar. Toque de novo, por favor.'); } };
+    const wakeInner = () => {
+      root.classList.add('bx-awake');
+      unlock();
+      if (listening) { stopListening(); return; }
+      if (mode === 'answer' && state !== 'idle') { cut(); state = 'idle'; mode = 'briefing'; clearNow(); if (resume()) return; startBriefing(); return; }
+      if (state === 'playing') { pause(); return; }
+      if (resume()) return;
+      if (!chat.children.length) addMsg('jv', greet() + ', Dheryck. Vou ler o seu briefing. Me interrompa quando quiser perguntar algo.');
+      startBriefing();
+    };
+
+    /* ---- microphone ---- */
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let rec = null;
+    if (!SR) root.classList.add('bx-nomic');
+    const stopListening = () => { listening = false; micBtn.classList.remove('on'); try { rec && rec.stop(); } catch (e) { } setUI(); };
+    const listen = () => {
+      if (!SR) return;
+      if (listening) { stopListening(); return; }
+      if (state === 'playing') holdBriefing();
+      try {
+        rec = new SR();
+        rec.lang = 'pt-BR'; rec.interimResults = true; rec.maxAlternatives = 1; rec.continuous = false;
+        let finalText = '';
+        rec.onresult = (e) => {
+          let interim = '';
+          for (let k = e.resultIndex; k < e.results.length; k++) { const t = e.results[k][0].transcript; if (e.results[k].isFinal) finalText += t; else interim += t; }
+          input.value = finalText || interim;
+        };
+        rec.onerror = (e) => {
+          listening = false; micBtn.classList.remove('on');
+          if (e && /not-allowed|service-not-allowed|audio-capture/.test(e.error)) { root.classList.add('bx-nomic'); addMsg('jv', 'Não consegui usar o microfone aqui. Pode digitar a pergunta que eu respondo em voz alta.'); }
+          setUI();
+        };
+        rec.onend = () => { const t = finalText.trim(); listening = false; micBtn.classList.remove('on'); input.value = ''; setUI(); if (t) handle(t); };
+        listening = true; micBtn.classList.add('on'); setUI();
+        rec.start();
+      } catch (e) { listening = false; root.classList.add('bx-nomic'); setUI(); }
+    };
+
+    /* ---- wiring ---- */
+    micBtn.addEventListener('click', listen);
+    document.getElementById('bx-send').addEventListener('click', () => { const t = input.value; input.value = ''; handle(t); });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); const t = input.value; input.value = ''; handle(t); } });
+    pauseBtn.addEventListener('click', () => { if (state === 'playing') pause(); else if (!resume()) wake(); });
+    document.getElementById('bx-stop').addEventListener('click', stop);
+    document.getElementById('bx-next').addEventListener('click', next);
+    document.getElementById('bx-doc-listen').addEventListener('click', () => { root.classList.add('bx-awake'); startBriefing('dossie-completo'); });
+    document.getElementById('bx-nav-jarvis').addEventListener('click', () => { document.getElementById('topo').scrollIntoView({ behavior: 'smooth', block: 'start' }); wake(); });
+    voiceSel.addEventListener('change', () => {
+      script.forEach((x) => x.segs.forEach((g) => { delete g.noNeural; }));
+      const nn = neuralName(); if (nn) voiceData(nn);
+      if (state === 'playing' || state === 'paused') { cut(); state = 'playing'; pi = 0; speakPhrase(); } else setUI();
+    });
+    rateSel.addEventListener('change', () => { if (N.src) N.src.playbackRate.value = (Number(rateSel.value) || 0.96) / 0.96; });
+    const stageEl = document.getElementById('bx-stage');
+    const warm = () => { const nn = neuralName(); if (nn) voiceData(nn); narration(); };
+    stageEl.addEventListener('pointerenter', warm, { once: true });
+    stageEl.addEventListener('touchstart', warm, { once: true, passive: true });
+    input.addEventListener('focus', warm, { once: true });
+    rateSel.addEventListener('change', setUI);
+    const sugg = document.getElementById('bx-sugg');
+    ['Bom dia', 'Por que o Ibovespa caiu?', 'Vai chover amanhã?', 'Bastidores da IA', 'O que é o dossiê de hoje?'].forEach((t) => {
+      const b = el('button', '', t); b.type = 'button';
+      b.addEventListener('click', () => handle(t));
+      sugg.appendChild(b);
+    });
+    return { active: () => state === 'playing', wake, refresh: () => { narration(); if (state === 'idle') setUI(); } };
+  })();
+
+  /* ================= draw everything from the data ================= */
+  const safe = (fn) => { try { fn(); } catch (e) { console.error(e); } };
+  dash.onData(() => {
+    safe(drawTicker);
+    safe(drawWeather);
+    safe(drawMarket);
+    safe(drawNews);
+    safe(drawAI);
+    safe(drawDossier);
+    safe(drawMemo);
+    safe(drawGeo);
+    safe(drawChart);
+    safe(drawForces);
+    safe(jarvis.refresh);
+  });
+
+  (() => {
+    const named = location.hash && document.getElementById(location.hash.slice(1));
+    if (named && root.contains(named)) setTimeout(() => named.scrollIntoView(), 50);
+  })();
+</script>

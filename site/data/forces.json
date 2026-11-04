@@ -1,0 +1,44 @@
+[
+ {
+  "front": "Indefinição da equipe econômica",
+  "asset": "Dólar",
+  "effect": "sobe",
+  "note": "Investidores buscam proteção enquanto não sai o nome da Fazenda."
+ },
+ {
+  "front": "Risco fiscal no novo mandato",
+  "asset": "Ibovespa",
+  "effect": "cai",
+  "note": "A bolsa acumula seis quedas seguidas desde a semana da eleição."
+ },
+ {
+  "front": "Esperança de acordo em Ormuz",
+  "asset": "Petróleo Brent",
+  "effect": "cai",
+  "note": "A mediação do Catar reduziu o prêmio de risco da guerra."
+ },
+ {
+  "front": "Petróleo em queda",
+  "asset": "Petrobras e PRIO",
+  "effect": "perdem fluxo",
+  "note": "Receita das petroleiras depende do preço do barril."
+ },
+ {
+  "front": "Definição da eleição nos EUA",
+  "asset": "Bitcoin",
+  "effect": "sobe",
+  "note": "O fim da incerteza da apuração trouxe alívio às criptos."
+ },
+ {
+  "front": "Saídas dos ETFs de bitcoin",
+  "asset": "Bitcoin",
+  "effect": "cai",
+  "note": "Três dias seguidos de resgates limitam a recuperação."
+ },
+ {
+  "front": "Dúvida fiscal e dólar alto",
+  "asset": "Projeção da Selic",
+  "effect": "sobe",
+  "note": "O Focus elevou a Selic esperada para o fim de 2026, de 13,25% para 13,50%."
+ }
+]

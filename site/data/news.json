@@ -1,0 +1,52 @@
+[
+ {
+  "id": "n1",
+  "tag": "Américas",
+  "headline": "Democratas conquistam a Câmara e o Senado dos EUA",
+  "summary": "A ABC News projeta controle democrata das duas casas do Congresso após as eleições de meio de mandato.",
+  "what": "Na noite de 3 de novembro, a ABC projetou maioria democrata na Câmara e no Senado. Talarico lidera no Texas, e El-Sayed venceu em Michigan.",
+  "why": "Trump perde o controle do Congresso nos últimos dois anos de mandato. Isso limita leis, orçamento e abre espaço para investigações.",
+  "source": "ABC News",
+  "date": "04/11/2026"
+ },
+ {
+  "id": "n2",
+  "tag": "Oriente Médio",
+  "headline": "EUA atacam ilha iraniana de Qeshm enquanto Catar media acordo",
+  "summary": "Ataque limitado no Estreito de Ormuz ocorreu na véspera da eleição. Negociações seguem com prazo de 36 horas.",
+  "what": "Os EUA atingiram alvos em Qeshm, Hengam e Bandar Abbas na noite de 2 de novembro. O Catar diz aproximar as partes, que analisam propostas.",
+  "why": "Ormuz é rota de cerca de um quinto do petróleo mundial. Um acordo ou nova escalada mexe direto com combustíveis e inflação.",
+  "source": "PBS NewsHour; Khaleej Times",
+  "date": "03/11/2026"
+ },
+ {
+  "id": "n3",
+  "tag": "Brasil",
+  "headline": "Ibovespa cai pela sexta vez seguida e dólar fecha a R$ 5,49",
+  "summary": "Bolsa recuou 1,74% no primeiro pregão após o feriado, véspera da decisão do Copom.",
+  "what": "O Ibovespa fechou a 164.993 pontos. O dólar subiu 1,01%, a R$ 5,4902. Petroleiras caíram com o recuo do Brent.",
+  "why": "O mercado cobra sinais sobre a equipe econômica do novo mandato. O resultado pressiona juros futuros e o custo de vida.",
+  "source": "Gazeta Brasil",
+  "date": "03/11/2026"
+ },
+ {
+  "id": "n4",
+  "tag": "Europa",
+  "headline": "Ministro dos Transportes da Espanha renuncia após acidente de trem",
+  "summary": "Óscar Puente deixou o cargo após o acidente de Urda, que matou 69 pessoas.",
+  "what": "Puente revelou que um trem de alta velocidade seguiu a mais de 160 km/h após falha no sistema de segurança. Todas as vítimas foram identificadas.",
+  "why": "É uma crise política para o governo espanhol. E reabre o debate sobre segurança ferroviária na Europa.",
+  "source": "Euronews",
+  "date": "03/11/2026"
+ },
+ {
+  "id": "n5",
+  "tag": "Ásia",
+  "headline": "Coreia do Norte nega roubo de 5 bilhões de euros da Binance",
+  "summary": "Pyongyang rejeitou a acusação do FBI e fez novos testes de mísseis.",
+  "what": "O FBI atribuiu à Coreia do Norte o ataque à corretora Binance. O regime negou e voltou a testar mísseis.",
+  "why": "O caso pesa sobre a confiança no mercado de criptomoedas. E mantém a tensão militar na península coreana.",
+  "source": "Euronews",
+  "date": "03/11/2026"
+ }
+]

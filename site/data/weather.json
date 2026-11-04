@@ -1,0 +1,62 @@
+[
+ {
+  "day_label": "Hoje",
+  "date": "2026-11-04",
+  "weekday": "Quarta-feira",
+  "condition": "Poucas nuvens",
+  "high": 33,
+  "low": 18,
+  "precip": 0,
+  "tip": "Dia quente, máxima de 33 graus. Use protetor solar e beba bastante água."
+ },
+ {
+  "day_label": "Amanhã",
+  "date": "2026-11-05",
+  "weekday": "Quinta-feira",
+  "condition": "Chuva",
+  "high": 31,
+  "low": 21,
+  "precip": 93,
+  "tip": "Chuva com trovoadas prevista. Leve guarda-chuva e evite áreas de alagamento."
+ },
+ {
+  "day_label": "Sex",
+  "date": "2026-11-06",
+  "weekday": "Sexta-feira",
+  "condition": "Nublado",
+  "high": 23,
+  "low": 19,
+  "precip": 0,
+  "tip": "Temperatura cai dez graus. Tenha um agasalho leve à mão."
+ },
+ {
+  "day_label": "Sáb",
+  "date": "2026-11-07",
+  "weekday": "Sábado",
+  "condition": "Chuva",
+  "high": 30,
+  "low": 18,
+  "precip": 96,
+  "tip": "Chuva e trovoadas no sábado. Planeje programas em locais cobertos."
+ },
+ {
+  "day_label": "Dom",
+  "date": "2026-11-08",
+  "weekday": "Domingo",
+  "condition": "Chuva",
+  "high": 23,
+  "low": 15,
+  "precip": 92,
+  "tip": "Domingo chuvoso e mais frio. Casaco e guarda-chuva são boa ideia."
+ },
+ {
+  "day_label": "Seg",
+  "date": "2026-11-09",
+  "weekday": "Segunda-feira",
+  "condition": "Poucas nuvens",
+  "high": 21,
+  "low": 13,
+  "precip": 0,
+  "tip": "Manhã fria, mínima de 13 graus. Saia de casa agasalhado."
+ }
+]

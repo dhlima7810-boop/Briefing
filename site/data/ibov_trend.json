@@ -1,0 +1,26 @@
+[
+ {
+  "label": "Recorde",
+  "date": "09/10/2026",
+  "points": 209066.9,
+  "note": "Maior fechamento da história, segundo a Suno."
+ },
+ {
+  "label": "Pós-reeleição",
+  "date": "26/10/2026",
+  "points": 176608,
+  "note": "Queda de 13,88%, com circuit breaker no dia seguinte à eleição."
+ },
+ {
+  "label": "Fim de outubro",
+  "date": "30/10/2026",
+  "points": 167921.8,
+  "note": "Quinta queda seguida. Outubro fechou com perda de 9,88%."
+ },
+ {
+  "label": "Último fechamento",
+  "date": "03/11/2026",
+  "points": 164993,
+  "note": "Queda de 1,74%, a sexta seguida, na véspera do Copom."
+ }
+]

@@ -1,0 +1,5 @@
+site/data/audio/
+site/data/narration.json
+kokoro-multi-lang-v1_0/
+__pycache__/
+*.tar.bz2

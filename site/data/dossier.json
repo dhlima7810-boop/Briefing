@@ -1,0 +1,71 @@
+[
+ {
+  "block": "A",
+  "country": "EUA",
+  "title": "Bloco A — Trump, Irã e instrumentos executivos",
+  "summary": "Os EUA fizeram um ataque limitado ao Irã na véspera da eleição. O Catar media um acordo. Não achamos nova ordem executiva. Agora Trump terá o Congresso contra ele.",
+  "events": [
+   {
+    "date": "02/11/2026",
+    "headline": "Ataque não anunciado à ilha de Qeshm",
+    "detail": "Alvos em Qeshm, Hengam e Bandar Abbas. Um funcionário americano chamou a ação de limitada, contra baterias antiaéreas iranianas."
+   },
+   {
+    "date": "03/11/2026",
+    "headline": "Catar diz aproximar EUA e Irã",
+    "detail": "As partes analisam propostas e devem responder em até 36 horas. O Irã diz que a bola está com Washington."
+   },
+   {
+    "date": "04/11/2026",
+    "headline": "Democratas assumem Câmara e Senado",
+    "detail": "A ABC News projetou controle democrata das duas casas. O Congresso ganha força para frear medidas de Trump."
+   }
+  ]
+ },
+ {
+  "block": "B",
+  "country": "Brasil",
+  "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
+  "summary": "Sem fato oficial novo hoje. O último foi a convocação da diplomata argentina, em 29 de outubro. Reportagens trazem novos detalhes da saída de Flávio Bolsonaro.",
+  "events": [
+   {
+    "date": "26/10/2026",
+    "headline": "Milei não parabeniza Lula",
+    "detail": "O governo argentino ficou em silêncio após a reeleição. Chile e Paraguai cumprimentaram Lula logo."
+   },
+   {
+    "date": "29/10/2026",
+    "headline": "Itamaraty convoca encarregada de negócios argentina",
+    "detail": "O governo pediu explicações sobre a ajuda argentina à saída de Flávio Bolsonaro. A conversa foi protocolar, sem reprimenda formal."
+   },
+   {
+    "date": "03/11/2026",
+    "headline": "Fantástico revela registros na fronteira",
+    "detail": "A TV Globo mostrou três registros de entrada na Argentina em 34 minutos. São apurações jornalísticas, ainda não confirmadas por governos."
+   }
+  ]
+ },
+ {
+  "block": "C",
+  "country": "Análise",
+  "title": "Bloco C — Leitura cruzada",
+  "summary": "Risco fiscal doméstico e notícias externas puxam em direções diferentes. O Copom de hoje é o próximo teste para dólar e bolsa.",
+  "events": [
+   {
+    "date": "03/11/2026",
+    "headline": "Bolsa na sexta queda, dólar a R$ 5,49",
+    "detail": "O Ibovespa fechou a 164.993 pontos. O mercado espera o nome do novo ministro da Fazenda."
+   },
+   {
+    "date": "04/11/2026",
+    "headline": "Copom decide a Selic",
+    "detail": "A taxa está em 13,75%. A decisão sai hoje à noite."
+   },
+   {
+    "date": "04/11/2026",
+    "headline": "Bitcoin volta a US$ 78 mil",
+    "detail": "A cripto se recuperou com a definição da eleição americana, apesar de saídas dos ETFs."
+   }
+  ]
+ }
+]

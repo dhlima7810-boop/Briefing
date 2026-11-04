@@ -392,6 +392,8 @@
   .bx.bx-reading .bx-point::before, .bx-now .bx-point::before { content: ""; position: absolute; left: -14px; top: .2em; bottom: .2em; width: 3px; border-radius: 2px; background: var(--iris); box-shadow: 0 0 12px var(--iris); }
   .bx-now .bx-acc-body { max-height: 900px; }
   .bx-now { position: relative; }
+  .bx-step, .bx-seg, .bx-point { scroll-margin-top: 84px; scroll-margin-bottom: 110px; }
+  .bx-sec, .bx-hero { scroll-margin-top: 10px; }
 
   /* ---------- motion ---------- */
   @keyframes bx-float {
@@ -421,19 +423,16 @@
   @keyframes bx-beat { 0%, 100% { box-shadow: 0 0 0 0 currentColor; } 50% { box-shadow: 0 0 0 5px transparent; } }
 
   @media (prefers-reduced-motion: no-preference) {
-    .bx-spark { animation: bx-float var(--t, 22s) ease-in-out var(--delay, 0s) infinite; }
-    .bx-blob { animation: bx-drift var(--t, 26s) ease-in-out var(--delay, 0s) infinite; }
+    /* the background stays still: nothing on the page moves unless Jarvis is talking or the user touches it */
     .bx-ticker-track { animation: bx-marquee 50s linear infinite; }
-    .bx-orb::after { animation: bx-ring 2.4s ease-out infinite; }
-    .bx-big-orb::before { animation: bx-ring 3s ease-out infinite; }
-    .bx-big-orb::after { animation: bx-ring 3s ease-out 1.5s infinite; }
-    .bx.bx-speaking .bx-big-orb::before, .bx.bx-speaking .bx-big-orb::after { animation-duration: 1.1s; }
+    /* the rings pulse only while Jarvis talks */
+    .bx.bx-speaking .bx-orb::after { animation: bx-ring 2.4s ease-out infinite; }
+    .bx.bx-speaking .bx-big-orb::before { animation: bx-ring 1.1s ease-out infinite; }
+    .bx.bx-speaking .bx-big-orb::after { animation: bx-ring 1.1s ease-out .55s infinite; }
     .bx.bx-speaking .bx-wave i { animation: bx-bar .9s ease-in-out infinite; }
     .bx.bx-speaking .bx-wave i:nth-child(2) { animation-delay: .15s; }
     .bx.bx-speaking .bx-wave i:nth-child(3) { animation-delay: .3s; }
     .bx.bx-speaking .bx-wave i:nth-child(4) { animation-delay: .45s; }
-    .bx-pulse { animation: bx-beat 2s ease-in-out infinite; }
-    .bx-hint-dot { animation: bx-ring2 2s ease-out infinite; }
     .bx-mic.on { animation: bx-ring2 1.2s ease-out infinite; }
     .bx-sun { animation: bx-glow 4s ease-in-out infinite; }
     .bx-rays { animation: bx-spin 40s linear infinite; }
@@ -689,6 +688,7 @@
     const words = ['mundo', 'mercado', 'poder', 'dólar', 'clima'];
     const rot = document.getElementById('bx-rot');
     let i = 0;
+    if (rot) return; // the headline word no longer swaps by itself (the page stays still until you touch it)
     const timer = setInterval(() => {
       if (!rot.isConnected) { clearInterval(timer); return; }
       i = (i + 1) % words.length;
@@ -824,8 +824,9 @@
       if (!canvas.isConnected) return;
       requestAnimationFrame(frame);
       if (!built) { built = build(); if (!built) return; }
-      t += 0.016;
       energy += (target - energy) * 0.05;
+      const live = target > 1 || ptr.on || energy > 1.02; // idle = still picture, it only moves while Jarvis talks or listens
+      if (live) t += 0.016;
       const pulse = 1 + (energy - 1) * 0.06 * Math.sin(t * 6);
       ctx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2;
@@ -839,7 +840,7 @@
           else { p.ox *= 0.92; p.oy *= 0.92; }
         } else { p.ox *= 0.92; p.oy *= 0.92; }
         p.x = x + p.ox; p.y = y + p.oy;
-        p.rot += p.vr * energy;
+        if (live) p.rot += p.vr * energy;
       }
       ctx.lineWidth = 0.6; ctx.strokeStyle = '#8052ff';
       ctx.globalAlpha = Math.min(0.4, 0.1 + (energy - 1) * 0.08);
@@ -1700,18 +1701,22 @@
     /* ---- following the reading on screen: go to the block, then to the exact point being spoken ---- */
     const normW = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter((w) => w.length > 3);
     const HEAD = 76;
-    const scrollToY = (y) => window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: reduced() ? 'auto' : 'smooth' });
+    // scrollIntoView instead of window.scrollTo: it moves whatever actually scrolls (the page, a container,
+    // or the page around an embedded frame), so the screen goes down with the block on every device
+    const framed = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+    const viewH = () => Math.min(window.innerHeight, (window.visualViewport && window.visualViewport.height) || window.innerHeight);
+    const goTo = (e, block) => { try { e.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block, inline: 'nearest' }); } catch (x) { e.scrollIntoView(block !== 'end'); } };
     const goBlock = (e) => {
       if (!e || !e.getBoundingClientRect) return;
-      const r = e.getBoundingClientRect(), vh = window.innerHeight;
-      if (e.matches('.bx-sec, .bx-hero')) { scrollToY(scrollY + r.top - 10); return; }
-      if (r.height < vh * 0.7) scrollToY(scrollY + r.top - Math.max(HEAD, (vh - r.height) * 0.35));
-      else scrollToY(scrollY + r.top - HEAD);
+      const r = e.getBoundingClientRect(), vh = viewH();
+      if (e.matches('.bx-sec, .bx-hero')) { goTo(e, 'start'); return; }
+      goTo(e, !framed && r.height < vh * 0.7 ? 'center' : 'start');
     };
     const goPoint = (e) => {
-      const r = e.getBoundingClientRect(), vh = window.innerHeight;
+      if (framed) { goTo(e, 'nearest'); return; } // inside a frame the visible area is unknown: move only if needed
+      const r = e.getBoundingClientRect(), vh = viewH();
       if (r.top >= HEAD && r.bottom <= vh * 0.88) return; // already in view: the screen stays put
-      scrollToY(scrollY + r.top - Math.max(HEAD, (vh - Math.min(r.height, vh * 0.6)) * 0.4));
+      goTo(e, 'center');
     };
     const pointsOf = (seg) => {
       if (seg._pts) return seg._pts;

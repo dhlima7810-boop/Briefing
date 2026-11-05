@@ -112,25 +112,47 @@
       return actx;
     } catch (e) { return null; }
   };
-  var bell = function (c, t, f, g, dur) {
-    var v = c.createGain(), o = c.createOscillator(), o2 = c.createOscillator(), v2 = c.createGain();
-    o.type = 'sine'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 2.76; v2.gain.value = 0.16;
-    o.connect(v); o2.connect(v2); v2.connect(v); v.connect(bus);
-    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(g, t + 0.01); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+  // one soft note; pan -1 (left) .. 1 (right); kind 'sine' or 'triangle'
+  var tone = function (c, kind, f, t, g, att, dec, pan) {
+    var o = c.createOscillator(), v = c.createGain(), dest = bus;
+    if (pan && c.createStereoPanner) { var p = c.createStereoPanner(); p.pan.value = pan; p.connect(bus); dest = p; }
+    o.type = kind; o.frequency.value = f;
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(g, t + att); v.gain.exponentialRampToValueAtTime(0.0001, t + att + dec);
+    o.connect(v); v.connect(dest); o.start(t); o.stop(t + att + dec + 0.05);
   };
-  var NOTES = [659.3, 830.6, 987.8, 1108.7, 1318.5, 1661.2];
-  var ping = function () { var c = audio(); if (c) bell(c, c.currentTime, NOTES[Math.floor(rnd() * NOTES.length)], 0.05, 0.9); };
+  // 1. crystal bell (touching a star): like tapping a glass lightly
+  var CRYSTAL = [1568, 1760, 2093, 2349, 2637];
+  var ping = function () {
+    var c = audio(); if (!c) return;
+    var t = c.currentTime + 0.01, f = CRYSTAL[Math.floor(rnd() * CRYSTAL.length)], pan = (rnd() - 0.5) * 0.6;
+    tone(c, 'sine', f, t, 0.1, 0.004, 1.2, pan);
+    tone(c, 'sine', f * 2.76, t, 0.03, 0.003, 0.45, pan);
+    tone(c, 'sine', f * 5.4, t, 0.015, 0.002, 0.22, pan);
+  };
+  // 2. stardust (the golden star bursts on the button tap): rising sparkle cascade
+  var stardust = function (c, t) {
+    [1047, 1175, 1319, 1568, 1760, 2093, 2349, 2637, 3136].forEach(function (f, i) {
+      var s = t + i * 0.055 + rnd() * 0.01, pan = Math.sin(i * 1.7) * 0.7;
+      tone(c, 'triangle', f, s, 0.07 - i * 0.004, 0.003, 0.55, pan);
+      tone(c, 'sine', f * 2, s, 0.02, 0.002, 0.2, pan);
+    });
+  };
+  // 3. galaxy breath (the dive into the briefing): a soft whoosh with a warm chord
+  var breath = function (c, t) {
+    var len = Math.floor(c.sampleRate * 2.2), nb = c.createBuffer(1, len, c.sampleRate), d = nb.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    var src = c.createBufferSource(), bp = c.createBiquadFilter(), v = c.createGain();
+    src.buffer = nb; bp.type = 'bandpass'; bp.Q.value = 6;
+    bp.frequency.setValueAtTime(1200, t); bp.frequency.exponentialRampToValueAtTime(6000, t + 1.8);
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(0.16, t + 0.5); v.gain.exponentialRampToValueAtTime(0.0001, t + 2.0);
+    src.connect(bp); bp.connect(v); v.connect(bus); src.start(t); src.stop(t + 2.1);
+    [880, 1319, 2217].forEach(function (f, i) { tone(c, 'sine', f, t + 0.1 + i * 0.06, 0.045, 0.45, 1.4, (i - 1) * 0.4); });
+  };
   var chime = function () {
     var c = audio(); if (!c) return;
     var t = c.currentTime + 0.02;
-    // a warm swell underneath, then the star sparkles upward
-    var o = c.createOscillator(), v = c.createGain();
-    o.type = 'sine'; o.frequency.setValueAtTime(329.6, t); o.frequency.exponentialRampToValueAtTime(659.3, t + 1.1);
-    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(0.07, t + 0.35); v.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
-    o.connect(v); v.connect(bus); o.start(t); o.stop(t + 1.6);
-    [0, 1, 2, 4, 3, 5].forEach(function (k, i) { bell(c, t + 0.05 + i * 0.075, NOTES[k], 0.09 - i * 0.008, 1.4); });
-    bell(c, t + 0.55, NOTES[5] * 1.5, 0.035, 1.8);
+    stardust(c, t);
+    breath(c, t + 0.35);
   };
 
   /* ---------- camera and input ---------- */

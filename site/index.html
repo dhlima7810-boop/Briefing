@@ -17,7 +17,7 @@
   html, body { margin: 0; background: #000; color: #e4e4e6; }
   #dash-root { padding: 0 var(--dash-gutter, 0); min-height: 100vh; }
   /* ---------- abertura: a rede neural do ícone ---------- */
-  #bx-intro { position: fixed; inset: 0; z-index: 60; background: radial-gradient(120% 90% at 62% 42%, #1a1040 0%, #07050f 48%, #000 100%); color: #e4e4e6; font-family: "BX Inter", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; transition: opacity .55s cubic-bezier(.4, 0, .2, 1) .6s, filter .9s ease; }
+  #bx-intro { position: fixed; inset: 0; z-index: 60; background: radial-gradient(120% 90% at 62% 42%, #1a1040 0%, #07050f 48%, #000 100%); color: #e4e4e6; font-family: "BX Inter", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; transition: opacity .55s cubic-bezier(.4, 0, .2, 1) .85s, filter .9s ease; }
   html.bx-intro-on, html.bx-intro-on body { overflow: hidden; }
   #bx-intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
   #bx-intro canvas:active { cursor: grabbing; }
@@ -45,7 +45,7 @@
   #bx-intro.is-failed .load { color: #ff7ac9; }
   #bx-intro.is-leaving { opacity: 0; pointer-events: none; }
   #bx-intro.is-leaving .copy, #bx-intro.is-leaving .brand, #bx-intro.is-leaving .hint { opacity: 0; transform: translateY(-10px); transition: opacity .35s ease, transform .35s ease; }
-  html.bx-entering #dash-root { animation: bx-arrive 1.2s cubic-bezier(.2, .7, .2, 1) both; }
+  html.bx-entering #dash-root { animation: bx-arrive 1.45s cubic-bezier(.2, .7, .2, 1) both; }
   @keyframes bx-arrive { 0% { transform: scale(1.06); filter: blur(10px); opacity: 0; } 55% { opacity: 0; } 100% { transform: none; filter: none; opacity: 1; } }
   @keyframes bx-intro-ping { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); } 100% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } }
   @media (max-width: 759px) {

@@ -57,6 +57,7 @@
   // accents from the icon: the A's apex is the saffron star, the top of the R the green one
   nodes[star(3 * (L + GAP) + L / 2, 0, true)].col = '#ffb829'; nodes[star(3 * (L + GAP) + L / 2, 0, true)].r = 6.5;
   nodes[star(2 * (L + GAP) + 0.45, 0, true)].col = '#34c9a3'; nodes[star(2 * (L + GAP) + 0.45, 0, true)].r = 5.2;
+  var NOVA = star(3 * (L + GAP) + L / 2, 0, true); // the saffron star the entrance dives into
   var ICON = nodes.slice(); // the word's stars
   var N = window.innerWidth < 600 ? 230 : 340;
   while (nodes.length < N + ICON.length) {
@@ -94,6 +95,44 @@
   edges.forEach(function (e) { if (e.core) { nodes[e.a].first = Math.min(nodes[e.a].first, e.order); nodes[e.b].first = Math.min(nodes[e.b].first, e.order + 1); } });
   var WRITE_AT = 1.5, WRITE_FOR = 2.2; // seconds: the pen starts after the stars arrive
 
+  /* ---------- sound: tiny bells made in the browser, no file to download ---------- */
+  // audio only starts after a tap (browsers' rule), so the opening itself stays silent
+  var actx = null, bus = null;
+  var audio = function () {
+    try {
+      if (!actx) {
+        var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+        actx = new AC(); bus = actx.createGain(); bus.gain.value = 0.5;
+        // a soft echo makes the bells shimmer like a starry sky
+        var dl = actx.createDelay(1), fb = actx.createGain(), lp = actx.createBiquadFilter();
+        dl.delayTime.value = 0.23; fb.gain.value = 0.38; lp.type = 'lowpass'; lp.frequency.value = 3200;
+        bus.connect(actx.destination); bus.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(actx.destination);
+      }
+      if (actx.state === 'suspended') actx.resume();
+      return actx;
+    } catch (e) { return null; }
+  };
+  var bell = function (c, t, f, g, dur) {
+    var v = c.createGain(), o = c.createOscillator(), o2 = c.createOscillator(), v2 = c.createGain();
+    o.type = 'sine'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 2.76; v2.gain.value = 0.16;
+    o.connect(v); o2.connect(v2); v2.connect(v); v.connect(bus);
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(g, t + 0.01); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+  };
+  var NOTES = [659.3, 830.6, 987.8, 1108.7, 1318.5, 1661.2];
+  var ping = function () { var c = audio(); if (c) bell(c, c.currentTime, NOTES[Math.floor(rnd() * NOTES.length)], 0.05, 0.9); };
+  var chime = function () {
+    var c = audio(); if (!c) return;
+    var t = c.currentTime + 0.02;
+    // a warm swell underneath, then the star sparkles upward
+    var o = c.createOscillator(), v = c.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(329.6, t); o.frequency.exponentialRampToValueAtTime(659.3, t + 1.1);
+    v.gain.setValueAtTime(0.0001, t); v.gain.exponentialRampToValueAtTime(0.07, t + 0.35); v.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
+    o.connect(v); v.connect(bus); o.start(t); o.stop(t + 1.6);
+    [0, 1, 2, 4, 3, 5].forEach(function (k, i) { bell(c, t + 0.05 + i * 0.075, NOTES[k], 0.09 - i * 0.008, 1.4); });
+    bell(c, t + 0.55, NOTES[5] * 1.5, 0.035, 1.8);
+  };
+
   /* ---------- camera and input ---------- */
   var W = 0, H = 0, dpr = 1;
   var yaw = 0, pitch = 0.05, vyaw = 0, vpitch = 0, cam = 3.4, t0 = performance.now();
@@ -105,7 +144,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
   resize(); window.addEventListener('resize', resize);
-  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: yaw, pitch: pitch, t: performance.now() }; cv.setPointerCapture(e.pointerId); fireNear(e.clientX, e.clientY); });
+  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: yaw, pitch: pitch, t: performance.now() }; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
   cv.addEventListener('pointermove', function (e) {
     ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
     if (!drag) return;
@@ -134,11 +173,12 @@
   var fireNear = function (cx, cy) {
     var best = -1, bd = 70 * 70;
     proj.forEach(function (p, i) { if (!p) return; var dx = p.x - cx, dy = p.y - cy, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } });
-    if (best >= 0) { nodes[best].flash = 1; fire(best, 0); }
+    if (best >= 0) { nodes[best].flash = 1; fire(best, 0); return true; }
+    return false;
   };
 
   /* ---------- loading drives the light ---------- */
-  var lit = 0, ready = false, leaving = 0, leaveStart = 0, done = false;
+  var lit = 0, ready = false, leaving = 0, leaveStart = 0, done = false, novaAt = null, shift = null;
   window.__intro = {
     step: function (label, n, total) {
       lit = Math.max(lit, n);
@@ -162,15 +202,18 @@
   var enter = function (withVoice) {
     if (!ready || leaving) return;
     if (withVoice) { var st = document.getElementById('bx-stage'); if (st) st.click(); } // same tap starts Zyra (audio needs a gesture)
+    chime();
     leaving = 1; leaveStart = performance.now();
+    nodes[NOVA].flash = 1; fire(NOVA, 0, '#ffb829');
     root.classList.add('is-leaving');
     document.documentElement.classList.add('bx-entering');
-    setTimeout(finish, reduced ? 350 : 1150);
+    setTimeout(finish, reduced ? 350 : 1400);
   };
   var finish = function () {
     if (done) return; done = true;
     root.remove(); document.documentElement.classList.remove('bx-entering', 'bx-intro-on');
     window.removeEventListener('resize', resize);
+    if (actx) setTimeout(function () { try { actx.close(); } catch (e) {} }, 2600); // let the last bells ring out
   };
   goBtn.addEventListener('click', function () { enter(true); });
   readBtn.addEventListener('click', function () { enter(false); });
@@ -185,7 +228,8 @@
     if (!drag) { var sway = reduced ? 0 : Math.sin(el * 0.35) * 0.28; yaw += vyaw; vyaw *= 0.9; yaw += (sway - yaw) * 0.025; pitch += vpitch; vpitch *= 0.9; pitch += (0.05 + tilt.y * 0.25 - pitch) * 0.03; }
     var yw = yaw + tilt.x * 0.4;
     var pen = reduced ? STROKES : Math.max(0, Math.min(1, (el - WRITE_AT) / WRITE_FOR)) * STROKES;
-    if (leaving) { var lt = Math.min(1, (now - leaveStart) / 1000); cam = 3.4 - Math.pow(lt, 2.2) * 3.75; }
+    var lt = leaving ? Math.max(0, Math.min(1.4, (now - leaveStart) / 1000)) : 0;
+    if (leaving) { cam = 3.4 - Math.pow(Math.min(1, Math.max(0, lt - 0.25) / 0.95), 2.2) * 3.75; nodes[NOVA].flash = Math.max(nodes[NOVA].flash || 0, lt < 0.5 ? 1 : 0); }
     // the word (about 2.9 units wide) must fit: most of a phone's width, half a computer screen
     // the word fills most of the width; the brain around it is blown up to fill the empty sky above the text
     var mob = W < 760;
@@ -194,6 +238,7 @@
     var cx = W * (mob ? 0.5 : 0.6), cy = H * (mob ? 0.33 : 0.32);
     var SF = Math.max(1, Math.min(2, scale / 220)); // bigger word, bolder stars and strokes
     var cyw = Math.cos(yw), syw = Math.sin(yw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     proj.length = nodes.length;
     for (var i = 0; i < nodes.length; i++) {
@@ -210,6 +255,16 @@
       if (n.core && n.first > pen) { proj[i] = null; continue; }
       if (n.flash) n.flash *= 0.94;
       proj[i] = { x: cx + x1 * s * scale, y: cy + y1 * s * scale, s: s, z: z2, a: a };
+    }
+    // on the way in, the whole sky glides so the saffron star comes to the middle of the screen
+    if (leaving && !reduced) {
+      var np = proj[NOVA];
+      if (np) { novaAt = { x: np.x, y: np.y }; }
+      if (novaAt) {
+        var gk = ease(Math.min(1, Math.max(0, lt - 0.12) / 0.75));
+        shift = { x: (W / 2 - novaAt.x) * gk, y: (H / 2 - novaAt.y) * gk };
+        ctx.setTransform(dpr, 0, 0, dpr, shift.x * dpr, shift.y * dpr);
+      }
     }
     // links
     ctx.lineCap = 'round';
@@ -260,6 +315,33 @@
       ctx.globalAlpha = (0.25 + 0.75 * glow) * dep * pr.a; ctx.beginPath(); ctx.arc(pr.x, pr.y, rr, 0, 6.283); ctx.fill();
     }
     ctx.globalAlpha = 1;
+    // the star bursts: a four-point sparkle, a ring, then its light fills the screen
+    if (leaving && novaAt) {
+      var sx0 = novaAt.x, sy0 = novaAt.y, burst = Math.min(1, lt / 0.45);
+      var arm = (30 + 260 * ease(burst)) * SF, fadeArm = Math.max(0, 1 - Math.max(0, lt - 0.35) / 0.5);
+      ctx.save(); ctx.translate(sx0, sy0); ctx.rotate(lt * 0.6);
+      ctx.globalCompositeOperation = 'lighter';
+      for (var r4 = 0; r4 < 4; r4++) {
+        var len = r4 % 2 ? arm * 0.62 : arm;
+        var g4 = ctx.createLinearGradient(0, 0, len, 0);
+        g4.addColorStop(0, 'rgba(255,244,220,' + 0.95 * fadeArm + ')'); g4.addColorStop(0.35, 'rgba(255,184,41,' + 0.45 * fadeArm + ')'); g4.addColorStop(1, 'rgba(255,184,41,0)');
+        ctx.fillStyle = g4; ctx.beginPath(); ctx.moveTo(0, -3 * SF); ctx.lineTo(len, 0); ctx.lineTo(0, 3 * SF); ctx.closePath(); ctx.fill();
+        ctx.rotate(Math.PI / 2);
+      }
+      ctx.restore();
+      var ring = ease(Math.min(1, lt / 0.7));
+      ctx.globalAlpha = Math.max(0, 0.6 * (1 - ring)); ctx.strokeStyle = '#ffd27a'; ctx.lineWidth = 2 * SF;
+      ctx.beginPath(); ctx.arc(sx0, sy0, 12 * SF + ring * Math.max(W, H) * 0.45, 0, 6.283); ctx.stroke();
+      ctx.globalAlpha = 1;
+      var bl = Math.min(1, Math.max(0, lt - 0.3) / 0.55), bloomA = Math.sin(Math.PI * Math.min(1, bl * 0.85 + 0.0)) * 0.85;
+      if (bl > 0) {
+        var R = 20 + ease(bl) * Math.hypot(W, H);
+        var gb = ctx.createRadialGradient(sx0, sy0, 0, sx0, sy0, R);
+        gb.addColorStop(0, 'rgba(255,246,228,' + bloomA + ')'); gb.addColorStop(0.3, 'rgba(255,190,80,' + bloomA * 0.55 + ')'); gb.addColorStop(1, 'rgba(128,82,255,0)');
+        ctx.fillStyle = gb; ctx.fillRect(sx0 - R, sy0 - R, R * 2, R * 2);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);

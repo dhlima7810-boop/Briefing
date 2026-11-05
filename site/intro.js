@@ -58,7 +58,7 @@
   nodes[star(3 * (L + GAP) + L / 2, 0, true)].col = '#ffb829'; nodes[star(3 * (L + GAP) + L / 2, 0, true)].r = 6.5;
   nodes[star(2 * (L + GAP) + 0.45, 0, true)].col = '#34c9a3'; nodes[star(2 * (L + GAP) + 0.45, 0, true)].r = 5.2;
   var ICON = nodes.slice(); // the word's stars
-  var N = window.innerWidth < 600 ? 150 : 210;
+  var N = window.innerWidth < 600 ? 230 : 340;
   while (nodes.length < N + ICON.length) {
     var x = rnd() * 2 - 1, y = rnd() * 2 - 1, z = rnd() * 2 - 1;
     var d = x * x / 1.0 + y * y / 0.62 + z * z / 0.8;
@@ -187,15 +187,20 @@
     var pen = reduced ? STROKES : Math.max(0, Math.min(1, (el - WRITE_AT) / WRITE_FOR)) * STROKES;
     if (leaving) { var lt = Math.min(1, (now - leaveStart) / 1000); cam = 3.4 - Math.pow(lt, 2.2) * 3.75; }
     // the word (about 2.9 units wide) must fit: most of a phone's width, half a computer screen
-    var scale = Math.min(Math.min(W, H) * (W < 600 ? 0.62 : 0.66), (W < 760 ? W * 0.88 : W * 0.52) / (WORD_W * K * 0.72));
-    var cx = W * (W < 760 ? 0.5 : 0.62), cy = H * (W < 760 ? 0.36 : 0.46);
+    // the word fills most of the width; the brain around it is blown up to fill the empty sky above the text
+    var mob = W < 760;
+    var scale = Math.min(H * (mob ? 0.5 : 0.75), (mob ? W * 0.92 : W * 0.6) / (WORD_W * K * 0.72));
+    var BS = mob ? Math.max(1.4, (H * 0.3) / (0.75 * 0.72 * scale)) : Math.max(1.2, (H * 0.4) / (0.75 * 0.72 * scale));
+    var cx = W * (mob ? 0.5 : 0.6), cy = H * (mob ? 0.33 : 0.32);
+    var SF = Math.max(1, Math.min(2, scale / 220)); // bigger word, bolder stars and strokes
     var cyw = Math.cos(yw), syw = Math.sin(yw), cp = Math.cos(pitch), sp = Math.sin(pitch);
     ctx.clearRect(0, 0, W, H);
     proj.length = nodes.length;
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i];
       var a = reduced ? 1 : ease(Math.max(0, Math.min(1, (el - n.delay) / 1.6)));
-      var x = n.sx + (n.x - n.sx) * a, y = n.sy + (n.y - n.sy) * a, z = n.sz + (n.z - n.sz) * a;
+      var bs = n.core ? 1 : BS;
+      var x = n.sx + (n.x * bs - n.sx) * a, y = n.sy + (n.y * bs - n.sy) * a, z = n.sz + (n.z * Math.min(bs, 1.5) - n.sz) * a;
       var x1 = x * cyw - z * syw, z1 = x * syw + z * cyw;
       var y1 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
       var dz = cam + z2;
@@ -215,9 +220,9 @@
         var part = Math.max(0, Math.min(1, pen - e.order));
         if (part <= 0 || !p) continue;
         var A2 = p, B2 = q || p, ex = A2.x + (B2.x - A2.x) * part, ey = A2.y + (B2.y - A2.y) * part;
-        ctx.strokeStyle = 'rgba(128,82,255,0.28)'; ctx.lineWidth = 9 * Math.min(A2.s, 1.6);
+        ctx.strokeStyle = 'rgba(128,82,255,0.28)'; ctx.lineWidth = 9 * SF * Math.min(A2.s, 1.6);
         ctx.beginPath(); ctx.moveTo(A2.x, A2.y); ctx.lineTo(ex, ey); ctx.stroke();
-        ctx.strokeStyle = 'rgba(214,200,255,0.95)'; ctx.lineWidth = 2.2 * Math.min(A2.s, 1.6);
+        ctx.strokeStyle = 'rgba(214,200,255,0.95)'; ctx.lineWidth = 2.2 * SF * Math.min(A2.s, 1.6);
         ctx.beginPath(); ctx.moveTo(A2.x, A2.y); ctx.lineTo(ex, ey); ctx.stroke();
         continue;
       }
@@ -249,7 +254,7 @@
       var dep = Math.max(0.15, Math.min(1, 1 - (pr.z + 1.4) / 2.8));
       var hover = ptr.on ? Math.max(0, 1 - Math.hypot(pr.x - ptr.x, pr.y - ptr.y) / 90) : 0;
       var glow = Math.min(1, nd.lit + (nd.flash || 0) + hover * 0.8);
-      var rr = nd.r * pr.s * (1 + (nd.flash || 0) * 0.6 + hover * 0.5);
+      var rr = nd.r * pr.s * (nd.core ? SF : 1) * (1 + (nd.flash || 0) * 0.6 + hover * 0.5);
       ctx.fillStyle = nd.col;
       ctx.globalAlpha = 0.14 * glow * pr.a; ctx.beginPath(); ctx.arc(pr.x, pr.y, rr * 3.4, 0, 6.283); ctx.fill();
       ctx.globalAlpha = (0.25 + 0.75 * glow) * dep * pr.a; ctx.beginPath(); ctx.arc(pr.x, pr.y, rr, 0, 6.283); ctx.fill();

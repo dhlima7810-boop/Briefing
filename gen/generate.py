@@ -61,6 +61,7 @@ SCHEMAS = {
     'geopolitics': rows(obj({'title': S(), 'intro': S(), 'points': rows(obj({'heading': S(), 'body': S()}), 3, 3), 'conclusion': S()}), 1, 1),
     'ibov_trend': rows(obj({'label': S(), 'date': S(), 'points': N, 'note': S()}), 3, 6),
     'forces': rows(obj({'front': S(), 'asset': S(), 'effect': S(), 'note': S()}), 5, 8),
+    'glossary': rows(obj({'term': S(), 'aliases': {'type': 'array', 'items': {'type': 'string'}}, 'section': S(enum=['clima', 'mercado', 'noticias', 'ia', 'dossie', 'geopolitica']), 'text': S()}), 5, 40),
 }
 
 # ---------------------------------------------------------------- instructions
@@ -273,6 +274,12 @@ def main():
             errs = check(sets, data)
             if errs: failed.append(g); log(f'[{g}] mock inválido: {errs[:3]}')
             else: results.update(data)
+        gp = os.path.join(a.mock, 'glossary.json')  # optional: terms Zyra can explain
+        if not a.only and os.path.exists(gp):
+            gd = {'glossary': json.load(open(gp, encoding='utf-8'))}
+            errs = check(['glossary'], gd)
+            if errs: failed.append('glossario'); log(f'[glossario] mock inválido: {errs[:3]}')
+            else: results.update(gd)
     else:
         if not os.environ.get('ANTHROPIC_API_KEY'): sys.exit('Falta ANTHROPIC_API_KEY')
         c = client()

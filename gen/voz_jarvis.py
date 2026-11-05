@@ -7,7 +7,7 @@ key the dashboard page knows how to highlight.
 
 Usage: python3 voz_jarvis.py <data_dir> <kokoro_dir> <out_dir>
   data_dir   holds weather.json market.json news.json ai_news.json dossier.json
-             dossier_full.json geopolitics.json forces.json
+             dossier_full.json geopolitics.json forces.json glossary.json
   kokoro_dir is the unpacked kokoro-multi-lang-v1_0 model from sherpa-onnx
 Needs: pip install sherpa-onnx soundfile espeakng-loader phonemizer-fork ; ffmpeg on PATH.
 """
@@ -186,7 +186,11 @@ def build_units(d):
         add('fecho_fds', 'close', 'geopolitica', 'Geopolítica', '#leitura', 'É isso. Bom fim de semana.')
 
     # fixed phrases of the conversation
-    add('ph_not_found', 'phrase', 'topo', 'Resposta', '#topo', 'Isso não está no briefing de hoje. Posso falar de clima, mercado, notícias, inteligência artificial, dossiê ou geopolítica.')
+    add('ph_not_found', 'phrase', 'topo', 'Resposta', '#topo', 'Isso não está no briefing de hoje. Posso explicar os termos que aparecem nele, ou falar de clima, mercado, notícias, inteligência artificial, dossiê ou geopolítica.')
+    for i, r in enumerate(load(d, 'glossary')):
+        if r.get('text'):
+            sec = r.get('section') or 'mercado'
+            add(f'g{i}', 'answer', sec, 'Glossário', '#' + sec, str(r['text']))
     add('ph_stop', 'phrase', 'topo', 'Resposta', '#topo', 'Tudo bem. Estou aqui quando precisar.')
     add('ph_nothing', 'phrase', 'topo', 'Resposta', '#topo', 'Não tenho nada pausado. Quer que eu comece o briefing?')
     return U

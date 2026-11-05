@@ -25,7 +25,7 @@
 <script>
 (function () {
   // Small stand-in for the dashboard runtime: the page asks dash.data(id) and gets rows.
-  var CORE = ['weather', 'market', 'news', 'ai_news', 'dossier', 'dossier_full', 'geopolitics', 'ibov_trend', 'forces', 'narration'];
+  var CORE = ['weather', 'market', 'news', 'ai_news', 'dossier', 'dossier_full', 'geopolitics', 'ibov_trend', 'forces', 'glossary', 'narration'];
   var DATA = {}, calcs = {}, draws = [], loaded = false, stamp = '';
   var clone = function (o) { return JSON.parse(JSON.stringify(o)); };
   // nested arrays/objects arrive as JSON strings, exactly as on the original dashboard

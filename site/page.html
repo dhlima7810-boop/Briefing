@@ -40,6 +40,7 @@
   .bx p { text-wrap: pretty; }
 
   /* ---------- living background ---------- */
+  .bx-morph { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: block; }
   .bx-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; contain: strict; }
   .bx-spark { position: absolute; display: block; width: var(--s, 10px); height: var(--s, 10px); opacity: var(--o, .4); }
   .bx-spark svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -719,27 +720,208 @@
     }, 2600);
   })();
 
-  /* ================= living background ================= */
-  // drifting outlined triangles over the whole page
+  /* ================= living background: triangles that become the subject of each block ================= */
+  // Analogy: a flock of small triangles that, as you scroll, gathers into a picture of what you're reading.
+  // Clima = cloud and sun, Mercado = four bars, Notícias = globe, IA = brain, Dossiê = two worlds linked,
+  // Geopolítica = coin, Leitura do dia = light bulb. Between blocks they break apart and regroup.
   (() => {
-    const field = root.querySelector('.bx-field');
-    const colors = ['#8052ff', '#ffb829', '#15846e', '#a98bff', '#5fb8ff', '#ff7ac9'];
-    for (let i = 0; i < 70; i++) {
-      const s = el('span', 'bx-spark');
-      s.style.left = (Math.random() * 100).toFixed(2) + '%';
-      s.style.top = (Math.random() * 100).toFixed(2) + '%';
-      s.style.setProperty('--s', (6 + Math.random() * 14).toFixed(1) + 'px');
-      s.style.setProperty('--o', (0.18 + Math.random() * 0.45).toFixed(2));
-      s.style.setProperty('--t', (16 + Math.random() * 22).toFixed(1) + 's');
-      s.style.setProperty('--delay', (-Math.random() * 30).toFixed(1) + 's');
-      s.style.setProperty('--dx', ((Math.random() - 0.5) * 140).toFixed(0) + 'px');
-      s.style.setProperty('--dy', ((Math.random() - 0.5) * 160).toFixed(0) + 'px');
-      s.style.setProperty('--fall', (220 + Math.random() * 360).toFixed(0) + 'px');
-      s.style.setProperty('--r', ((Math.random() < 0.5 ? -1 : 1) * (90 + Math.random() * 270)).toFixed(0) + 'deg');
-      const c = colors[i % colors.length];
-      s.innerHTML = '<svg viewBox="0 0 20 20"><path d="M10 2 L18 17 L2 17 Z" fill="none" stroke="' + c + '" stroke-width="1.6" stroke-linejoin="round"/></svg>';
-      field.appendChild(s);
+    const cv = document.createElement('canvas');
+    cv.className = 'bx-morph'; cv.setAttribute('aria-hidden', 'true');
+    root.insertBefore(cv, root.firstChild);
+    const ctx = cv.getContext('2d');
+    const mobile = () => window.innerWidth < 760;
+    const N = window.innerWidth < 760 ? 1100 : 2000;
+    let seed = 7;
+    const R = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+    const TAU = Math.PI * 2;
+    const sph = () => { const u = R() * 2 - 1, a = R() * TAU, s = Math.sqrt(1 - u * u); return [s * Math.cos(a), u, s * Math.sin(a)]; };
+    const fill = (fn) => { const out = new Float32Array(N * 3); for (let i = 0; i < N; i++) { const p = fn(i); out[i * 3] = p[0]; out[i * 3 + 1] = p[1]; out[i * 3 + 2] = p[2]; } return out; };
+
+    // ---- the shapes, each in a unit box around the origin (y grows downward, like the screen) ----
+    const field = fill(() => [R() * 6 - 3, R() * 4 - 2, R() * 2 - 1]);
+    const cloud = (() => {
+      const balls = [[-0.55, 0.15, 0, 0.42], [-0.1, -0.12, 0, 0.55], [0.42, 0.05, 0, 0.45], [0.05, 0.25, 0.1, 0.4], [0.75, 0.25, 0, 0.3]];
+      const sun = [0.55, -0.55, -0.35, 0.36];
+      return fill((i) => {
+        if (i % 4 === 0) { const d = sph(); return [sun[0] + d[0] * sun[3], sun[1] + d[1] * sun[3], sun[2] + d[2] * sun[3]]; }
+        for (let k = 0; k < 40; k++) {
+          const b = balls[Math.floor(R() * balls.length)], d = sph();
+          const p = [b[0] + d[0] * b[3], b[1] + d[1] * b[3] * 0.85, b[2] + d[2] * b[3]];
+          if (p[1] > 0.42) continue; // flat bottom
+          if (!balls.some((o) => o !== b && Math.hypot(p[0] - o[0], p[1] - o[1], p[2] - o[2]) < o[3] * 0.98)) return p;
+        }
+        return [R() - 0.5, 0.42, R() * 0.4 - 0.2];
+      });
+    })();
+    const bars = (() => {
+      const hs = [0.75, 1.1, 1.45, 0.95], w = 0.32, gap = 0.48, base = 0.8;
+      return fill((i) => {
+        const b = i % 4, x0 = -0.72 + b * gap, h = hs[b], face = R();
+        let x = x0 + (R() - 0.5) * w, y = base - R() * h, z = (R() - 0.5) * w;
+        if (face < 0.35) z = (R() < 0.5 ? -1 : 1) * w / 2;
+        else if (face < 0.7) x = x0 + (R() < 0.5 ? -1 : 1) * w / 2;
+        else if (face < 0.85) y = base - h;
+        return [x, y, z];
+      });
+    })();
+    const land = (lat, lon) => Math.sin(lon * 2.1 + 0.6) * Math.cos(lat * 2.6) + 0.55 * Math.sin(lon * 4.3 + lat * 3.1) + 0.35 * Math.cos(lat * 6.0 - lon * 1.7);
+    const globe = fill(() => {
+      for (let k = 0; k < 30; k++) { const d = sph(); const lat = Math.asin(d[1]), lon = Math.atan2(d[2], d[0]); if (land(lat, lon) > 0.15 || R() < 0.12) return [d[0] * 0.95, d[1] * 0.95, d[2] * 0.95]; }
+      const d = sph(); return [d[0] * 0.95, d[1] * 0.95, d[2] * 0.95];
+    });
+    const brain = fill((i) => {
+      if (i % 14 === 0) { const t = R(); return [0.18 + (R() - 0.5) * 0.12, 0.45 + t * 0.55, 0.15 + (R() - 0.5) * 0.12]; } // stem
+      if (i % 9 === 0) { const d = sph(); return [d[0] * 0.38 + 0.25, d[1] * 0.2 + 0.42, d[2] * 0.3 + 0.35]; } // cerebellum
+      const d = sph(); const side = d[0] < 0 ? -1 : 1;
+      const fold = 1 + 0.07 * Math.sin(d[1] * 14 + d[2] * 9) * Math.sin(d[2] * 12 - d[1] * 5);
+      return [d[0] * 1.08 * fold + side * 0.05, d[1] * 0.72 * fold - 0.05, d[2] * 0.85 * fold];
+    });
+    const worlds = fill((i) => {
+      if (i % 5 === 0) { const t = R(); return [-0.7 + t * 1.4, -0.32 * Math.sin(t * Math.PI) + (R() - 0.5) * 0.05, (R() - 0.5) * 0.05]; } // the bridge
+      const d = sph(), c = i % 2 ? 0.78 : -0.78; return [c + d[0] * 0.45, d[1] * 0.45, d[2] * 0.45];
+    });
+    const coin = fill(() => {
+      const f = R(), a = R() * TAU;
+      // standing on its edge, face to the viewer, so the spin shows face, edge, face
+      if (f < 0.25) return [Math.cos(a) * 0.9, Math.sin(a) * 0.9, (R() - 0.5) * 0.18]; // rim
+      const r = f < 0.4 ? 0.7 + R() * 0.04 : Math.sqrt(R()) * 0.9, face = f < 0.7 ? -0.09 : 0.09; // inner ring, like a minted coin
+      return [Math.cos(a) * r, Math.sin(a) * r, face];
+    });
+    const bulb = fill((i) => {
+      const f = R();
+      if (f < 0.68) { const d = sph(); if (d[1] > 0.55) d[1] = 0.55 + (d[1] - 0.55) * 0.3; return [d[0] * 0.72, d[1] * 0.72 - 0.25, d[2] * 0.72]; }
+      if (f < 0.88) { const t = R(), r = 0.42 - t * 0.12, a = R() * TAU; return [Math.cos(a) * r, 0.2 + t * 0.4, Math.sin(a) * r]; } // neck
+      const t = R(), a = R() * TAU, r = 0.3 + 0.03 * Math.sin(t * 22); return [Math.cos(a) * r, 0.6 + t * 0.3, Math.sin(a) * r]; // screw base
+    });
+    // [section or element id, shape, rotates?]
+    // [block id, shape, how it turns: 'spin' all the way round, 'sway' rocks gently so it stays readable]
+    const STOPS = [['topo', field, 'sway'], ['clima', cloud, 'sway'], ['mercado', bars, 'sway'], ['noticias', globe, 'spin'], ['ia', brain, 'sway'], ['dossie', worlds, 'sway'], ['geopolitica', coin, 'spin'], ['leitura', bulb, 'spin']];
+    const shapeFor = (s) => (s === field ? 0 : 1);
+
+    // ---- particles ----
+    const COLS = ['#ffb829', '#ffb829', '#ffb829', '#8052ff', '#a98bff', '#ffffff', '#34c9a3', '#5fb8ff', '#ff7ac9'];
+    const vis = new Float32Array(N), col = new Uint8Array(N), size = new Float32Array(N), rot = new Float32Array(N), spin = new Float32Array(N), lag = new Float32Array(N);
+    const burst = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      vis[i] = R(); col[i] = Math.floor(R() * COLS.length); size[i] = 2 + R() * 2.6; rot[i] = R() * TAU; spin[i] = (R() - 0.5) * 0.02; lag[i] = R() * 0.35;
+      const d = sph(); const m = 0.6 + R() * 1.4; burst[i * 3] = d[0] * m; burst[i * 3 + 1] = d[1] * m; burst[i * 3 + 2] = d[2] * m;
     }
+
+    let W = 0, H = 0, dpr = 1;
+    const size2 = () => { dpr = Math.min(window.devicePixelRatio || 1, 1.5); W = window.innerWidth; H = window.innerHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    size2();
+    let lastW = W; window.addEventListener('resize', () => { if (window.innerWidth !== lastW || Math.abs(window.innerHeight - H) > 160) { lastW = window.innerWidth; size2(); } });
+    const mouse = { x: -999, y: -999, tx: 0, ty: 0 };
+    window.addEventListener('pointermove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.tx = (e.clientX / W - 0.5); mouse.ty = (e.clientY / H - 0.5); }, { passive: true });
+    window.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; });
+
+    // where are we between two blocks? 0..STOPS.length-1, fractional
+    const els = () => STOPS.map(([id]) => document.getElementById(id));
+    // the picture sits beside the block's title and scrolls with it
+    const anchorOf = (n, mob) => {
+      if (!n) return [W * 0.76, H * 0.5];
+      const h = n.querySelector('.bx-h2') || n.querySelector('.bx-label') || n;
+      const sub = n.querySelector('.bx-sub');
+      const a = h.getBoundingClientRect(), b = (sub || h).getBoundingClientRect();
+      const wrap = (n.querySelector('.bx-wrap') || n).getBoundingClientRect();
+      const right = Math.min(W, wrap.right || W);
+      if (n.id === 'leitura') return [right - (mob ? 0.22 : 0.16) * W, a.top + (mob ? -70 : 90)];
+      const r = mob ? W * 0.15 : Math.min(W * 0.1, 150);
+      const x = right - (mob ? 0.2 * W : Math.min(W * 0.14, 200));
+      // on a phone the title fills the width: the picture floats in the empty band above the block's label
+      if (mob) { const lab = (n.querySelector('.bx-label') || h).getBoundingClientRect(); return [W * 0.78, lab.top - r * 1.15]; }
+      // a long title would run under the picture: lift it into the empty band above the title
+      if (a.right > x - r * 1.15) return [x, a.top - r * 0.45];
+      return [x, (a.top + b.bottom) / 2];
+    };
+    let nodes = els(), target = 0, pos = 0;
+    const measure = () => {
+      if (!nodes.every(Boolean)) nodes = els();
+      const anchor = H * 0.55, span = H * 0.5;
+      let t = 0;
+      for (let i = 1; i < nodes.length; i++) {
+        const n = nodes[i]; if (!n) continue;
+        const top = n.getBoundingClientRect().top;
+        const f = Math.max(0, Math.min(1, (anchor + span - top) / span));
+        if (f > 0) t = i - 1 + f;
+      }
+      target = t;
+    };
+    window.addEventListener('scroll', measure, { passive: true });
+
+    let yaw = 0, tilt = 0, fallT = 0, last = performance.now(), visible = true;
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
+    const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+    const paths = COLS.map(() => [new Path2D(), new Path2D()]);
+    const frame = (now) => {
+      requestAnimationFrame(frame);
+      if (!visible) return;
+      const dt = Math.min(50, now - last); last = now;
+      const still = reduced();
+      measure();
+      pos += (target - pos) * (still ? 1 : 0.07);
+      const i0 = Math.min(STOPS.length - 1, Math.floor(pos)), i1 = Math.min(STOPS.length - 1, i0 + 1), f = pos - i0;
+      const A = STOPS[i0][1], B = STOPS[i1][1];
+      if (!still) { yaw += dt * 0.00022; fallT += dt * 0.00004; }
+      tilt += (mouse.ty * 0.5 - tilt) * 0.05;
+      const mob = mobile();
+      const turn = (m) => (m === 'spin' ? yaw : Math.sin(yaw * 1.6) * 0.55);
+      const eMid = ease(f);
+      const yw = turn(STOPS[i0][2]) + (turn(STOPS[i1][2]) - turn(STOPS[i0][2])) * eMid + mouse.tx * 0.8;
+      // where the picture sits: beside the block's title, small on a phone
+      const pA = anchorOf(nodes[i0], mob), pB = anchorOf(nodes[i1], mob);
+      const shapeCx = pA[0] + (pB[0] - pA[0]) * eMid, shapeCy = pA[1] + (pB[1] - pA[1]) * eMid;
+      const shapeR = mob ? W * 0.15 : Math.min(W * 0.1, 150);
+      const wA = shapeFor(A), wB = shapeFor(B);
+      const cyw = Math.cos(yw), syw = Math.sin(yw), ct = Math.cos(tilt), st = Math.sin(tilt);
+      ctx.clearRect(0, 0, W, H);
+      for (const p of paths) { p[0] = new Path2D(); p[1] = new Path2D(); }
+      const fieldR = Math.max(W, H) / 5.2;
+      for (let i = 0; i < N; i++) {
+        const k = i * 3;
+        // each triangle leaves a little later than its neighbour, so the shape breaks apart instead of sliding
+        const e = ease(Math.max(0, Math.min(1, (f - lag[i]) / (1 - 0.35))));
+        const blow = Math.sin(e * Math.PI) * (A === B ? 0 : 0.55);
+        const pick = (S, w) => {
+          let x = S[k], y = S[k + 1], z = S[k + 2];
+          if (!w) { y = ((y + 2 + fallT * (0.6 + (i % 7) * 0.12)) % 4) - 2; }
+          return [x, y, z];
+        };
+        const a = pick(A, wA), b = pick(B, wB);
+        const ws = wA + (wB - wA) * e; // 0 = loose field, 1 = a picture
+        if (vis[i] > 0.07 + 0.93 * ws) continue; // the loose field is sparse; the rest gather in only to draw a picture
+        let x = a[0] + (b[0] - a[0]) * e + burst[k] * blow, y = a[1] + (b[1] - a[1]) * e + burst[k + 1] * blow, z = a[2] + (b[2] - a[2]) * e + burst[k + 2] * blow;
+        // rotate the picture (the loose field barely turns)
+        const yy = yw * ws;
+        const cy2 = ws === 1 ? cyw : Math.cos(yy), sy2 = ws === 1 ? syw : Math.sin(yy);
+        const x1 = x * cy2 - z * sy2, z1 = x * sy2 + z * cy2;
+        const y1 = y * ct - z1 * st * ws, z2 = y * st * ws + z1 * ct;
+        const persp = 3.2 / (3.2 + z2);
+        const cx = 0.5 * W + (shapeCx - 0.5 * W) * ws, cyy = 0.5 * H + (shapeCy - 0.5 * H) * ws, sc = fieldR + (shapeR - fieldR) * ws;
+        let sx = cx + x1 * sc * persp, sy = cyy + y1 * sc * persp;
+        // the cursor pushes triangles aside
+        const dx = sx - mouse.x, dy = sy - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < 8100) { const d = Math.sqrt(d2) || 1, push = (90 - d) * 0.35; sx += dx / d * push; sy += dy / d * push; }
+        if (sx < -10 || sx > W + 10 || sy < -10 || sy > H + 10) continue;
+        rot[i] += spin[i] * (still ? 0 : 1);
+        const s = size[i] * persp * (mob ? 0.85 : 1), r = rot[i];
+        const p = paths[col[i]][z2 > 0.15 ? 0 : 1];
+        p.moveTo(sx + Math.cos(r) * s, sy + Math.sin(r) * s);
+        p.lineTo(sx + Math.cos(r + 2.094) * s, sy + Math.sin(r + 2.094) * s);
+        p.lineTo(sx + Math.cos(r + 4.189) * s, sy + Math.sin(r + 4.189) * s);
+        p.closePath();
+      }
+      const base = mob ? 0.6 : 0.8;
+      ctx.lineWidth = 1; ctx.lineJoin = 'round';
+      for (let c = 0; c < COLS.length; c++) {
+        ctx.strokeStyle = COLS[c];
+        ctx.globalAlpha = base * 0.45; ctx.stroke(paths[c][0]);
+        ctx.globalAlpha = base; ctx.stroke(paths[c][1]);
+      }
+      ctx.globalAlpha = 1;
+    };
+    measure(); pos = target;
+    requestAnimationFrame(frame);
   })();
 
   // a slow aurora behind every section, in that section's colours

@@ -1,6 +1,6 @@
 {
-  "name": "Briefing Diário",
-  "short_name": "Briefing",
+  "name": "Zyra · Briefing Diário",
+  "short_name": "Zyra",
   "description": "Briefing da manhã com a Zyra: clima, mercado, notícias, IA, dossiê e geopolítica.",
   "lang": "pt-BR",
   "start_url": "./",

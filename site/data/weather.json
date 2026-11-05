@@ -1,62 +1,62 @@
 [
  {
   "day_label": "Hoje",
-  "date": "2026-11-04",
-  "weekday": "Quarta-feira",
-  "condition": "Poucas nuvens",
-  "high": 33,
-  "low": 18,
-  "precip": 0,
-  "tip": "Dia quente, máxima de 33 graus. Use protetor solar e beba bastante água."
- },
- {
-  "day_label": "Amanhã",
   "date": "2026-11-05",
   "weekday": "Quinta-feira",
   "condition": "Chuva",
-  "high": 31,
-  "low": 21,
-  "precip": 93,
-  "tip": "Chuva com trovoadas prevista. Leve guarda-chuva e evite áreas de alagamento."
+  "high": 26,
+  "low": 19,
+  "precip": 100,
+  "tip": "Leve guarda-chuva. Há risco de trovoadas à tarde."
  },
  {
-  "day_label": "Sex",
+  "day_label": "Amanhã",
   "date": "2026-11-06",
   "weekday": "Sexta-feira",
-  "condition": "Nublado",
-  "high": 23,
-  "low": 19,
-  "precip": 0,
-  "tip": "Temperatura cai dez graus. Tenha um agasalho leve à mão."
+  "condition": "Chuva",
+  "high": 20,
+  "low": 17,
+  "precip": 69,
+  "tip": "Dia mais fresco, com chuva esparsa. Um casaco leve ajuda."
  },
  {
   "day_label": "Sáb",
   "date": "2026-11-07",
   "weekday": "Sábado",
   "condition": "Chuva",
-  "high": 30,
+  "high": 29,
   "low": 18,
-  "precip": 96,
-  "tip": "Chuva e trovoadas no sábado. Planeje programas em locais cobertos."
+  "precip": 100,
+  "tip": "Calor e chuva forte à tarde. Programe passeios para a manhã."
  },
  {
   "day_label": "Dom",
   "date": "2026-11-08",
   "weekday": "Domingo",
-  "condition": "Chuva",
-  "high": 23,
-  "low": 15,
-  "precip": 92,
-  "tip": "Domingo chuvoso e mais frio. Casaco e guarda-chuva são boa ideia."
+  "condition": "Chuva forte",
+  "high": 19,
+  "low": 14,
+  "precip": 100,
+  "tip": "Frente fria com muita chuva. Evite áreas de alagamento."
  },
  {
   "day_label": "Seg",
   "date": "2026-11-09",
   "weekday": "Segunda-feira",
-  "condition": "Poucas nuvens",
-  "high": 21,
-  "low": 13,
+  "condition": "Chuva",
+  "high": 14,
+  "low": 12,
+  "precip": 96,
+  "tip": "Dia frio para novembro. Saia agasalhado e com guarda-chuva."
+ },
+ {
+  "day_label": "Ter",
+  "date": "2026-11-10",
+  "weekday": "Terça-feira",
+  "condition": "Nublado",
+  "high": 20,
+  "low": 12,
   "precip": 0,
-  "tip": "Manhã fria, mínima de 13 graus. Saia de casa agasalhado."
+  "tip": "Tempo firme, mas manhã fria. Bom dia para resolver coisas na rua."
  }
 ]

@@ -3,22 +3,22 @@
   "block": "A",
   "country": "EUA",
   "title": "Bloco A — Trump, Irã e instrumentos executivos",
-  "summary": "Os EUA fizeram um ataque limitado ao Irã na véspera da eleição. O Catar media um acordo. Não achamos nova ordem executiva. Agora Trump terá o Congresso contra ele.",
+  "summary": "Trump admitiu que a guerra pesou na eleição e diz não ter planos imediatos de atacar. Minas em Ormuz atingiram petroleiros. Não achamos nova ordem executiva.",
   "events": [
    {
-    "date": "02/11/2026",
-    "headline": "Ataque não anunciado à ilha de Qeshm",
-    "detail": "Alvos em Qeshm, Hengam e Bandar Abbas. Um funcionário americano chamou a ação de limitada, contra baterias antiaéreas iranianas."
-   },
-   {
     "date": "03/11/2026",
-    "headline": "Catar diz aproximar EUA e Irã",
-    "detail": "As partes analisam propostas e devem responder em até 36 horas. O Irã diz que a bola está com Washington."
+    "headline": "Sem novos ataques no horizonte",
+    "detail": "Trump disse ao Financial Times que não há planos imediatos de atacar o Irã. Afirmou que os EUA estão obtendo o que querem."
    },
    {
     "date": "04/11/2026",
-    "headline": "Democratas assumem Câmara e Senado",
-    "detail": "A ABC News projetou controle democrata das duas casas. O Congresso ganha força para frear medidas de Trump."
+    "headline": "Trump liga derrota ao Irã",
+    "detail": "À Fox News, disse que parte do resultado eleitoral foi o Irã. Mas defendeu que a guerra foi a decisão certa."
+   },
+   {
+    "date": "04/11/2026",
+    "headline": "Petroleiros atingidos por minas",
+    "detail": "A Guarda Revolucionária disse que quatro petroleiros foram destruídos ao sul de Ormuz. O líder supremo diz que a hostilidade americana não muda."
    }
   ]
  },
@@ -26,22 +26,22 @@
   "block": "B",
   "country": "Brasil",
   "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
-  "summary": "Sem fato oficial novo hoje. O último foi a convocação da diplomata argentina, em 29 de outubro. Reportagens trazem novos detalhes da saída de Flávio Bolsonaro.",
+  "summary": "Sem fato oficial novo hoje. O último foi a convocação da diplomata argentina, em 29 de outubro, sobre a saída de Flávio Bolsonaro.",
   "events": [
    {
-    "date": "26/10/2026",
-    "headline": "Milei não parabeniza Lula",
-    "detail": "O governo argentino ficou em silêncio após a reeleição. Chile e Paraguai cumprimentaram Lula logo."
+    "date": "27/10/2026",
+    "headline": "Flávio Bolsonaro sai pela Argentina",
+    "detail": "A família cruzou de Foz do Iguaçu a Puerto Iguazú e seguiu em voo privado até Miami."
    },
    {
     "date": "29/10/2026",
-    "headline": "Itamaraty convoca encarregada de negócios argentina",
-    "detail": "O governo pediu explicações sobre a ajuda argentina à saída de Flávio Bolsonaro. A conversa foi protocolar, sem reprimenda formal."
+    "headline": "Itamaraty convoca diplomata argentina",
+    "detail": "María Emilia Cortés foi chamada para explicar suposta ajuda do governo Milei. Não há prova pública dessa ajuda."
    },
    {
-    "date": "03/11/2026",
-    "headline": "Fantástico revela registros na fronteira",
-    "detail": "A TV Globo mostrou três registros de entrada na Argentina em 34 minutos. São apurações jornalísticas, ainda não confirmadas por governos."
+    "date": "01/11/2026",
+    "headline": "Buenos Aires nega pedido formal",
+    "detail": "O chanceler Pablo Quirno negou que o Brasil tenha pedido explicações. Não negou que a reunião ocorreu."
    }
   ]
  },
@@ -49,22 +49,22 @@
   "block": "C",
   "country": "Análise",
   "title": "Bloco C — Leitura cruzada",
-  "summary": "Risco fiscal doméstico e notícias externas puxam em direções diferentes. O Copom de hoje é o próximo teste para dólar e bolsa.",
+  "summary": "O alívio externo ajudou a bolsa e o real. Mas o Copom parou os cortes, e o mercado segue esperando sinais fiscais de Lula.",
   "events": [
    {
-    "date": "03/11/2026",
-    "headline": "Bolsa na sexta queda, dólar a R$ 5,49",
-    "detail": "O Ibovespa fechou a 164.993 pontos. O mercado espera o nome do novo ministro da Fazenda."
+    "date": "04/11/2026",
+    "headline": "Copom pausa em 13,75%",
+    "detail": "Decisão unânime cita inflação, dólar, incerteza fiscal e guerra. Não indica o próximo passo."
    },
    {
     "date": "04/11/2026",
-    "headline": "Copom decide a Selic",
-    "detail": "A taxa está em 13,75%. A decisão sai hoje à noite."
+    "headline": "Bolsa sobe e dólar recua",
+    "detail": "O Ibovespa subiu 1,23% e interrompeu seis quedas. A Petrobras caiu cerca de 7% com o petróleo."
    },
    {
     "date": "04/11/2026",
-    "headline": "Bitcoin volta a US$ 78 mil",
-    "detail": "A cripto se recuperou com a definição da eleição americana, apesar de saídas dos ETFs."
+    "headline": "Lula marca pronunciamento",
+    "detail": "Segundo o Estadão, Lula fala em rede nacional no domingo, dia 8. Deve prometer metas fiscais, sem anunciar o novo ministro."
    }
   ]
  }

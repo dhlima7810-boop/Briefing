@@ -1,21 +1,203 @@
 [
- {"term": "ETF", "aliases": ["ETFs", "fundo de índice", "ETF à vista"], "section": "mercado", "text": "ETF é um fundo negociado na bolsa como se fosse uma ação. Ele junta o dinheiro de muitos investidores para seguir um índice ou um ativo. Um ETF à vista de bitcoin, por exemplo, guarda bitcoins de verdade, e cada cota acompanha o preço da moeda."},
- {"term": "Binance", "aliases": [], "section": "noticias", "text": "A Binance é a maior corretora de criptomoedas do mundo em volume negociado. É um site e aplicativo onde as pessoas compram, vendem e guardam moedas digitais, como o bitcoin."},
- {"term": "Selic", "aliases": ["taxa Selic", "taxa básica de juros"], "section": "mercado", "text": "A Selic é a taxa básica de juros do Brasil, definida pelo Banco Central. Ela serve de referência para empréstimos, financiamentos e aplicações. Quando sobe, o crédito fica mais caro e a inflação tende a desacelerar."},
- {"term": "Copom", "aliases": ["Comitê de Política Monetária"], "section": "mercado", "text": "O Copom é o Comitê de Política Monetária do Banco Central. Ele se reúne a cada 45 dias, mais ou menos, para decidir o nível da Selic."},
- {"term": "Focus", "aliases": ["boletim Focus", "relatório Focus"], "section": "mercado", "text": "O Focus é uma pesquisa semanal do Banco Central com economistas do mercado. Ela mostra o que eles esperam para inflação, juros, dólar e crescimento."},
- {"term": "Ibovespa", "aliases": ["Ibov", "índice Bovespa"], "section": "mercado", "text": "O Ibovespa é o principal índice da bolsa brasileira, a B3. Ele mostra o desempenho médio das ações mais negociadas, como Petrobras, Vale e grandes bancos."},
- {"term": "pregão", "aliases": ["pregões"], "section": "mercado", "text": "Pregão é cada dia de negociação na bolsa de valores, do horário de abertura ao fechamento."},
- {"term": "risco fiscal", "aliases": ["dúvida fiscal", "incerteza fiscal", "fiscal"], "section": "mercado", "text": "Risco fiscal é o medo de que o governo gaste mais do que arrecada e a dívida pública cresça sem controle. Quando esse medo aumenta, o dólar e os juros costumam subir e a bolsa costuma cair."},
- {"term": "bitcoin", "aliases": ["BTC"], "section": "mercado", "text": "O bitcoin é a primeira e maior criptomoeda, um dinheiro digital que não é emitido por nenhum governo ou banco central. Seu preço varia muito, de acordo com a oferta e a procura."},
- {"term": "Brent", "aliases": ["petróleo Brent"], "section": "geopolitica", "text": "Brent é o tipo de petróleo do Mar do Norte usado como referência mundial de preço. Quando se fala do preço do petróleo, normalmente é dele."},
- {"term": "Estreito de Ormuz", "aliases": ["Ormuz"], "section": "noticias", "text": "O Estreito de Ormuz é uma passagem marítima estreita entre o Irã e a Península Arábica. Por ele passa cerca de um quinto do petróleo consumido no mundo, por isso qualquer tensão ali mexe com o preço dos combustíveis."},
- {"term": "SEC", "aliases": [], "section": "ia", "text": "A SEC é a Comissão de Valores Mobiliários dos Estados Unidos, o órgão que fiscaliza a bolsa e as empresas que vendem ações ao público. É parecida com a CVM do Brasil."},
- {"term": "IPO", "aliases": ["abertura de capital", "S-1"], "section": "ia", "text": "IPO é a abertura de capital, quando uma empresa passa a vender ações na bolsa pela primeira vez. Antes disso, nos Estados Unidos, ela entrega à SEC um documento chamado S-1, com seus números e seus riscos."},
- {"term": "benchmark", "aliases": ["benchmarks"], "section": "ia", "text": "Benchmark é um teste padronizado para comparar sistemas. Em inteligência artificial, é uma prova com tarefas e notas que mostra o quanto cada modelo acerta."},
- {"term": "deepfake", "aliases": ["deepfakes"], "section": "ia", "text": "Deepfake é uma imagem, vídeo ou áudio falso criado com inteligência artificial para parecer real, por exemplo colocando o rosto ou a voz de uma pessoa em algo que ela nunca fez."},
- {"term": "parâmetros", "aliases": ["parâmetro", "trilhão de parâmetros"], "section": "ia", "text": "Parâmetros são os números internos que um modelo de inteligência artificial ajusta durante o treino. Mais parâmetros costumam significar um modelo maior, mas não necessariamente melhor."},
- {"term": "malware", "aliases": [], "section": "ia", "text": "Malware é qualquer programa feito para causar dano, como vírus, programas que roubam senhas ou que sequestram arquivos."},
- {"term": "eleições de meio de mandato", "aliases": ["meio de mandato", "midterms"], "section": "noticias", "text": "As eleições de meio de mandato acontecem nos Estados Unidos dois anos depois da eleição presidencial. Elas renovam toda a Câmara e um terço do Senado, e costumam funcionar como um termômetro do governo."},
- {"term": "Fazenda", "aliases": ["Ministério da Fazenda", "equipe econômica"], "section": "mercado", "text": "O Ministério da Fazenda cuida das contas do governo federal, dos impostos e da política econômica. Quem o comanda é o principal sinal para o mercado de como o governo vai gastar."}
+ {
+  "term": "Copom",
+  "aliases": [
+   "Comitê de Política Monetária"
+  ],
+  "section": "mercado",
+  "text": "É o comitê do Banco Central que define a Selic. Reúne-se oito vezes por ano."
+ },
+ {
+  "term": "Selic",
+  "aliases": [
+   "taxa Selic",
+   "taxa básica de juros"
+  ],
+  "section": "mercado",
+  "text": "É a taxa básica de juros do Brasil. Ela influencia o custo de empréstimos e o rendimento da renda fixa."
+ },
+ {
+  "term": "ciclo de cortes",
+  "aliases": [
+   "ciclo de redução"
+  ],
+  "section": "mercado",
+  "text": "É uma sequência de reuniões em que o Banco Central reduz os juros. Este ciclo começou em março de 2026."
+ },
+ {
+  "term": "contracionista",
+  "aliases": [
+   "política contracionista",
+   "juros contracionistas"
+  ],
+  "section": "dossie",
+  "text": "Diz-se dos juros altos o bastante para frear a economia. O objetivo é conter a inflação."
+ },
+ {
+  "term": "meta de inflação",
+  "aliases": [
+   "meta",
+   "intervalo de tolerância"
+  ],
+  "section": "dossie",
+  "text": "É o alvo de inflação definido pelo governo para o Banco Central. Há uma margem de tolerância para cima e para baixo."
+ },
+ {
+  "term": "Ibovespa",
+  "aliases": [
+   "Ibov",
+   "bolsa"
+  ],
+  "section": "mercado",
+  "text": "É o principal índice da bolsa brasileira, a B3. Mostra o desempenho médio das ações mais negociadas."
+ },
+ {
+  "term": "dólar comercial",
+  "aliases": [
+   "dólar à vista"
+  ],
+  "section": "mercado",
+  "text": "É a cotação usada em negócios entre empresas e bancos. Difere do dólar turismo, que é mais caro."
+ },
+ {
+  "term": "DXY",
+  "aliases": [
+   "índice do dólar"
+  ],
+  "section": "mercado",
+  "text": "É um índice que mede o dólar contra seis moedas fortes, como euro e iene."
+ },
+ {
+  "term": "Brent",
+  "aliases": [
+   "petróleo Brent"
+  ],
+  "section": "noticias",
+  "text": "É o tipo de petróleo do Mar do Norte usado como referência mundial de preço."
+ },
+ {
+  "term": "Estreito de Ormuz",
+  "aliases": [
+   "Ormuz"
+  ],
+  "section": "noticias",
+  "text": "É a passagem marítima entre o Irã e Omã. Por ela passa cerca de um quinto do petróleo do mundo."
+ },
+ {
+  "term": "Guarda Revolucionária",
+  "aliases": [
+   "IRGC"
+  ],
+  "section": "dossie",
+  "text": "É a força militar de elite do Irã, ligada diretamente ao líder supremo."
+ },
+ {
+  "term": "Kospi",
+  "aliases": [],
+  "section": "noticias",
+  "text": "É o principal índice da bolsa da Coreia do Sul. É muito influenciado por empresas de chips, como a Samsung."
+ },
+ {
+  "term": "semicondutores",
+  "aliases": [
+   "chips"
+  ],
+  "section": "noticias",
+  "text": "São os componentes que fazem computadores e celulares funcionarem. Chips de memória são essenciais para a IA."
+ },
+ {
+  "term": "data center",
+  "aliases": [
+   "centro de dados",
+   "data centers"
+  ],
+  "section": "ia",
+  "text": "É um prédio cheio de servidores que guardam dados e rodam sistemas, como modelos de IA. Consome muita energia."
+ },
+ {
+  "term": "bitcoin",
+  "aliases": [
+   "BTC"
+  ],
+  "section": "mercado",
+  "text": "É a primeira e maior criptomoeda. Seu preço oscila muito e não é garantido por nenhum governo."
+ },
+ {
+  "term": "liquidação",
+  "aliases": [
+   "liquidações"
+  ],
+  "section": "mercado",
+  "text": "No mercado de cripto, é o fechamento forçado de uma aposta alavancada quando o preço vai contra ela."
+ },
+ {
+  "term": "ETF",
+  "aliases": [
+   "fundo de índice",
+   "ETFs"
+  ],
+  "section": "mercado",
+  "text": "É um fundo negociado na bolsa como se fosse uma ação. Os ETFs de bitcoin acompanham o preço da moeda."
+ },
+ {
+  "term": "encarregada de negócios",
+  "aliases": [
+   "encarregado de negócios"
+  ],
+  "section": "dossie",
+  "text": "É quem chefia uma embaixada quando não há embaixador no posto."
+ },
+ {
+  "term": "Itamaraty",
+  "aliases": [
+   "Ministério das Relações Exteriores"
+  ],
+  "section": "dossie",
+  "text": "É o nome pelo qual é conhecido o Ministério das Relações Exteriores do Brasil."
+ },
+ {
+  "term": "pronunciamento em rede nacional",
+  "aliases": [
+   "rede nacional"
+  ],
+  "section": "dossie",
+  "text": "É quando o presidente fala ao país em transmissão obrigatória de rádio e TV."
+ },
+ {
+  "term": "agente de IA",
+  "aliases": [
+   "agentes de IA",
+   "agentes"
+  ],
+  "section": "ia",
+  "text": "É um programa de IA que executa tarefas sozinho, como clicar, comprar ou enviar mensagens, além de conversar."
+ },
+ {
+  "term": "bug bounty",
+  "aliases": [
+   "programa de recompensas"
+  ],
+  "section": "ia",
+  "text": "É quando uma empresa paga quem encontra falhas de segurança nos seus sistemas e avisa de forma responsável."
+ },
+ {
+  "term": "Claude Code",
+  "aliases": [],
+  "section": "ia",
+  "text": "É a ferramenta da Anthropic que usa o modelo Claude para escrever e revisar código de programação."
+ },
+ {
+  "term": "IPO",
+  "aliases": [
+   "abertura de capital"
+  ],
+  "section": "ia",
+  "text": "É a primeira venda de ações de uma empresa na bolsa. A OpenAI se prepara para isso."
+ },
+ {
+  "term": "frente fria",
+  "aliases": [],
+  "section": "clima",
+  "text": "É uma massa de ar frio que avança e costuma trazer chuva, vento e queda de temperatura."
+ }
 ]

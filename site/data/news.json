@@ -1,52 +1,52 @@
 [
  {
   "id": "n1",
-  "tag": "Américas",
-  "headline": "Democratas conquistam a Câmara e o Senado dos EUA",
-  "summary": "A ABC News projeta controle democrata das duas casas do Congresso após as eleições de meio de mandato.",
-  "what": "Na noite de 3 de novembro, a ABC projetou maioria democrata na Câmara e no Senado. Talarico lidera no Texas, e El-Sayed venceu em Michigan.",
-  "why": "Trump perde o controle do Congresso nos últimos dois anos de mandato. Isso limita leis, orçamento e abre espaço para investigações.",
-  "source": "ABC News",
+  "tag": "Brasil",
+  "headline": "Copom mantém a Selic em 13,75% e encerra ciclo de cortes",
+  "summary": "Decisão unânime interrompe cinco reduções seguidas, iniciadas em março.",
+  "what": "O Copom manteve os juros na noite de 4 de novembro. O comunicado cita inflação acima da meta, incerteza fiscal e cenário externo mais adverso.",
+  "why": "Juros parados mantêm crédito caro e renda fixa atraente. A próxima decisão sai em 9 de dezembro.",
+  "source": "O Povo; Sou Brasília",
   "date": "04/11/2026"
  },
  {
   "id": "n2",
-  "tag": "Oriente Médio",
-  "headline": "EUA atacam ilha iraniana de Qeshm enquanto Catar media acordo",
-  "summary": "Ataque limitado no Estreito de Ormuz ocorreu na véspera da eleição. Negociações seguem com prazo de 36 horas.",
-  "what": "Os EUA atingiram alvos em Qeshm, Hengam e Bandar Abbas na noite de 2 de novembro. O Catar diz aproximar as partes, que analisam propostas.",
-  "why": "Ormuz é rota de cerca de um quinto do petróleo mundial. Um acordo ou nova escalada mexe direto com combustíveis e inflação.",
-  "source": "PBS NewsHour; Khaleej Times",
-  "date": "03/11/2026"
+  "tag": "Américas",
+  "headline": "Democratas ampliam vantagem no Congresso e Trump admite peso do Irã",
+  "summary": "A apuração confirma maioria democrata nas duas casas. Trump disse que a guerra pesou na derrota.",
+  "what": "Democratas somam 54 cadeiras no Senado, com dois estados em aberto. Gina Hinojosa venceu Greg Abbott no Texas. Trump disse à Fox que parte do resultado foi o Irã.",
+  "why": "Um Congresso de oposição pode limitar verbas militares. Isso aumenta a pressão por um acordo com Teerã.",
+  "source": "AP; Fox News, via Just Security",
+  "date": "04/11/2026"
  },
  {
   "id": "n3",
-  "tag": "Brasil",
-  "headline": "Ibovespa cai pela sexta vez seguida e dólar fecha a R$ 5,49",
-  "summary": "Bolsa recuou 1,74% no primeiro pregão após o feriado, véspera da decisão do Copom.",
-  "what": "O Ibovespa fechou a 164.993 pontos. O dólar subiu 1,01%, a R$ 5,4902. Petroleiras caíram com o recuo do Brent.",
-  "why": "O mercado cobra sinais sobre a equipe econômica do novo mandato. O resultado pressiona juros futuros e o custo de vida.",
-  "source": "Gazeta Brasil",
-  "date": "03/11/2026"
+  "tag": "Oriente Médio",
+  "headline": "Petróleo despenca quase 9% com esperança de paz com o Irã",
+  "summary": "O Brent fechou a US$ 94,62, menor nível desde agosto, mesmo com navios atingidos por minas.",
+  "what": "O Brent caiu 8,7% na quarta. A Guarda Revolucionária disse que quatro petroleiros explodiram em minas ao sul de Ormuz, e dois navios foram apreendidos.",
+  "why": "Petróleo mais barato pode aliviar combustíveis e inflação. Mas derruba ações de petroleiras, como a Petrobras.",
+  "source": "Investing.com; Reuters, via Just Security",
+  "date": "04/11/2026"
  },
  {
   "id": "n4",
-  "tag": "Europa",
-  "headline": "Ministro dos Transportes da Espanha renuncia após acidente de trem",
-  "summary": "Óscar Puente deixou o cargo após o acidente de Urda, que matou 69 pessoas.",
-  "what": "Puente revelou que um trem de alta velocidade seguiu a mais de 160 km/h após falha no sistema de segurança. Todas as vítimas foram identificadas.",
-  "why": "É uma crise política para o governo espanhol. E reabre o debate sobre segurança ferroviária na Europa.",
-  "source": "Euronews",
-  "date": "03/11/2026"
+  "tag": "Ásia",
+  "headline": "Bolsa da Coreia do Sul cai mais de 5% com fuga de ações de chips",
+  "summary": "Investidores temem regras mais duras para data centers de IA após a vitória democrata.",
+  "what": "O Kospi caiu 5,28% nesta quinta. Samsung e SK Hynix recuaram de 6% a 9%. A queda acionou um freio automático de negociação.",
+  "why": "Chips de memória são a base da corrida da IA. A queda mostra como a política americana mexe com mercados no mundo todo.",
+  "source": "Seoul Economic Daily; EFE, via Infobae",
+  "date": "05/11/2026"
  },
  {
   "id": "n5",
-  "tag": "Ásia",
-  "headline": "Coreia do Norte nega roubo de 5 bilhões de euros da Binance",
-  "summary": "Pyongyang rejeitou a acusação do FBI e fez novos testes de mísseis.",
-  "what": "O FBI atribuiu à Coreia do Norte o ataque à corretora Binance. O regime negou e voltou a testar mísseis.",
-  "why": "O caso pesa sobre a confiança no mercado de criptomoedas. E mantém a tensão militar na península coreana.",
-  "source": "Euronews",
-  "date": "03/11/2026"
+  "tag": "Europa",
+  "headline": "Rússia ataca rede elétrica da Ucrânia e mortos em Zaporizhzhia chegam a 37",
+  "summary": "Ataques deixaram partes do país sem energia, às vésperas do inverno.",
+  "what": "A Rússia atingiu a infraestrutura de energia ucraniana. O total de mortos em um centro de ajuda em Zaporizhzhia subiu para 37, com 59 desaparecidos.",
+  "why": "A guerra segue sem trégua na Europa. Ataques à energia elevam o risco de crise humanitária no frio.",
+  "source": "Reuters, via Just Security",
+  "date": "04/11/2026"
  }
 ]

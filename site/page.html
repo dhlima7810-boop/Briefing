@@ -800,10 +800,11 @@
 
     // ---- particles ----
     const COLS = ['#ffb829', '#ffb829', '#ffb829', '#8052ff', '#a98bff', '#ffffff', '#34c9a3', '#5fb8ff', '#ff7ac9'];
-    const vis = new Float32Array(N), col = new Uint8Array(N), size = new Float32Array(N), rot = new Float32Array(N), spin = new Float32Array(N), lag = new Float32Array(N);
+    const FIELD = 0.2; // share of triangles falling loose at the top: noticeable, not a blizzard
+    const vis = new Float32Array(N), vis2 = new Float32Array(N), col = new Uint8Array(N), size = new Float32Array(N), rot = new Float32Array(N), spin = new Float32Array(N), lag = new Float32Array(N);
     const burst = new Float32Array(N * 3);
     for (let i = 0; i < N; i++) {
-      vis[i] = R(); col[i] = Math.floor(R() * COLS.length); size[i] = 2 + R() * 2.6; rot[i] = R() * TAU; spin[i] = (R() - 0.5) * 0.02; lag[i] = R() * 0.35;
+      vis[i] = R(); vis2[i] = R(); col[i] = Math.floor(R() * COLS.length); size[i] = 2 + R() * 2.6; rot[i] = R() * TAU; spin[i] = (R() - 0.5) * 0.02; lag[i] = R() * 0.35;
       const d = sph(); const m = 0.6 + R() * 1.4; burst[i * 3] = d[0] * m; burst[i * 3 + 1] = d[1] * m; burst[i * 3 + 2] = d[2] * m;
     }
 
@@ -866,38 +867,47 @@
       tilt += (mouse.ty * 0.5 - tilt) * 0.05;
       const mob = mobile();
       const turn = (m) => (m === 'spin' ? yaw : Math.sin(yaw * 1.6) * 0.55);
-      const eMid = ease(f);
-      const yw = turn(STOPS[i0][2]) + (turn(STOPS[i1][2]) - turn(STOPS[i0][2])) * eMid + mouse.tx * 0.8;
+      const yA = turn(STOPS[i0][2]) + mouse.tx * 0.8, yB = turn(STOPS[i1][2]) + mouse.tx * 0.8;
       // where the picture sits: beside the block's title, small on a phone
       const pA = anchorOf(nodes[i0], mob), pB = anchorOf(nodes[i1], mob);
-      const shapeCx = pA[0] + (pB[0] - pA[0]) * eMid, shapeCy = pA[1] + (pB[1] - pA[1]) * eMid;
       const shapeR = mob ? W * 0.15 : Math.min(W * 0.1, 150);
       const wA = shapeFor(A), wB = shapeFor(B);
-      const cyw = Math.cos(yw), syw = Math.sin(yw), ct = Math.cos(tilt), st = Math.sin(tilt);
+      const ct = Math.cos(tilt), st = Math.sin(tilt);
       ctx.clearRect(0, 0, W, H);
       for (const p of paths) { p[0] = new Path2D(); p[1] = new Path2D(); }
       const fieldR = Math.max(W, H) / 5.2;
       for (let i = 0; i < N; i++) {
         const k = i * 3;
-        // each triangle leaves a little later than its neighbour, so the shape breaks apart instead of sliding
-        const e = ease(Math.max(0, Math.min(1, (f - lag[i]) / (1 - 0.35))));
-        const blow = Math.sin(e * Math.PI) * (A === B ? 0 : 0.55);
-        const pick = (S, w) => {
-          let x = S[k], y = S[k + 1], z = S[k + 2];
-          if (!w) { y = ((y + 2 + fallT * (0.6 + (i % 7) * 0.12)) % 4) - 2; }
-          return [x, y, z];
-        };
-        const a = pick(A, wA), b = pick(B, wB);
-        const ws = wA + (wB - wA) * e; // 0 = loose field, 1 = a picture
-        if (vis[i] > 0.07 + 0.93 * ws) continue; // the loose field is sparse; the rest gather in only to draw a picture
-        let x = a[0] + (b[0] - a[0]) * e + burst[k] * blow, y = a[1] + (b[1] - a[1]) * e + burst[k + 1] * blow, z = a[2] + (b[2] - a[2]) * e + burst[k + 2] * blow;
-        // rotate the picture (the loose field barely turns)
-        const yy = yw * ws;
-        const cy2 = ws === 1 ? cyw : Math.cos(yy), sy2 = ws === 1 ? syw : Math.sin(yy);
+        let x, y, z, ws, yRot, cX, cY;
+        if (wA && wB && A !== B) {
+          // between two blocks: the picture dematerialises (triangles blink out and drift),
+          // then the next one rematerialises beside its own title
+          const g = ease(f);
+          const out = g < 0.5, ph = out ? g * 2 : (g - 0.5) * 2;
+          if (out ? vis2[i] < ph : vis2[i] > ph) continue;
+          const S = out ? A : B, d = out ? ph * ph * 0.45 : (1 - ph) * (1 - ph) * 0.45;
+          x = S[k] + burst[k] * d; y = S[k + 1] + burst[k + 1] * d; z = S[k + 2] + burst[k + 2] * d;
+          ws = 1; yRot = out ? yA : yB; cX = out ? pA[0] : pB[0]; cY = out ? pA[1] : pB[1];
+        } else {
+          // from the falling field into a picture (or back): the falling triangles fly in, the rest fade in around them
+          const e = ease(Math.max(0, Math.min(1, (f - lag[i]) / (1 - 0.35))));
+          const blow = Math.sin(e * Math.PI) * (A === B ? 0 : 0.3);
+          const pick = (S, w) => {
+            let px = S[k], py = S[k + 1], pz = S[k + 2];
+            if (!w) { py = ((py + 2 + fallT * (0.6 + (i % 7) * 0.12)) % 4) - 2; }
+            return [px, py, pz];
+          };
+          const a = pick(A, wA), b2 = pick(B, wB);
+          ws = wA + (wB - wA) * e; // 0 = loose field, 1 = a picture
+          if (vis[i] > FIELD + (1 - FIELD) * ws) continue;
+          x = a[0] + (b2[0] - a[0]) * e + burst[k] * blow; y = a[1] + (b2[1] - a[1]) * e + burst[k + 1] * blow; z = a[2] + (b2[2] - a[2]) * e + burst[k + 2] * blow;
+          yRot = (wA ? yA : yB) * ws; cX = wA ? pA[0] : pB[0]; cY = wA ? pA[1] : pB[1];
+        }
+        const cy2 = Math.cos(yRot), sy2 = Math.sin(yRot);
         const x1 = x * cy2 - z * sy2, z1 = x * sy2 + z * cy2;
         const y1 = y * ct - z1 * st * ws, z2 = y * st * ws + z1 * ct;
         const persp = 3.2 / (3.2 + z2);
-        const cx = 0.5 * W + (shapeCx - 0.5 * W) * ws, cyy = 0.5 * H + (shapeCy - 0.5 * H) * ws, sc = fieldR + (shapeR - fieldR) * ws;
+        const cx = 0.5 * W + (cX - 0.5 * W) * ws, cyy = 0.5 * H + (cY - 0.5 * H) * ws, sc = fieldR + (shapeR - fieldR) * ws;
         let sx = cx + x1 * sc * persp, sy = cyy + y1 * sc * persp;
         // the cursor pushes triangles aside
         const dx = sx - mouse.x, dy = sy - mouse.y, d2 = dx * dx + dy * dy;

@@ -7,7 +7,7 @@
     --bone: #ffffff;
     --text: #e4e4e6;
     --muted: #a6a6ab;
-    --dim: #6e6e74;
+    --dim: #8a8a91;
     --iris: #8052ff;
     --iris-soft: #a98bff;
     --saffron: #ffb829;
@@ -17,7 +17,7 @@
     --rose: #ff7ac9;
     --hair: rgba(255, 255, 255, 0.1);
     --sans: "BX Inter", Inter, var(--font-anthropic-sans, system-ui), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --serif: var(--font-anthropic-serif, Georgia), Georgia, "Times New Roman", serif;
+    --serif: "BX Newsreader", Georgia, "Times New Roman", serif;
     position: relative;
     overflow: hidden;
     background: var(--void);
@@ -32,6 +32,12 @@
   :where(.bx) :where(p, h1, h2, h3, h4, ol, ul) { margin: 0; padding: 0; }
   .bx button, .bx select { font-family: inherit; color: inherit; }
   .bx-num { font-family: var(--serif); font-weight: 400; font-variant-numeric: lining-nums tabular-nums; }
+  /* browser surfaces carry the palette too */
+  .bx ::selection { background: rgba(128, 82, 255, .45); color: #fff; }
+  .bx { accent-color: var(--iris); caret-color: var(--saffron); scrollbar-color: #2a2a31 #000; }
+  .bx a:focus-visible, .bx button:focus-visible, .bx select:focus-visible, .bx [tabindex]:focus-visible { outline: 2px solid var(--saffron); outline-offset: 3px; border-radius: 6px; }
+  .bx h1, .bx h2, .bx h3 { text-wrap: balance; }
+  .bx p { text-wrap: pretty; }
 
   /* ---------- living background ---------- */
   .bx-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; contain: strict; }
@@ -94,6 +100,7 @@
   .bx-mic, .bx-send { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--hair); background: none; cursor: pointer; display: grid; place-items: center; color: var(--text); transition: all .2s ease; }
   .bx-mic svg, .bx-send svg { width: 18px; height: 18px; }
   .bx-send { background: var(--iris); border-color: var(--iris); color: #fff; }
+  .bx .bx-btn, .bx .bx-send { color: #fff; } /* beat the generic `.bx button { color: inherit }` so labels on iris stay legible */
   .bx-mic:hover, .bx-send:hover { transform: translateY(-1px); }
   .bx-mic.on { background: var(--saffron); border-color: var(--saffron); color: #000; }
   .bx-nomic .bx-mic { display: none; }
@@ -175,7 +182,7 @@
   /* ---------- hero ---------- */
   .bx-hero { position: relative; }
   .bx-hero-in { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 24px; align-items: center; padding-top: 56px; padding-bottom: 80px; }
-  .bx-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 24px; }
+  .bx-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); margin-bottom: 24px; text-wrap: balance; }
   .bx-display { font-weight: 500; font-size: clamp(48px, 7.4vw, 104px); line-height: 1.0; letter-spacing: -0.045em; color: var(--bone); margin-bottom: 28px; }
   .bx-rot { display: inline-block; color: var(--saffron); }
   .bx-rot.bx-swap { animation: bx-swap .6s cubic-bezier(.2, .7, .2, 1); }
@@ -262,7 +269,8 @@
   .bx-spark-line { margin-top: 14px; height: 46px; }
   .bx-spark-line svg { display: block; width: 100%; height: 46px; overflow: visible; }
   .bx-more { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; background: none; border: 0; padding: 0; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--iris-soft); }
-  .bx-more .chev, .bx-acc-head .chev { display: inline-block; transition: transform .35s ease, color .3s ease; }
+  .bx-more .chev, .bx-acc-head .chev { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; transition: transform .35s cubic-bezier(.2, .7, .2, 1), color .3s ease; }
+  .chev svg { display: block; }
   .bx-open .bx-more .chev, .bx-open > .bx-acc-head .chev { transform: rotate(180deg); }
   .bx-acc-body { max-height: 0; overflow: hidden; transition: max-height .6s cubic-bezier(.2, .7, .2, 1); }
   .bx-open > .bx-acc-body, .bx-open .bx-m-why { max-height: 900px; }
@@ -374,9 +382,9 @@
   .bx-concl-text { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.6vw, 50px); line-height: 1.22; letter-spacing: -0.015em; color: var(--bone); max-width: 1080px; }
   .bx-concl-text .w { opacity: .14; transition: opacity .5s ease; }
   .bx-concl-text .w.on { opacity: 1; }
-  .bx-concl-quote { font-family: var(--serif); font-size: 120px; line-height: .6; color: var(--iris); height: 50px; }
+  .bx-concl-quote { font-family: var(--serif); font-size: 120px; line-height: 1; color: var(--iris); height: 64px; margin-top: 18px; overflow: hidden; }
 
-  .bx-foot { position: relative; z-index: 1; border-top: 1px solid var(--hair); margin-top: 90px; padding: 34px 0 40px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+  .bx-foot { position: relative; z-index: 1; border-top: 1px solid var(--hair); margin-top: 90px; padding: 34px 0 40px; font-size: 13px; line-height: 1.6; font-weight: 500; color: var(--dim); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
 
   .bx-ph { color: var(--muted); }
   .bx-failed { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
@@ -648,6 +656,7 @@
   root.classList.add('bx-js');
 
   /* ================= helpers ================= */
+  const chev = () => { const s = el('span', 'chev'); s.setAttribute('aria-hidden', 'true'); s.innerHTML = '<svg viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'; return s; };
   const el = (tag, cls, text) => {
     const n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -1094,7 +1103,7 @@
       const more = el('button', 'bx-more');
       more.type = 'button';
       more.setAttribute('aria-expanded', openMarket.has(i) ? 'true' : 'false');
-      more.append(document.createTextNode('Por que isso aconteceu '), el('span', 'chev', '▾'));
+      more.append(document.createTextNode('Por que isso aconteceu '), chev());
       const why = el('div', 'bx-acc-body bx-m-why');
       why.append(mark(el('p', '', r.why), { 'data-field': 'why' }));
       row.append(more, why);
@@ -1144,7 +1153,7 @@
       head.setAttribute('aria-expanded', openNews.has(i) ? 'true' : 'false');
       const mid = el('span');
       mid.append(mark(el('span', 'bx-n-tag', r.tag), { 'data-field': 'tag' }), mark(el('span', 'bx-n-head', r.headline), { 'data-field': 'headline' }));
-      head.append(el('span', 'bx-n-idx bx-num', String(i + 1).padStart(2, '0')), mid, el('span', 'chev', '▾'));
+      head.append(el('span', 'bx-n-idx bx-num', String(i + 1).padStart(2, '0')), mid, chev());
       const body = el('div', 'bx-acc-body');
       const inner = el('div', 'bx-n-body');
       const grid = el('div', 'bx-n-grid');
@@ -1257,7 +1266,7 @@
       const head = el('button', 'bx-acc-head');
       head.type = 'button';
       head.setAttribute('aria-expanded', openPoints.has(i) ? 'true' : 'false');
-      head.append(el('span', 'bx-p-head', p.heading), el('span', 'chev', '▾'));
+      head.append(el('span', 'bx-p-head', p.heading), chev());
       const body = el('div', 'bx-acc-body');
       body.append(el('p', '', p.body));
       item.append(head, body);
@@ -1272,10 +1281,12 @@
 
   // the reading of the day lights up word by word as it comes into view
   let conclSeen = false;
+  // the data often repeats the section label ("Leitura do dia: ..."); show and speak it once
+  const cleanConcl = (t) => String(t || '').replace(/^\s*(a\s+)?leitura do dia\s*[:.\u2013\u2014-]\s*/i, '').replace(/^\p{Ll}/u, (c) => c.toUpperCase());
   const drawConclusion = (text) => {
     const p = document.getElementById('bx-concl');
     p.replaceChildren();
-    String(text).split(/(\s+)/).forEach((part) => {
+    cleanConcl(text).split(/(\s+)/).forEach((part) => {
       if (/^\s+$/.test(part) || part === '') p.append(document.createTextNode(part));
       else p.append(el('span', 'w' + (conclSeen || reduced() ? ' on' : ''), part));
     });
@@ -1685,7 +1696,7 @@
             const fronts = Array.from(new Set(f.data.map((x) => x.front)));
             segs.push({ el: q('#bx-fside'), text: 'No mapa de forças: ' + fronts.map((fr) => fr + ' pressiona ' + f.data.filter((x) => x.front === fr).map((x) => x.asset + ', que ' + x.effect).join('; ')).join('. ') + '.' });
           }
-          segs.push({ el: q('#leitura'), text: 'A leitura do dia. ' + r.conclusion + ' É isso. ' + (weekend ? 'Bom fim de semana.' : 'Tenha um ótimo dia.') });
+          segs.push({ el: q('#leitura'), text: 'A leitura do dia. ' + cleanConcl(r.conclusion) + ' É isso. ' + (weekend ? 'Bom fim de semana.' : 'Tenha um ótimo dia.') });
           sec('geopolitica', 'Geopolítica', segs);
         }
       });
@@ -1973,7 +1984,7 @@
       part(() => { if (ai.status === 'ok') ai.data.forEach((r, i) => add(r.actor + '. ' + r.headline + '. ' + statusWords(r) + r.summary + ' ' + r.detail + ' Como aplicar: ' + r.apply, q('[data-step="ai' + i + '"]'), 'ai' + i)); });
       part(() => { if (dd.status === 'ok') dd.data.forEach((r, i) => { add('Bloco ' + r.block + ', ' + r.country + '. ' + r.summary, q('[data-step="d' + i + '"]'), 'd' + i); arr(r.events).forEach((e, j) => add(e.date + '. ' + e.headline + '. ' + e.detail, q('[data-step="d' + i + '"]'), 'd' + i + 'e' + j)); }); });
       part(() => { if (memo.status === 'ok') memo.data.slice().sort((a, b) => a.order - b.order).forEach((r, i) => add(r.title + '. ' + r.body, q('[data-step="c' + i + '"]'), 'c' + i)); });
-      part(() => { if (g.status === 'ok') { const r = g.data[0]; add(r.intro, q('#bx-geo-intro'), 'geo_intro'); arr(r.points).forEach((p, i) => add(String(p.heading).replace(/^\d+\.\s*/, '') + '. ' + p.body, q('[data-step="p' + i + '"]'), 'p' + i)); add('A leitura do dia: ' + r.conclusion, q('#leitura'), 'leitura'); } });
+      part(() => { if (g.status === 'ok') { const r = g.data[0]; add(r.intro, q('#bx-geo-intro'), 'geo_intro'); arr(r.points).forEach((p, i) => add(String(p.heading).replace(/^\d+\.\s*/, '') + '. ' + p.body, q('[data-step="p' + i + '"]'), 'p' + i)); add('A leitura do dia: ' + cleanConcl(r.conclusion), q('#leitura'), 'leitura'); } });
       part(() => { if (f.status === 'ok') f.data.forEach((r) => add(r.front + ' pressiona ' + r.asset + ', que ' + r.effect + '. ' + r.note, q('#bx-fside'), 'forces')); });
       return C;
     };
@@ -2064,7 +2075,7 @@
         if (ns.status === 'ok') return { text: 'As cinco notícias de hoje. ' + ns.data.map((r, i) => (ORD[i] || 'Próxima') + ': ' + r.headline).join('. ') + '. Quer que eu explique alguma?', target: q('#noticias'), key: 'list_news' };
       }
       if (/(mapa de forcas|quem pressiona)/.test(n)) { const f = dash.data('forces'); if (f.status === 'ok') return { text: f.data.map((r) => r.front + ' pressiona ' + r.asset + ', que ' + r.effect).join('. ') + '.', target: q('#forcas'), key: 'forces' }; }
-      if (/(leitura do dia|conclus|resumo final)/.test(n)) { const g = dash.data('geopolitics'); if (g.status === 'ok') return { text: 'A leitura do dia. ' + g.data[0].conclusion, target: q('#leitura'), key: 'leitura' }; }
+      if (/(leitura do dia|conclus|resumo final)/.test(n)) { const g = dash.data('geopolitics'); if (g.status === 'ok') return { text: 'A leitura do dia. ' + cleanConcl(g.data[0].conclusion), target: q('#leitura'), key: 'leitura' }; }
       { const gl = n.split(' ').length <= 4 ? glossAnswer(n) : null; if (gl) return gl; }
       const hit = search(raw);
       if (hit) return { text: hit.text, target: hit.target, key: hit.key };

@@ -92,6 +92,12 @@ def status_words(r):
     if re.search('disput', st, re.I): return 'Informação disputada. '
     return f"Segundo {r.get('source', '')}. "
 
+def limpa_leitura(s):
+    """O texto da conclusão às vezes já começa com "Leitura do dia:"; a Zyra fala o rótulo uma vez só."""
+    s = re.sub(r'^\s*(a\s+)?leitura do dia\s*[:.\u2013\u2014-]\s*', '', str(s or ''), flags=re.I)
+    return s[:1].upper() + s[1:]
+
+
 def build_units(d):
     U = []
     def add(key, kind, section, title, target, text, seq=None):
@@ -181,7 +187,7 @@ def build_units(d):
             fronts = list(dict.fromkeys(r.get('front') for r in forces))
             txt = 'No mapa de forças: ' + '. '.join(f + ' pressiona ' + '; '.join(f"{r.get('asset')}, que {r.get('effect')}" for r in forces if r.get('front') == f) for f in fronts) + '.'
             b('forces', 'geopolitica', 'Geopolítica', '#bx-fside', txt)
-        b('leitura', 'geopolitica', 'Geopolítica', '#leitura', 'A leitura do dia. ' + str(g.get('conclusion', '')))
+        b('leitura', 'geopolitica', 'Geopolítica', '#leitura', 'A leitura do dia. ' + limpa_leitura(g.get('conclusion', '')))
         add('fecho_dia', 'close', 'geopolitica', 'Geopolítica', '#leitura', 'É isso. Tenha um ótimo dia.')
         add('fecho_fds', 'close', 'geopolitica', 'Geopolítica', '#leitura', 'É isso. Bom fim de semana.')
 

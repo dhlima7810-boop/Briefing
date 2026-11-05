@@ -16,13 +16,69 @@
 <style>
   html, body { margin: 0; background: #000; color: #e4e4e6; }
   #dash-root { padding: 0 var(--dash-gutter, 0); min-height: 100vh; }
-  #bx-boot { position: fixed; inset: 0; display: grid; place-items: center; font: 15px/1.4 system-ui, sans-serif; color: #a6a6ab; background: #000; z-index: 50; transition: opacity .4s; }
-  #bx-boot.off { opacity: 0; pointer-events: none; }
+  /* ---------- abertura: a rede neural do ícone ---------- */
+  #bx-intro { position: fixed; inset: 0; z-index: 60; background: radial-gradient(120% 90% at 62% 42%, #1a1040 0%, #07050f 48%, #000 100%); color: #e4e4e6; font-family: "BX Inter", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; transition: opacity .55s cubic-bezier(.4, 0, .2, 1) .6s, filter .9s ease; }
+  html.bx-intro-on, html.bx-intro-on body { overflow: hidden; }
+  #bx-intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+  #bx-intro canvas:active { cursor: grabbing; }
+  #bx-intro .copy { position: absolute; left: max(24px, 6vw); right: 24px; bottom: max(32px, 8vh); max-width: 30rem; pointer-events: none; }
+  #bx-intro .copy > * { pointer-events: auto; }
+  #bx-intro .brand { position: absolute; top: max(20px, env(safe-area-inset-top)); left: max(24px, 6vw); display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; letter-spacing: .02em; color: #fff; }
+  #bx-intro .brand svg { width: 22px; height: 22px; }
+  #bx-intro-hi { margin: 0; font-family: "BX Newsreader", Georgia, serif; font-weight: 400; font-size: clamp(40px, 6.4vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #fff; text-wrap: balance; }
+  #bx-intro-date { margin: 14px 0 0; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.5; color: #a6a6ab; }
+  #bx-intro .load { margin-top: 28px; display: flex; align-items: center; gap: 14px; font-size: 13px; color: #8a8a91; min-height: 20px; }
+  #bx-intro .track { flex: 0 0 120px; height: 2px; background: rgba(255, 255, 255, .12); border-radius: 2px; overflow: hidden; }
+  #bx-intro-bar { display: block; height: 100%; background: linear-gradient(90deg, #8052ff, #ffb829); transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+  #bx-intro .acts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; opacity: .35; transform: translateY(6px); transition: opacity .5s ease, transform .5s cubic-bezier(.2, .7, .2, 1); }
+  #bx-intro.is-ready .acts { opacity: 1; transform: none; }
+  #bx-intro .acts button { font: 600 14px/1 inherit; font-family: inherit; border-radius: 9999px; padding: 15px 22px; cursor: pointer; border: 1px solid transparent; transition: transform .2s ease, background-color .2s ease, border-color .2s ease; }
+  #bx-intro .acts button:disabled { cursor: default; }
+  #bx-intro-go { background: #8052ff; color: #fff; display: inline-flex; align-items: center; gap: 10px; }
+  #bx-intro-go:not(:disabled):hover { background: #8f66ff; transform: translateY(-1px); }
+  #bx-intro-go i { width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); }
+  #bx-intro.is-ready #bx-intro-go i { animation: bx-intro-ping 1.8s ease-out infinite; }
+  #bx-intro-read { background: transparent; color: #e4e4e6; border-color: rgba(255, 255, 255, .18) !important; }
+  #bx-intro-read:not(:disabled):hover { border-color: rgba(255, 255, 255, .4) !important; }
+  #bx-intro .acts button:focus-visible { outline: 2px solid #ffb829; outline-offset: 3px; }
+  #bx-intro .hint { position: absolute; right: max(24px, 6vw); bottom: max(32px, 8vh); font-size: 12px; color: #9a9aa2; letter-spacing: .02em; pointer-events: none; }
+  #bx-intro.is-failed .load { color: #ff7ac9; }
+  #bx-intro.is-leaving { opacity: 0; pointer-events: none; }
+  #bx-intro.is-leaving .copy, #bx-intro.is-leaving .brand, #bx-intro.is-leaving .hint { opacity: 0; transform: translateY(-10px); transition: opacity .35s ease, transform .35s ease; }
+  html.bx-entering #dash-root { animation: bx-arrive 1.2s cubic-bezier(.2, .7, .2, 1) both; }
+  @keyframes bx-arrive { 0% { transform: scale(1.06); filter: blur(10px); opacity: 0; } 55% { opacity: 0; } 100% { transform: none; filter: none; opacity: 1; } }
+  @keyframes bx-intro-ping { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); } 100% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } }
+  @media (max-width: 759px) {
+    #bx-intro .copy { left: 20px; right: 20px; bottom: max(24px, env(safe-area-inset-bottom)); }
+    #bx-intro .brand { left: 20px; }
+    #bx-intro .hint { display: none; }
+    #bx-intro .acts button { flex: 1 1 auto; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #bx-intro { transition: opacity .3s ease; }
+    html.bx-entering #dash-root { animation: none; }
+    #bx-intro.is-ready #bx-intro-go i { animation: none; }
+  }
 </style>
+<link rel="stylesheet" href="fonts.css">
 <script src="vendor/d3.min.js"></script>
 </head>
 <body>
-<div id="bx-boot">Carregando o briefing…</div>
+<div id="bx-intro" role="dialog" aria-modal="true" aria-labelledby="bx-intro-hi">
+  <canvas aria-hidden="true"></canvas>
+  <div class="brand"><svg viewBox="0 0 512 512" aria-hidden="true"><g stroke="#8052ff" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M146 300 L214 196 L300 236 L366 150 M214 196 L256 340 L300 236 M256 340 L366 330 L366 150"/></g><g fill="#fff"><circle cx="146" cy="300" r="30"/><circle cx="214" cy="196" r="32"/><circle cx="256" cy="340" r="28"/><circle cx="366" cy="330" r="28"/></g><circle cx="300" cy="236" r="42" fill="#ffb829"/><circle cx="366" cy="150" r="32" fill="#15846e"/></svg>Briefing</div>
+  <div class="copy">
+    <h1 id="bx-intro-hi">Bom dia.</h1>
+    <p id="bx-intro-date"></p>
+    <div class="load" aria-live="polite"><span class="track"><span id="bx-intro-bar"></span></span><span id="bx-intro-status">Acordando a rede…</span></div>
+    <div class="acts">
+      <button type="button" id="bx-intro-go" disabled><i aria-hidden="true"></i>Entrar ouvindo a Zyra</button>
+      <button type="button" id="bx-intro-read" disabled>Só ler</button>
+    </div>
+  </div>
+  <p class="hint">Arraste para girar. Toque nos pontos.</p>
+</div>
+<script src="intro.js"></script>
 <div id="dash-root"></div>
 <script>
 (function () {
@@ -65,14 +121,16 @@
     return get('data/meta.json').then(function (r) { return r.json(); }).catch(function () { return {}; });
   }).then(function (meta) {
     stamp = (meta && (meta.audio_stamp || meta.generated_at)) || String(Date.now());
+    var LABEL = { weather: 'o clima', market: 'o mercado', news: 'as notícias', ai_news: 'a IA', dossier: 'o dossiê', dossier_full: 'o dossiê completo', geopolitics: 'a geopolítica', ibov_trend: 'o Ibovespa', forces: 'o mapa de forças', glossary: 'o glossário', narration: 'a voz da Zyra' };
+    var got = 0, tick = function (id) { got++; if (window.__intro) window.__intro.step(LABEL[id] || id, got, CORE.length); };
     return Promise.all(CORE.map(function (id) {
-      return get('data/' + id + '.json').then(function (r) { return r.json(); }).then(function (rows) { DATA[id] = rows; }).catch(function (e) { console.warn('sem ' + id, e.message); });
+      return get('data/' + id + '.json').then(function (r) { return r.json(); }).then(function (rows) { DATA[id] = rows; }).catch(function (e) { console.warn('sem ' + id, e.message); }).then(function () { tick(id); });
     }));
   }).then(function () {
     loaded = true; run();
-    document.getElementById('bx-boot').classList.add('off');
+    if (window.__intro) window.__intro.ready();
   }).catch(function (e) {
-    document.getElementById('bx-boot').textContent = 'Não consegui carregar o briefing. Puxe a página para atualizar.';
+    if (window.__intro) window.__intro.fail('Não consegui carregar o briefing. Puxe a página para atualizar.');
     console.error(e);
   });
 

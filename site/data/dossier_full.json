@@ -2,37 +2,37 @@
  {
   "order": 1,
   "section": "Sumário executivo",
-  "title": "Juros parados, petróleo em queda e um Congresso de oposição nos EUA",
-  "body": "O dia teve três movimentos centrais. No Brasil, o Copom manteve a Selic em 13,75% ao ano, por unanimidade, e encerrou o ciclo de cortes iniciado em março. Nos Estados Unidos, a apuração confirmou maioria democrata na Câmara e no Senado, e Trump admitiu que a guerra com o Irã pesou no resultado. No mercado de energia, o Brent caiu 8,7% e fechou a US$ 94,62, o menor nível desde agosto, com a aposta de que um Congresso de oposição empurre Washington para um acordo. A bolsa brasileira subiu 1,23% e o dólar recuou para R$ 5,45. Na Ásia, a bolsa coreana caiu mais de 5% com a venda de ações de chips."
+  "title": "Tombo da tecnologia, dólar no topo do ano e Irã na mesa",
+  "body": "O dia teve três movimentos centrais. Nos Estados Unidos, as ações de tecnologia despencaram. O Nasdaq caiu cerca de 5,5%, com medo de que o novo Congresso democrata freie a construção de data centers de inteligência artificial. No Brasil, o dólar subiu 0,68% e fechou a R$ 5,49, a maior cotação do ano, enquanto o Ibovespa caiu 0,82%. A reunião de Lula com a equipe econômica terminou sem medidas fiscais. No Oriente Médio, o Irã enviou uma proposta nuclear aos Estados Unidos pelo Catar, segundo a Reuters, enquanto novos incidentes atingiram petroleiros em Ormuz. A leitura é de cautela: o vento externo que ajudou na quarta virou contra na quinta."
  },
  {
   "order": 2,
   "section": "Brasil",
-  "title": "Copom interrompe cortes e Lula prepara pronunciamento",
-  "body": "O Comitê de Política Monetária manteve a Selic em 13,75% ao ano na noite de 4 de novembro. Foi a primeira pausa depois de cinco cortes seguidos de 0,25 ponto. O comunicado chamou os juros de substancialmente contracionistas e citou inflação acima da meta, alta do dólar, incerteza fiscal e a guerra no Oriente Médio. O texto não indicou o próximo passo. A reunião seguinte será em 8 e 9 de dezembro. No mesmo dia, segundo o Estadão, Lula marcou um pronunciamento em rede nacional para domingo, 8. Ele deve reafirmar as metas fiscais e pedir união, mas não deve anunciar o novo ministro da Fazenda nem medidas detalhadas."
+  "title": "Medidas fiscais ficam para depois da viagem",
+  "body": "Lula reuniu ministros e economistas no Palácio da Alvorada na quinta-feira, dia 5. Estiveram convidados o vice Geraldo Alckmin, os ministros Bruno Moretti, Miriam Belchior e Esther Dweck, além de Aloizio Mercadante, Fernando Haddad e Guido Mantega. O presidente do Banco Central, Gabriel Galípolo, foi convidado, mas não compareceu. Segundo o ministro da Fazenda, Dario Durigan, não houve discussão de medidas específicas. Ele falou em compromisso com as contas públicas, melhora gradual do resultado primário e possíveis ajustes nas regras fiscais. As propostas serão levadas a Lula após a viagem à COP31, na Turquia, e à cúpula da Asean, nas Filipinas, de 15 a 17 de novembro."
  },
  {
   "order": 3,
   "section": "Brasil e Argentina",
-  "title": "Relação segue rebaixada, sem fato novo",
-  "body": "Não houve fato oficial novo entre Brasília e Buenos Aires nesta quarta. O último episódio foi em 29 de outubro, quando o Itamaraty convocou María Emilia Cortés, encarregada de negócios da Argentina. O governo brasileiro quer saber se Buenos Aires ajudou na saída de Flávio Bolsonaro, que cruzou para Puerto Iguazú em 27 de outubro e seguiu de avião até Miami. Não há prova pública de envolvimento oficial argentino. O chanceler Pablo Quirno negou que o Brasil tenha feito um pedido formal de explicações. A relação está rebaixada desde agosto, depois de ataques de Javier Milei a Lula. O silêncio argentino após a reeleição mantém o clima frio."
+  "title": "Caso Flávio Bolsonaro sem novidade oficial",
+  "body": "Não houve fato oficial novo na relação com a Argentina desde 1º de novembro. Naquele dia, o chanceler argentino Pablo Quirno negou que o Brasil tenha feito pedido formal de explicações. Antes disso, em 29 de outubro, o Itamaraty convocou a encarregada de negócios argentina, María Emilia Cortés, sobre suposta ajuda do governo Milei à saída do senador Flávio Bolsonaro. Reportagens atribuem a articulação ao assessor Santiago Caputo, mas isso não foi confirmado oficialmente. Não há prova pública dessa ajuda. Na região, a renúncia do presidente do Paraguai, Santiago Peña, após a quebra do banco Ueno, abre outra frente de atenção para o Itamaraty."
  },
  {
   "order": 4,
   "section": "Estados Unidos e Irã",
-  "title": "Derrota eleitoral muda o cálculo da guerra",
-  "body": "Trump disse à Fox News que parte da derrota republicana se deveu ao Irã, mas defendeu a guerra como decisão correta. Ao Financial Times, afirmou não ter planos imediatos de novos ataques. A pressão vem do novo Congresso, que pode limitar verbas militares, e do vice JD Vance, que questionou os custos do conflito. No mar, a tensão continua. A Guarda Revolucionária disse que quatro petroleiros foram destruídos por minas ao sul de Ormuz, e que dois navios foram apreendidos. O líder supremo, Mojtaba Khamenei, disse que a mudança política em Washington não muda a hostilidade americana. Não encontramos nova ordem executiva sobre o Irã nas últimas 48 horas."
+  "title": "Proposta pelo Catar e ameaça ao mesmo tempo",
+  "body": "Segundo a Reuters, o Irã enviou uma proposta nuclear aos Estados Unidos por meio do Catar, e autoridades americanas analisam o texto. O jornal The New York Times relatou que Teerã também estuda propostas de mediadores. Trump disse a jornalistas que preferia não destruir o resto do Irã, mas que talvez precise. No Estreito de Ormuz, a Guarda Revolucionária afirmou que dois petroleiros e um rebocador pegaram fogo, um deles após atingir uma mina. Em Washington, o deputado republicano Thomas Massie quer forçar votação de impeachment do secretário de Defesa, Pete Hegseth. Trump defendeu Hegseth publicamente. O Tesouro ampliou sanções contra quem ajuda o Irã a vender petróleo."
  },
  {
   "order": 5,
   "section": "Mercados",
-  "title": "Alívio externo, mas petroleiras sofrem",
-  "body": "O Ibovespa fechou a 167.563 pontos, alta de 1,23%, e interrompeu seis quedas seguidas. Bancos, Vale e Ambev subiram mais de 3%. A Petrobras foi na direção contrária e caiu cerca de 7%, acompanhando o tombo do petróleo. O dólar recuou 0,65%, a R$ 5,452, num dia de fraqueza da moeda americana no mundo. Em Nova York, o Dow Jones subiu 3%. O bitcoin voltou a superar US$ 80 mil, ajudado pela liquidação de apostas na queda, embora os fundos de bitcoin ainda registrem saídas. Na Coreia do Sul, o Kospi caiu 5,28%, com temor de regras mais duras para data centers de inteligência artificial."
+  "title": "Dia de aversão a risco",
+  "body": "O Ibovespa fechou em 166.191 pontos, queda de 0,82%, depois de subir pela manhã. Petrobras e Bradesco pesaram, e a Tenda caiu 17,7% após o balanço. O dólar fechou a R$ 5,4886, maior cotação do ano. Em Nova York, o Nasdaq caiu 5,52% e o Dow Jones, 3,44%, segundo o Estadão Conteúdo. A Nvidia caiu cerca de 7,5% e a AMD, mais de 14%, segundo a CBS. O bitcoin perdeu cerca de 5,6% e voltou a US$ 75,9 mil, com cerca de US$ 1,1 bilhão em liquidações. O Brent recuperou parte da queda da véspera e subia 2,6% à tarde. O ouro subiu cerca de 1%. Esses são fatos do dia, não previsões."
  },
  {
   "order": 6,
   "section": "O que observar",
-  "title": "Pronunciamento, Ormuz e o novo Congresso",
-  "body": "Três pontos merecem atenção nos próximos dias. Primeiro, o pronunciamento de Lula no domingo, dia 8, e qualquer pista sobre o comando da Fazenda e medidas de ajuste. Segundo, a situação no Estreito de Ormuz, onde minas e apreensões convivem com a esperança de acordo. Um novo incidente grave pode reverter a queda do petróleo. Terceiro, os primeiros sinais do Congresso democrata sobre verbas militares e regulação de inteligência artificial. No Brasil, o Relatório de Política Monetária do fim de novembro trará novas projeções de inflação. Isso é acompanhamento, não previsão, e não é recomendação de investimento."
+  "title": "Pronunciamento, Ormuz e Congresso americano",
+  "body": "Há quatro pontos para acompanhar. Primeiro, o pronunciamento de Lula em rede nacional, previsto para domingo, dia 8, segundo o Estadão, e os sinais sobre o futuro da equipe econômica. Segundo, a resposta americana à proposta nuclear iraniana e novos incidentes no Estreito de Ormuz, que mexem no petróleo. Terceiro, se a queda das ações de tecnologia continua, já que ela afetou bolsas, bitcoin e o dólar. Quarto, a crise no Paraguai, vizinho e sócio do Brasil em Itaipu e no Mercosul. A próxima reunião do Copom será em 8 e 9 de dezembro. Isso é uma lista de pontos de atenção, não uma previsão."
  }
 ]

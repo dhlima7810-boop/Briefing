@@ -3,22 +3,22 @@
   "block": "A",
   "country": "EUA",
   "title": "Bloco A — Trump, Irã e instrumentos executivos",
-  "summary": "Trump admitiu que a guerra pesou na eleição e diz não ter planos imediatos de atacar. Minas em Ormuz atingiram petroleiros. Não achamos nova ordem executiva.",
+  "summary": "O Irã mandou uma proposta nuclear pelo Catar, e Trump mistura ameaça com espera. Não achamos nova ordem executiva, só sanções do Tesouro.",
   "events": [
    {
-    "date": "03/11/2026",
-    "headline": "Sem novos ataques no horizonte",
-    "detail": "Trump disse ao Financial Times que não há planos imediatos de atacar o Irã. Afirmou que os EUA estão obtendo o que querem."
+    "date": "04/11/2026",
+    "headline": "Sanções contra apoio ao Irã",
+    "detail": "O Tesouro puniu empresas e pessoas na Índia e na Turquia. O objetivo é cortar as vendas de petróleo iraniano."
    },
    {
-    "date": "04/11/2026",
-    "headline": "Trump liga derrota ao Irã",
-    "detail": "À Fox News, disse que parte do resultado eleitoral foi o Irã. Mas defendeu que a guerra foi a decisão certa."
+    "date": "05/11/2026",
+    "headline": "Proposta nuclear via Catar",
+    "detail": "Segundo a Reuters, Washington analisa o texto. Trump disse que preferia não destruir o resto do Irã, mas que talvez precise."
    },
    {
-    "date": "04/11/2026",
-    "headline": "Petroleiros atingidos por minas",
-    "detail": "A Guarda Revolucionária disse que quatro petroleiros foram destruídos ao sul de Ormuz. O líder supremo diz que a hostilidade americana não muda."
+    "date": "05/11/2026",
+    "headline": "Hegseth sob pressão",
+    "detail": "O deputado Thomas Massie quer forçar votação de impeachment do secretário de Defesa. Trump disse que ele faz um ótimo trabalho."
    }
   ]
  },
@@ -26,7 +26,7 @@
   "block": "B",
   "country": "Brasil",
   "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
-  "summary": "Sem fato oficial novo hoje. O último foi a convocação da diplomata argentina, em 29 de outubro, sobre a saída de Flávio Bolsonaro.",
+  "summary": "Sem fato oficial novo hoje. O último foi a negativa argentina, em 1º de novembro, sobre o caso Flávio Bolsonaro.",
   "events": [
    {
     "date": "27/10/2026",
@@ -49,22 +49,22 @@
   "block": "C",
   "country": "Análise",
   "title": "Bloco C — Leitura cruzada",
-  "summary": "O alívio externo ajudou a bolsa e o real. Mas o Copom parou os cortes, e o mercado segue esperando sinais fiscais de Lula.",
+  "summary": "O alívio de quarta durou pouco. O tombo da tecnologia nos EUA e a falta de medidas fiscais levaram o dólar ao maior valor do ano.",
   "events": [
    {
-    "date": "04/11/2026",
-    "headline": "Copom pausa em 13,75%",
-    "detail": "Decisão unânime cita inflação, dólar, incerteza fiscal e guerra. Não indica o próximo passo."
+    "date": "05/11/2026",
+    "headline": "Nasdaq cai 5,5%",
+    "detail": "O medo de regras para data centers de IA derrubou Nvidia e AMD. O bitcoin caiu junto."
    },
    {
-    "date": "04/11/2026",
-    "headline": "Bolsa sobe e dólar recua",
-    "detail": "O Ibovespa subiu 1,23% e interrompeu seis quedas. A Petrobras caiu cerca de 7% com o petróleo."
+    "date": "05/11/2026",
+    "headline": "Reunião sem anúncio",
+    "detail": "Lula ouviu ministros e economistas. As medidas ficam para a volta da viagem à COP31 e à Asean."
    },
    {
-    "date": "04/11/2026",
-    "headline": "Lula marca pronunciamento",
-    "detail": "Segundo o Estadão, Lula fala em rede nacional no domingo, dia 8. Deve prometer metas fiscais, sem anunciar o novo ministro."
+    "date": "05/11/2026",
+    "headline": "Dólar a R$ 5,49",
+    "detail": "A moeda subiu 0,68% e o Ibovespa caiu 0,82%. Petrobras e Bradesco pesaram."
    }
   ]
  }

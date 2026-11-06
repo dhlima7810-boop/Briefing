@@ -24,9 +24,15 @@
   "note": "Queda de 1,74%, na véspera do Copom."
  },
  {
-  "label": "Último fechamento",
+  "label": "Respiro",
   "date": "04/11/2026",
   "points": 167563.47,
   "note": "Alta de 1,23%, que interrompeu seis quedas seguidas."
+ },
+ {
+  "label": "Último fechamento",
+  "date": "05/11/2026",
+  "points": 166191.45,
+  "note": "Queda de 0,82%, com o tombo da tecnologia em Wall Street."
  }
 ]

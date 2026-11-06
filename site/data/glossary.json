@@ -1,11 +1,20 @@
 [
  {
-  "term": "Copom",
+  "term": "Nasdaq",
   "aliases": [
-   "Comitê de Política Monetária"
+   "Nasdaq Composite"
   ],
   "section": "mercado",
-  "text": "É o comitê do Banco Central que define a Selic. Reúne-se oito vezes por ano."
+  "text": "É o índice da bolsa americana onde estão as grandes empresas de tecnologia. Serve de termômetro do setor."
+ },
+ {
+  "term": "Ibovespa",
+  "aliases": [
+   "Ibov",
+   "Bovespa"
+  ],
+  "section": "mercado",
+  "text": "É o principal índice da bolsa brasileira, a B3. Mostra a média das ações mais negociadas."
  },
  {
   "term": "Selic",
@@ -17,118 +26,21 @@
   "text": "É a taxa básica de juros do Brasil. Ela influencia o custo de empréstimos e o rendimento da renda fixa."
  },
  {
-  "term": "ciclo de cortes",
+  "term": "Copom",
   "aliases": [
-   "ciclo de redução"
+   "Comitê de Política Monetária"
   ],
   "section": "mercado",
-  "text": "É uma sequência de reuniões em que o Banco Central reduz os juros. Este ciclo começou em março de 2026."
- },
- {
-  "term": "contracionista",
-  "aliases": [
-   "política contracionista",
-   "juros contracionistas"
-  ],
-  "section": "dossie",
-  "text": "Diz-se dos juros altos o bastante para frear a economia. O objetivo é conter a inflação."
- },
- {
-  "term": "meta de inflação",
-  "aliases": [
-   "meta",
-   "intervalo de tolerância"
-  ],
-  "section": "dossie",
-  "text": "É o alvo de inflação definido pelo governo para o Banco Central. Há uma margem de tolerância para cima e para baixo."
- },
- {
-  "term": "Ibovespa",
-  "aliases": [
-   "Ibov",
-   "bolsa"
-  ],
-  "section": "mercado",
-  "text": "É o principal índice da bolsa brasileira, a B3. Mostra o desempenho médio das ações mais negociadas."
- },
- {
-  "term": "dólar comercial",
-  "aliases": [
-   "dólar à vista"
-  ],
-  "section": "mercado",
-  "text": "É a cotação usada em negócios entre empresas e bancos. Difere do dólar turismo, que é mais caro."
- },
- {
-  "term": "DXY",
-  "aliases": [
-   "índice do dólar"
-  ],
-  "section": "mercado",
-  "text": "É um índice que mede o dólar contra seis moedas fortes, como euro e iene."
- },
- {
-  "term": "Brent",
-  "aliases": [
-   "petróleo Brent"
-  ],
-  "section": "noticias",
-  "text": "É o tipo de petróleo do Mar do Norte usado como referência mundial de preço."
- },
- {
-  "term": "Estreito de Ormuz",
-  "aliases": [
-   "Ormuz"
-  ],
-  "section": "noticias",
-  "text": "É a passagem marítima entre o Irã e Omã. Por ela passa cerca de um quinto do petróleo do mundo."
- },
- {
-  "term": "Guarda Revolucionária",
-  "aliases": [
-   "IRGC"
-  ],
-  "section": "dossie",
-  "text": "É a força militar de elite do Irã, ligada diretamente ao líder supremo."
- },
- {
-  "term": "Kospi",
-  "aliases": [],
-  "section": "noticias",
-  "text": "É o principal índice da bolsa da Coreia do Sul. É muito influenciado por empresas de chips, como a Samsung."
- },
- {
-  "term": "semicondutores",
-  "aliases": [
-   "chips"
-  ],
-  "section": "noticias",
-  "text": "São os componentes que fazem computadores e celulares funcionarem. Chips de memória são essenciais para a IA."
- },
- {
-  "term": "data center",
-  "aliases": [
-   "centro de dados",
-   "data centers"
-  ],
-  "section": "ia",
-  "text": "É um prédio cheio de servidores que guardam dados e rodam sistemas, como modelos de IA. Consome muita energia."
- },
- {
-  "term": "bitcoin",
-  "aliases": [
-   "BTC"
-  ],
-  "section": "mercado",
-  "text": "É a primeira e maior criptomoeda. Seu preço oscila muito e não é garantido por nenhum governo."
+  "text": "É o comitê do Banco Central que define a Selic. Reúne-se oito vezes por ano."
  },
  {
   "term": "liquidação",
   "aliases": [
-   "liquidações"
+   "liquidações",
+   "liquidado"
   ],
   "section": "mercado",
-  "text": "No mercado de cripto, é o fechamento forçado de uma aposta alavancada quando o preço vai contra ela."
+  "text": "Acontece quando uma corretora encerra à força uma aposta feita com dinheiro emprestado. Ocorre quando o preço vai contra o investidor."
  },
  {
   "term": "ETF",
@@ -137,67 +49,148 @@
    "ETFs"
   ],
   "section": "mercado",
-  "text": "É um fundo negociado na bolsa como se fosse uma ação. Os ETFs de bitcoin acompanham o preço da moeda."
+  "text": "É um fundo negociado na bolsa como se fosse uma ação. Alguns acompanham o preço do bitcoin."
  },
  {
-  "term": "encarregada de negócios",
+  "term": "Brent",
   "aliases": [
-   "encarregado de negócios"
+   "petróleo Brent"
   ],
-  "section": "dossie",
-  "text": "É quem chefia uma embaixada quando não há embaixador no posto."
+  "section": "mercado",
+  "text": "É o petróleo de referência internacional, extraído no Mar do Norte. Seu preço serve de base para muitos contratos."
  },
  {
-  "term": "Itamaraty",
+  "term": "resultado primário",
   "aliases": [
-   "Ministério das Relações Exteriores"
+   "primário",
+   "superávit primário"
   ],
-  "section": "dossie",
-  "text": "É o nome pelo qual é conhecido o Ministério das Relações Exteriores do Brasil."
+  "section": "noticias",
+  "text": "É a diferença entre o que o governo arrecada e o que gasta, sem contar os juros da dívida."
  },
  {
-  "term": "pronunciamento em rede nacional",
+  "term": "regras fiscais",
   "aliases": [
-   "rede nacional"
+   "arcabouço fiscal",
+   "regra fiscal"
+  ],
+  "section": "noticias",
+  "text": "São as normas que limitam quanto o governo pode gastar e se endividar."
+ },
+ {
+  "term": "COP31",
+  "aliases": [
+   "COP 31",
+   "conferência do clima"
+  ],
+  "section": "noticias",
+  "text": "É a conferência anual da ONU sobre mudança do clima. Em 2026, acontece em Antália, na Turquia."
+ },
+ {
+  "term": "Asean",
+  "aliases": [
+   "Associação de Nações do Sudeste Asiático"
+  ],
+  "section": "noticias",
+  "text": "É o bloco de países do Sudeste Asiático, como Filipinas, Indonésia e Vietnã."
+ },
+ {
+  "term": "impeachment",
+  "aliases": [
+   "juicio político"
+  ],
+  "section": "noticias",
+  "text": "É o processo em que o Legislativo julga e pode afastar um presidente ou alto funcionário."
+ },
+ {
+  "term": "Ueno Bank",
+  "aliases": [
+   "Ueno",
+   "banco Ueno"
+  ],
+  "section": "noticias",
+  "text": "É um banco digital paraguaio que foi liquidado pelo Banco Central do país em novembro de 2026."
+ },
+ {
+  "term": "Estreito de Ormuz",
+  "aliases": [
+   "Ormuz"
+  ],
+  "section": "geopolitica",
+  "text": "É a passagem marítima entre o Irã e Omã. Por ela passa uma grande parte do petróleo do mundo."
+ },
+ {
+  "term": "Guarda Revolucionária",
+  "aliases": [
+   "IRGC",
+   "Guarda Revolucionária Islâmica"
   ],
   "section": "dossie",
-  "text": "É quando o presidente fala ao país em transmissão obrigatória de rádio e TV."
+  "text": "É a força militar de elite do Irã, ligada diretamente ao líder supremo."
+ },
+ {
+  "term": "data center",
+  "aliases": [
+   "data centers",
+   "centro de dados"
+  ],
+  "section": "ia",
+  "text": "É um prédio cheio de computadores que guardam dados e rodam serviços, incluindo a IA."
+ },
+ {
+  "term": "Nvidia",
+  "aliases": [],
+  "section": "ia",
+  "text": "É a empresa americana que fabrica os chips mais usados para treinar e rodar inteligência artificial."
+ },
+ {
+  "term": "AMD",
+  "aliases": [
+   "Advanced Micro Devices"
+  ],
+  "section": "ia",
+  "text": "É uma fabricante americana de chips, concorrente da Nvidia e da Intel."
+ },
+ {
+  "term": "CoreWeave",
+  "aliases": [],
+  "section": "ia",
+  "text": "É uma empresa americana que aluga acesso a chips de IA pela nuvem."
  },
  {
   "term": "agente de IA",
   "aliases": [
    "agentes de IA",
-   "agentes"
+   "agente"
   ],
   "section": "ia",
-  "text": "É um programa de IA que executa tarefas sozinho, como clicar, comprar ou enviar mensagens, além de conversar."
+  "text": "É uma IA que executa tarefas sozinha, como fazer compras ou escrever código, e não apenas responde perguntas."
  },
  {
-  "term": "bug bounty",
-  "aliases": [
-   "programa de recompensas"
-  ],
-  "section": "ia",
-  "text": "É quando uma empresa paga quem encontra falhas de segurança nos seus sistemas e avisa de forma responsável."
- },
- {
-  "term": "Claude Code",
+  "term": "Codex",
   "aliases": [],
   "section": "ia",
-  "text": "É a ferramenta da Anthropic que usa o modelo Claude para escrever e revisar código de programação."
+  "text": "É a ferramenta da OpenAI que escreve e corrige código de programas com inteligência artificial."
  },
  {
-  "term": "IPO",
-  "aliases": [
-   "abertura de capital"
-  ],
-  "section": "ia",
-  "text": "É a primeira venda de ações de uma empresa na bolsa. A OpenAI se prepara para isso."
- },
- {
-  "term": "frente fria",
+  "term": "GitHub",
   "aliases": [],
-  "section": "clima",
-  "text": "É uma massa de ar frio que avança e costuma trazer chuva, vento e queda de temperatura."
+  "section": "ia",
+  "text": "É o maior site do mundo para guardar e compartilhar código de programas. Pertence à Microsoft."
+ },
+ {
+  "term": "Linux",
+  "aliases": [],
+  "section": "ia",
+  "text": "É um sistema operacional gratuito e aberto, usado na maioria dos servidores da internet e no Android."
+ },
+ {
+  "term": "Tesouro dos EUA",
+  "aliases": [
+   "Departamento do Tesouro",
+   "Tesouro americano"
+  ],
+  "section": "dossie",
+  "text": "É o ministério da Fazenda dos Estados Unidos. Também aplica sanções econômicas a outros países."
  }
 ]

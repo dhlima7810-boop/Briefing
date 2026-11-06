@@ -1,44 +1,38 @@
 [
  {
-  "front": "Vitória democrata no Congresso dos EUA",
-  "asset": "Dólar",
-  "effect": "cai",
-  "note": "A moeda americana enfraqueceu no mundo, e o real acompanhou."
- },
- {
-  "front": "Esperança de acordo com o Irã",
-  "asset": "Petróleo Brent",
-  "effect": "cai",
-  "note": "O barril perdeu 8,7% e foi ao menor nível desde agosto."
- },
- {
-  "front": "Petróleo em queda",
-  "asset": "Petrobras",
-  "effect": "cai",
-  "note": "As ações caíram cerca de 7%, pois a receita depende do barril."
- },
- {
-  "front": "Alívio externo e dólar mais fraco",
-  "asset": "Ibovespa",
-  "effect": "sobe",
-  "note": "Bancos, Vale e Ambev subiram mais de 3% e puxaram o índice."
- },
- {
-  "front": "Temor de regras para data centers",
-  "asset": "Ações de chips na Ásia",
+  "front": "Medo de regras para data centers de IA",
+  "asset": "Ações de chips nos EUA",
   "effect": "caem",
-  "note": "Samsung e SK Hynix lideraram a queda de 5,28% do Kospi."
+  "note": "A Nvidia caiu cerca de 7,5% e a AMD, mais de 14%."
  },
  {
-  "front": "Liquidação de apostas na queda",
+  "front": "Tombo da tecnologia em Wall Street",
   "asset": "Bitcoin",
-  "effect": "sobe",
-  "note": "Cerca de US$ 560 milhões em posições vendidas foram zeradas."
+  "effect": "cai",
+  "note": "Cerca de US$ 1,1 bilhão em apostas na alta foram liquidadas."
  },
  {
-  "front": "Inflação acima da meta e incerteza fiscal",
-  "asset": "Selic",
-  "effect": "fica estável",
-  "note": "O Copom parou os cortes em 13,75% ao ano."
+  "front": "Aversão a risco no mundo",
+  "asset": "Dólar",
+  "effect": "sobe",
+  "note": "A moeda fechou a R$ 5,49, a maior cotação do ano."
+ },
+ {
+  "front": "Reunião de Lula sem medidas fiscais",
+  "asset": "Ibovespa",
+  "effect": "cai",
+  "note": "A bolsa virou e perdeu 0,82%, com Petrobras e Bradesco."
+ },
+ {
+  "front": "Incidentes com petroleiros em Ormuz",
+  "asset": "Petróleo Brent",
+  "effect": "sobe",
+  "note": "O barril recuperou parte da queda de quase 9% da véspera."
+ },
+ {
+  "front": "Busca por proteção",
+  "asset": "Ouro",
+  "effect": "sobe",
+  "note": "A onça subiu cerca de 1% e passou de US$ 4.100."
  }
 ]

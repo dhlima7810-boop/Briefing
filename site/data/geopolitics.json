@@ -1,21 +1,21 @@
 [
  {
   "title": "Geopolítica financeira do dia",
-  "intro": "A eleição americana virou fator de mercado no mundo todo. Ela derrubou o petróleo, enfraqueceu o dólar e atingiu ações de chips na Ásia.",
+  "intro": "Na quinta, a política americana mexeu com o mercado de novo. Desta vez, o medo de regras para a inteligência artificial derrubou bolsas no mundo todo.",
   "points": [
    {
-    "heading": "1. Congresso democrata e a guerra",
-    "body": "O mercado leu a vitória democrata como pressão por um acordo com o Irã. Por isso, o Brent caiu 8,7% em um dia, mesmo com petroleiros atingidos por minas."
+    "heading": "1. Congresso democrata e os data centers",
+    "body": "Investidores temem que o novo Congresso freie data centers de IA. Isso derrubou Nvidia e AMD e puxou o Nasdaq para baixo em 5,5%."
    },
    {
-    "heading": "2. Dólar mais fraco ajuda o real",
-    "body": "A moeda americana perdeu força no exterior. O real acompanhou e o dólar fechou a R$ 5,45. A bolsa brasileira subiu puxada por bancos."
+    "heading": "2. Dólar forte, real fraco",
+    "body": "Com o susto lá fora, investidores buscaram o dólar. Aqui, a falta de medidas fiscais somou pressão, e a moeda bateu R$ 5,49."
    },
    {
-    "heading": "3. Chips e energia sob nova regra",
-    "body": "Na Coreia, investidores venderam ações de chips e de equipamentos de energia. O temor é de regras mais duras para data centers de IA nos EUA."
+    "heading": "3. Irã entre proposta e minas",
+    "body": "O Irã mandou uma proposta nuclear pelo Catar. Mas petroleiros pegaram fogo em Ormuz, e o Brent recuperou parte da queda da véspera."
    }
   ],
-  "conclusion": "Leitura do dia: o vento externo virou a favor, mas o Copom parou os cortes. O rumo doméstico depende dos sinais fiscais de Lula. Isso é interpretação, não previsão."
+  "conclusion": "Leitura do dia: o alívio de quarta foi passageiro. O Brasil segue sensível ao humor de Wall Street e aos sinais fiscais de Lula. Isso é interpretação, não previsão."
  }
 ]

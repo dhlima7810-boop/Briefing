@@ -2,51 +2,51 @@
  {
   "id": "n1",
   "tag": "Brasil",
-  "headline": "Copom mantém a Selic em 13,75% e encerra ciclo de cortes",
-  "summary": "Decisão unânime interrompe cinco reduções seguidas, iniciadas em março.",
-  "what": "O Copom manteve os juros na noite de 4 de novembro. O comunicado cita inflação acima da meta, incerteza fiscal e cenário externo mais adverso.",
-  "why": "Juros parados mantêm crédito caro e renda fixa atraente. A próxima decisão sai em 9 de dezembro.",
-  "source": "O Povo; Sou Brasília",
-  "date": "04/11/2026"
+  "headline": "Lula reúne equipe econômica, mas medidas fiscais ficam para depois",
+  "summary": "Encontro no Alvorada terminou sem anúncio. O dólar fechou no maior valor do ano.",
+  "what": "Lula reuniu ministros e economistas na quinta, dia 5. O ministro Dario Durigan disse que as propostas serão levadas ao presidente após a viagem à COP31 e à cúpula da Asean.",
+  "why": "O mercado espera sinais de controle dos gastos. Sem eles, dólar e juros futuros ficam pressionados.",
+  "source": "Money Times; Exame; CNN Brasil",
+  "date": "05/11/2026"
  },
  {
   "id": "n2",
-  "tag": "Américas",
-  "headline": "Democratas ampliam vantagem no Congresso e Trump admite peso do Irã",
-  "summary": "A apuração confirma maioria democrata nas duas casas. Trump disse que a guerra pesou na derrota.",
-  "what": "Democratas somam 54 cadeiras no Senado, com dois estados em aberto. Gina Hinojosa venceu Greg Abbott no Texas. Trump disse à Fox que parte do resultado foi o Irã.",
-  "why": "Um Congresso de oposição pode limitar verbas militares. Isso aumenta a pressão por um acordo com Teerã.",
-  "source": "AP; Fox News, via Just Security",
-  "date": "04/11/2026"
+  "tag": "Tecnologia",
+  "headline": "Ações de tecnologia despencam nos EUA com medo de regras para IA",
+  "summary": "O Nasdaq caiu 5,5%, e o S&P 500 perdeu cerca de 4,4%.",
+  "what": "Investidores temem que o Congresso democrata freie a construção de data centers de IA. A Nvidia caiu cerca de 7,5% e a AMD, mais de 14%, segundo a CBS.",
+  "why": "Essas empresas pesam muito nos índices e nos fundos do mundo todo. A queda se espalhou para o bitcoin e para a bolsa brasileira.",
+  "source": "CBS News; Diário do Sudoeste",
+  "date": "05/11/2026"
  },
  {
   "id": "n3",
-  "tag": "Oriente Médio",
-  "headline": "Petróleo despenca quase 9% com esperança de paz com o Irã",
-  "summary": "O Brent fechou a US$ 94,62, menor nível desde agosto, mesmo com navios atingidos por minas.",
-  "what": "O Brent caiu 8,7% na quarta. A Guarda Revolucionária disse que quatro petroleiros explodiram em minas ao sul de Ormuz, e dois navios foram apreendidos.",
-  "why": "Petróleo mais barato pode aliviar combustíveis e inflação. Mas derruba ações de petroleiras, como a Petrobras.",
-  "source": "Investing.com; Reuters, via Just Security",
-  "date": "04/11/2026"
+  "tag": "Américas",
+  "headline": "Presidente do Paraguai renuncia após quebra do banco Ueno",
+  "summary": "Santiago Peña deixou o cargo em meio a um pedido de impeachment.",
+  "what": "O Banco Central paraguaio mandou liquidar o Ueno Bank, que tinha cerca de 2,9 milhões de clientes. Peña anunciou a renúncia em vídeo. A Promotoria acusou 27 pessoas.",
+  "why": "O Paraguai é vizinho e sócio do Brasil no Mercosul e em Itaipu. Uma crise política lá afeta a região.",
+  "source": "Infobae; CNN em Espanhol",
+  "date": "05/11/2026"
  },
  {
   "id": "n4",
-  "tag": "Ásia",
-  "headline": "Bolsa da Coreia do Sul cai mais de 5% com fuga de ações de chips",
-  "summary": "Investidores temem regras mais duras para data centers de IA após a vitória democrata.",
-  "what": "O Kospi caiu 5,28% nesta quinta. Samsung e SK Hynix recuaram de 6% a 9%. A queda acionou um freio automático de negociação.",
-  "why": "Chips de memória são a base da corrida da IA. A queda mostra como a política americana mexe com mercados no mundo todo.",
-  "source": "Seoul Economic Daily; EFE, via Infobae",
+  "tag": "Oriente Médio",
+  "headline": "Irã envia proposta nuclear aos EUA pelo Catar",
+  "summary": "Washington analisa o texto. Trump diz que preferiria não destruir o resto do Irã.",
+  "what": "Segundo a Reuters, a proposta chegou via Catar. A Guarda Revolucionária disse que dois petroleiros e um rebocador pegaram fogo em Ormuz, um deles após atingir uma mina.",
+  "why": "Um acordo pode reduzir o preço do petróleo. Já novos incidentes no estreito tendem a fazer o oposto.",
+  "source": "Reuters e The New York Times, via Foreign Exchanges; Just Security",
   "date": "05/11/2026"
  },
  {
   "id": "n5",
   "tag": "Europa",
-  "headline": "Rússia ataca rede elétrica da Ucrânia e mortos em Zaporizhzhia chegam a 37",
-  "summary": "Ataques deixaram partes do país sem energia, às vésperas do inverno.",
-  "what": "A Rússia atingiu a infraestrutura de energia ucraniana. O total de mortos em um centro de ajuda em Zaporizhzhia subiu para 37, com 59 desaparecidos.",
-  "why": "A guerra segue sem trégua na Europa. Ataques à energia elevam o risco de crise humanitária no frio.",
-  "source": "Reuters, via Just Security",
-  "date": "04/11/2026"
+  "headline": "França tem greve nacional contra a austeridade",
+  "summary": "Cerca de 600 mil pessoas protestaram, segundo o Ministério do Interior.",
+  "what": "Sindicatos, estudantes e agricultores foram às ruas contra cortes, custo de vida e condições das escolas. Houve relatos de confrontos com a polícia.",
+  "why": "A pressão social cresce a poucos meses da eleição presidencial francesa. Isso pesa sobre o orçamento do país.",
+  "source": "AP e Al Jazeera, via Foreign Exchanges",
+  "date": "05/11/2026"
  }
 ]

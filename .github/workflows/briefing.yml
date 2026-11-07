@@ -67,6 +67,11 @@ jobs:
           rm -rf site/data/audio
           echo '[]' > site/data/narration.json
 
+      # Horários de chuva (0h–23h) para cada dia, do Open-Meteo; se falhar, o site só não mostra as horas.
+      - name: Chuva hora a hora
+        continue-on-error: true
+        run: python3 gen/chuva_por_hora.py site/data
+
       - name: Baixar o modelo de voz Kokoro (com cache)
         id: kokoro
         uses: actions/cache@v4

@@ -98,6 +98,33 @@ def limpa_leitura(s):
     return s[:1].upper() + s[1:]
 
 
+RAIN_MIN = 40  # same rule as site/page.html: from this chance on, the hour counts as "vai chover"
+
+def rain_runs(hours):
+    if not isinstance(hours, list) or len(hours) < 24: return None
+    runs, s = [], -1
+    for h in range(24):
+        try: v = float(hours[h])
+        except Exception: v = 0
+        if v >= RAIN_MIN:
+            if s < 0: s = h
+        elif s >= 0: runs.append([s, h]); s = -1
+    if s >= 0: runs.append([s, 24])
+    out = []
+    for r in runs:  # a dry gap of a single hour does not split a rainy stretch
+        if out and r[0] - out[-1][1] <= 1: out[-1][1] = r[1]
+        else: out.append(r)
+    return out
+
+def rain_speech(hours):
+    """Same words as rainSpeech() in site/page.html."""
+    runs = rain_runs(hours)
+    if runs is None: return ''
+    if not runs: return 'Nenhum horário com chuva provável.'
+    if len(runs) == 1 and runs[0] == [0, 24]: return 'A chuva pode aparecer a qualquer hora do dia.'
+    parts = [('da meia-noite' if a == 0 else 'da uma' if a == 1 else f'das {a}') + (' até a meia-noite' if b == 24 else f' às {b} horas') for a, b in runs]
+    return 'A chuva é mais provável ' + (parts[0] if len(parts) == 1 else ', '.join(parts[:-1]) + ' e ' + parts[-1]) + '.'
+
 def build_units(d):
     U = []
     def add(key, kind, section, title, target, text, seq=None):
@@ -130,10 +157,10 @@ def build_units(d):
                 except Exception: pass
         d0 = weather[0]; rest = weather[1:] or [d0]
         hot = max(rest, key=lambda x: x.get('high', 0)); wet = max(rest, key=lambda x: x.get('precip', 0))
-        b('clima', 'clima', 'Clima', '#bx-wx', f"Primeiro, o tempo em Guarulhos. Hoje, {str(d0.get('condition', '')).lower()}. Máxima de {d0.get('high')} graus, mínima de {d0.get('low')}. Chance de chuva de {d0.get('precip')} por cento. {d0.get('tip', '')} Nos próximos dias, o mais quente é {str(hot.get('weekday', '')).lower()}, com {hot.get('high')} graus. E fique atento a {str(wet.get('weekday', '')).lower()}: {str(wet.get('condition', '')).lower()}, com {wet.get('precip')} por cento de chance de chuva.")
+        b('clima', 'clima', 'Clima', '#bx-wx', f"Primeiro, o tempo em Guarulhos. Hoje, {str(d0.get('condition', '')).lower()}. Máxima de {d0.get('high')} graus, mínima de {d0.get('low')}. Chance de chuva de {d0.get('precip')} por cento. {(rain_speech(d0.get('hours')) + ' ') if d0.get('hours') else ''}{d0.get('tip', '')} Nos próximos dias, o mais quente é {str(hot.get('weekday', '')).lower()}, com {hot.get('high')} graus. E fique atento a {str(wet.get('weekday', '')).lower()}: {str(wet.get('condition', '')).lower()}, com {wet.get('precip')} por cento de chance de chuva.")
         for i, x in enumerate(weather):
             lab = x.get('day_label') if x.get('day_label') in ('Hoje', 'Amanhã') else ''
-            add(f'w{i}', 'answer', 'clima', 'Clima', '#bx-wx', f"{(lab + ', ') if lab else ''}{str(x.get('weekday', '')).lower()}: {str(x.get('condition', '')).lower()}, máxima de {x.get('high')} e mínima de {x.get('low')} graus, com {x.get('precip')} por cento de chance de chuva. {x.get('tip', '')}")
+            add(f'w{i}', 'answer', 'clima', 'Clima', '#bx-wx', f"{(lab + ', ') if lab else ''}{str(x.get('weekday', '')).lower()}: {str(x.get('condition', '')).lower()}, máxima de {x.get('high')} e mínima de {x.get('low')} graus, com {x.get('precip')} por cento de chance de chuva. {(rain_speech(x.get('hours')) + ' ') if x.get('hours') else ''}{x.get('tip', '')}")
         add('week', 'answer', 'clima', 'Clima', '#bx-wx', 'A semana em Guarulhos. ' + '. '.join(f"{x.get('day_label') if x.get('day_label') in ('Hoje', 'Amanhã') else str(x.get('weekday', '')).lower()}: {str(x.get('condition', '')).lower()}, {x.get('high')} graus" for x in weather) + '.')
 
     # market

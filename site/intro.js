@@ -185,14 +185,14 @@
   };
   resize(); window.addEventListener('resize', resize);
 
-  /* ---------- input: drag breaks the name apart, letting go puts it back ---------- */
-  var drag = null, uy = 0, up = 0, vyaw = 0, vpitch = 0, tilt = { x: 0, y: 0 }, ptr = { x: -1, y: -1, on: false };
-  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, uy: uy, up: up }; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
+  /* ---------- input: spin the name any way you like; once you stop for a moment, it comes back ---------- */
+  var drag = null, uy = 0, up = 0, vyaw = 0, vpitch = 0, lastTouch = -9, IDLE = 1.2, tilt = { x: 0, y: 0 }, ptr = { x: -1, y: -1, on: false };
+  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, uy: uy, up: up }; vyaw = vpitch = 0; lastTouch = (performance.now() - t0) / 1000; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
   cv.addEventListener('pointermove', function (e) {
     ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
     if (!drag) return;
-    var ny = drag.uy + (e.clientX - drag.x) * 0.006, np = Math.max(-1, Math.min(1, drag.up + (e.clientY - drag.y) * 0.004));
-    vyaw = ny - uy; vpitch = np - up; uy = ny; up = np;
+    var ny = drag.uy + (e.clientX - drag.x) * 0.006, np = Math.max(-1.45, Math.min(1.45, drag.up + (e.clientY - drag.y) * 0.005));
+    vyaw = ny - uy; vpitch = np - up; uy = ny; up = np; lastTouch = (performance.now() - t0) / 1000;
   });
   var release = function () { drag = null; };
   cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
@@ -241,19 +241,44 @@
       barEl.style.transform = 'scaleX(1)';
       root.classList.add('is-ready');
       goBtn.disabled = false; readBtn.disabled = false;
+      // the two stars ignite with a small flash each
+      setTimeout(function () { supernova(goBtn, false); }, 120); setTimeout(function () { supernova(readBtn, false); }, 280);
     },
     fail: function (msg) { statusEl.textContent = msg; root.classList.add('is-failed'); }
   };
+
+  /* ---------- the buttons are stars: they tilt toward the finger and burst into a supernova ---------- */
+  var novas = [];
+  var supernova = function (btn, big) {
+    if (reduced) return;
+    var r = btn.getBoundingClientRect(), parts = [], n = big ? 70 : 22;
+    for (var i = 0; i < n; i++) {
+      var a = rnd() * 6.283, z = rnd();                       // z: how close the shard flies to us (bigger, faster)
+      parts.push({ c: Math.cos(a), s: Math.sin(a), v: (big ? 0.35 : 0.12) * (0.4 + rnd() * 0.9) * (0.6 + z), z: z, b: rnd() < 0.5 });
+    }
+    novas.push({ x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width, h: r.height, t0: performance.now(), big: big, parts: parts, life: big ? 1.1 : 0.8 });
+  };
+  [goBtn, readBtn].forEach(function (btn) {
+    btn.addEventListener('pointermove', function (e) {
+      if (reduced || btn.disabled) return;
+      var r = btn.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      btn.style.setProperty('--ry', ((px - 0.5) * 22).toFixed(1) + 'deg'); btn.style.setProperty('--rx', ((0.5 - py) * 26).toFixed(1) + 'deg');
+      btn.style.setProperty('--mx', (px * 100).toFixed(0) + '%'); btn.style.setProperty('--my', (py * 100).toFixed(0) + '%');
+    });
+    btn.addEventListener('pointerleave', function () { ['--rx', '--ry', '--mx', '--my'].forEach(function (k) { btn.style.removeProperty(k); }); });
+  });
 
   var enter = function (withVoice) {
     if (!ready || leaving) return;
     if (withVoice) { var st = document.getElementById('bx-stage'); if (st) st.click(); } // same tap starts Zyra (audio needs a gesture)
     chime();
-    leaving = 1; leaveStart = performance.now();
+    var btn = withVoice ? goBtn : readBtn; btn.classList.add('is-nova'); supernova(btn, true);
+    // the button's supernova plays first, then the sky glides and dives into the A's star
+    var HOLD = reduced ? 0 : 380;
+    leaving = 1; leaveStart = performance.now() + HOLD;
     nodes[NOVA].flash = 1; fire(NOVA, 0, '#ffffff');
-    root.classList.add('is-leaving');
-    document.documentElement.classList.add('bx-entering');
-    setTimeout(finish, reduced ? 350 : 1400);
+    setTimeout(function () { root.classList.add('is-leaving'); document.documentElement.classList.add('bx-entering'); }, HOLD);
+    setTimeout(finish, reduced ? 350 : 1400 + HOLD);
   };
   var finish = function () {
     if (done) return; done = true;
@@ -283,7 +308,13 @@
     var el = (now - t0) / 1000;
     // camera: the opening turn, the user's drag (springs back), a slow breath, and the phone's tilt
     var turn = reduced ? 1 : inout(clamp((el - TURN_AT) / TURN_FOR));
-    if (!drag) { uy += vyaw; vyaw *= 0.88; uy *= 0.94; up += vpitch; vpitch *= 0.88; up *= 0.94; }
+    if (!drag) {
+      // a flick keeps it spinning and slowing down, like a globe
+      uy += vyaw; vyaw *= 0.95; up = Math.max(-1.45, Math.min(1.45, up + vpitch)); vpitch *= 0.95;
+      if (Math.abs(vyaw) > 0.003 || Math.abs(vpitch) > 0.003) lastTouch = el;
+      // only after it has been still for a moment does it turn back (the short way) and the name reforms
+      if (el - lastTouch > IDLE) { uy = Math.atan2(Math.sin(uy), Math.cos(uy)) * 0.93; up *= 0.93; }
+    }
     var still = reduced ? 0 : turn;
     var yawN = OPEN_YAW * (1 - turn) + uy + Math.sin(el * 0.4) * 0.03 * still + tilt.x * 0.1;
     var pitchN = OPEN_PITCH * (1 - turn) + up + Math.sin(el * 0.31) * 0.015 * still + tilt.y * 0.05;
@@ -308,7 +339,7 @@
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
 
     // 1. veils: the far layers turn only a little (parallax), so the backdrop stays framed
-    rot(yawN * 0.22, pitchN * 0.22);
+    rot(Math.sin(yawN) * 0.3, Math.sin(pitchN) * 0.3); // bounded, so the backdrop never swings away
     var step = mob ? 0.04 : 0.025, tv = reduced ? 0 : el, f0 = leaving ? -0.7 : -0.15, f1 = leaving ? 1.7 : 1.16; // wider while the sky glides
     for (var v = 0; v < VEILS.length; v++) {
       var vl = VEILS[v], rows = [];
@@ -450,6 +481,35 @@
         gb.addColorStop(0, 'rgba(244,246,255,' + bloomA + ')'); gb.addColorStop(0.3, 'rgba(150,130,255,' + bloomA * 0.55 + ')'); gb.addColorStop(1, 'rgba(60,40,160,0)');
         ctx.fillStyle = gb; ctx.fillRect(sx0 - RR, sy0 - RR, RR * 2, RR * 2);
       }
+    }
+    // 8. supernovas from the buttons, drawn on the screen itself (they don't glide with the sky)
+    if (novas.length) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (var sn = novas.length - 1; sn >= 0; sn--) {
+        var nv = novas[sn], nt = (now - nv.t0) / 1000 / nv.life;
+        if (nt >= 1) { novas.splice(sn, 1); continue; }
+        var big = nv.big, reach = Math.max(W, H) * (big ? 0.75 : 0.18), et = ease(nt);
+        // flash: a white core that swells and fades
+        var fl = Math.max(0, 1 - nt * (big ? 2.2 : 3)), fr = nv.h * (big ? 2.2 : 1.2) * (0.6 + et);
+        if (fl > 0) { ctx.globalAlpha = fl; ctx.drawImage(HALO_B, nv.x - fr * 2, nv.y - fr * 2, fr * 4, fr * 4); }
+        // shockwaves: rings shaped like the button, flattened as they spread
+        for (var ri = 0; ri < (big ? 3 : 1); ri++) {
+          var rt = clamp(nt * 1.25 - ri * 0.12); if (rt <= 0) continue;
+          var re = ease(rt), rx = nv.w / 2 + reach * re, ry = nv.h / 2 + reach * re * 0.62;
+          ctx.globalAlpha = (1 - rt) * (big ? 0.7 : 0.55); ctx.strokeStyle = ri ? 'rgba(150,170,255,1)' : 'rgba(214,204,255,1)'; ctx.lineWidth = (big ? 2.4 : 1.4) * (1 - rt * 0.6);
+          ctx.beginPath(); ctx.ellipse(nv.x, nv.y, rx, ry, 0, 0, 6.283); ctx.stroke();
+        }
+        // debris: shards of light thrown out, nearer ones bigger and faster
+        for (var pi = 0; pi < nv.parts.length; pi++) {
+          var pt = nv.parts[pi], d1 = reach * pt.v * 2.6 * et, d0 = reach * pt.v * 2.6 * ease(Math.max(0, nt - 0.08));
+          var ax = nv.x + pt.c * (nv.w / 2 * 0.8 + d1), ay = nv.y + pt.s * (nv.h / 2 + d1 * 0.75), bx = nv.x + pt.c * (nv.w / 2 * 0.8 + d0), by = nv.y + pt.s * (nv.h / 2 + d0 * 0.75);
+          ctx.globalAlpha = (1 - nt) * (0.5 + 0.5 * pt.z);
+          ctx.strokeStyle = pt.b ? 'rgba(200,214,255,1)' : 'rgba(186,160,255,1)'; ctx.lineWidth = 0.8 + pt.z * 1.6;
+          ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay); ctx.stroke();
+          var hz = (4 + pt.z * 10) * (1 - nt * 0.5); ctx.drawImage(pt.b ? HALO_B : HALO_V, ax - hz / 2, ay - hz / 2, hz, hz);
+        }
+      }
+      ctx.globalAlpha = 1;
     }
     ctx.globalCompositeOperation = 'source-over';
     requestAnimationFrame(frame);

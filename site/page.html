@@ -3,11 +3,11 @@
   #dash-root { --dash-gutter: 0; }
 
   .bx {
-    --void: #000000;
+    --void: #05051f;
     --bone: #ffffff;
     --text: #e4e4e6;
-    --muted: #a6a6ab;
-    --dim: #8a8a91;
+    --muted: #aeb2d8;
+    --dim: #9396c4;
     --iris: #8052ff;
     --iris-soft: #a98bff;
     --saffron: #ffb829;
@@ -15,7 +15,7 @@
     --mint: #34c9a3;
     --sky: #5fb8ff;
     --rose: #ff7ac9;
-    --hair: rgba(255, 255, 255, 0.1);
+    --hair: rgba(190, 182, 255, 0.14);
     --sans: "BX Inter", Inter, var(--font-anthropic-sans, system-ui), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --serif: "BX Newsreader", Georgia, "Times New Roman", serif;
     position: relative;
@@ -34,7 +34,9 @@
   .bx-num { font-family: var(--serif); font-weight: 400; font-variant-numeric: lining-nums tabular-nums; }
   /* browser surfaces carry the palette too */
   .bx ::selection { background: rgba(128, 82, 255, .45); color: #fff; }
-  .bx { accent-color: var(--iris); caret-color: var(--saffron); scrollbar-color: #2a2a31 #000; }
+  .bx { accent-color: var(--iris); caret-color: var(--saffron); scrollbar-color: #2c2766 #05051f; }
+  /* the same night sky as the opening: navy below, violet glows, fixed behind everything (the triangles fly over it) */
+  .bx::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(70% 55% at 78% 8%, rgba(64, 40, 190, .42) 0%, rgba(64, 40, 190, 0) 70%), radial-gradient(60% 50% at 6% 92%, rgba(52, 46, 200, .32) 0%, rgba(52, 46, 200, 0) 70%), linear-gradient(180deg, #04041a 0%, #06062a 50%, #0a0838 100%); }
   .bx a:focus-visible, .bx button:focus-visible, .bx select:focus-visible, .bx [tabindex]:focus-visible { outline: 2px solid var(--saffron); outline-offset: 3px; border-radius: 6px; }
   .bx h1, .bx h2, .bx h3 { text-wrap: balance; }
   .bx p { text-wrap: pretty; }
@@ -96,7 +98,7 @@
   .bx-msg.jv { align-self: flex-start; background: rgba(128, 82, 255, .16); color: var(--text); border-bottom-left-radius: 6px; }
   .bx-msg.jv b { color: var(--bone); font-weight: 600; }
   .bx-ask { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
-  .bx-ask input { flex: 1 1 auto; min-width: 0; background: #0d0d11; border: 1px solid var(--hair); border-radius: 24px; padding: 11px 16px; color: var(--bone); font-size: 15px; font-family: inherit; outline: none; transition: border-color .2s ease; }
+  .bx-ask input { flex: 1 1 auto; min-width: 0; background: #0c0b30; border: 1px solid var(--hair); border-radius: 24px; padding: 11px 16px; color: var(--bone); font-size: 15px; font-family: inherit; outline: none; transition: border-color .2s ease; }
   .bx-ask input:focus { border-color: rgba(169, 139, 255, .6); }
   .bx-mic, .bx-send { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--hair); background: none; cursor: pointer; display: grid; place-items: center; color: var(--text); transition: all .2s ease; }
   .bx-mic svg, .bx-send svg { width: 18px; height: 18px; }
@@ -164,7 +166,7 @@
   .bx-con-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--iris), var(--saffron)); transition: width .6s ease; }
   .bx-con-opts { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 12px; font-size: 12px; color: var(--dim); }
   .bx-con-opts label { display: inline-flex; align-items: center; gap: 8px; }
-  .bx-con-opts select { background: #111; border: 1px solid var(--hair); border-radius: 10px; color: var(--text); font-size: 12px; padding: 5px 8px; max-width: 230px; }
+  .bx-con-opts select { background: #0c0b30; border: 1px solid var(--hair); border-radius: 10px; color: var(--text); font-size: 12px; padding: 5px 8px; max-width: 230px; }
   .bx-wave { display: inline-flex; gap: 3px; align-items: center; height: 16px; margin-left: 4px; vertical-align: middle; contain: layout; }
   .bx-wave i { display: block; width: 3px; height: 16px; border-radius: 2px; background: var(--iris-soft); transform: scaleY(.25); }
 
@@ -379,7 +381,7 @@
   .bx-note .big { font-size: 38px; color: var(--bone); }
   .bx-note .lab { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--saffron); }
   .bx-note .txt { grid-column: 1 / -1; font-size: 17px; line-height: 1.55; color: var(--text); max-width: 760px; }
-  .bx-tip { position: absolute; pointer-events: none; z-index: 3; background: #0d0d10; border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px; padding: 10px 12px; font-size: 13px; color: var(--bone); opacity: 0; transform: translateY(4px); transition: opacity .15s ease, transform .15s ease; white-space: nowrap; }
+  .bx-tip { position: absolute; pointer-events: none; z-index: 3; background: #0c0b30; border: 1px solid rgba(190, 182, 255, .24); border-radius: 12px; padding: 10px 12px; font-size: 13px; color: var(--bone); opacity: 0; transform: translateY(4px); transition: opacity .15s ease, transform .15s ease; white-space: nowrap; }
   .bx-tip.on { opacity: 1; transform: none; }
   .bx-tip .d { color: var(--muted); font-size: 12px; margin-bottom: 2px; }
   .bx-points { margin-top: 70px; border-bottom: 1px solid var(--hair); }
@@ -1396,7 +1398,7 @@
       });
     }
     g.append('circle').attr('cx', (d) => x(d.day_label)).attr('cy', (d) => y(d.high)).attr('r', (d, i) => (i === dayIndex ? 6 : 3.5))
-      .attr('fill', (d, i) => (i === dayIndex ? '#8052ff' : '#000')).attr('stroke', '#8052ff').attr('stroke-width', 2);
+      .attr('fill', (d, i) => (i === dayIndex ? '#8052ff' : '#07072a')).attr('stroke', '#8052ff').attr('stroke-width', 2);
     g.append('text').attr('x', (d) => x(d.day_label)).attr('y', (d) => y(d.high) - 11).attr('text-anchor', 'middle')
       .attr('fill', (d, i) => (i === dayIndex ? '#ffffff' : '#a6a6ab')).attr('font-size', 12).text((d) => d.high + '°');
     g.append('text').attr('x', (d) => x(d.day_label)).attr('y', h - 6).attr('text-anchor', 'middle')
@@ -1698,7 +1700,7 @@
     const g = svg.selectAll('g.pt').data(rows).join('g').attr('class', 'pt');
     g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', narrow ? Math.min(22, (x.step() || 44) / 2) : 22).attr('fill', 'transparent');
     g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 14 : 0)).attr('fill', 'rgba(255,184,41,0.18)');
-    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 7 : 5.5)).attr('fill', '#000').attr('stroke', '#ffb829').attr('stroke-width', 2.5);
+    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 7 : 5.5)).attr('fill', '#07072a').attr('stroke', '#ffb829').attr('stroke-width', 2.5);
     if (narrow) {
       // only the chosen point gets its number on a phone, kept inside the chart's edges
       const pd = rows[chartPick], px0 = x(pd.date), lbl = fmtInt(pd.points), half = lbl.length * 3.6 + 2;
@@ -1758,14 +1760,14 @@
     const fg = svg.append('g').selectAll('g').data(fronts).join('g').attr('class', 'node')
       .on('click', (e, f) => { forceSel = { kind: 'front', name: f }; drawForces(); });
     fg.append('circle').attr('cx', lx).attr('cy', (f) => fy(f)).attr('r', (f) => (forceSel.kind === 'front' && forceSel.name === f ? 9 : 6))
-      .attr('fill', (f) => (forceSel.kind === 'front' && forceSel.name === f ? '#8052ff' : '#000')).attr('stroke', '#8052ff').attr('stroke-width', 2);
+      .attr('fill', (f) => (forceSel.kind === 'front' && forceSel.name === f ? '#8052ff' : '#07072a')).attr('stroke', '#8052ff').attr('stroke-width', 2);
     fg.append('text').attr('x', lx - 16).attr('y', (f) => fy(f) + 5).attr('text-anchor', 'end').attr('font-size', fs).attr('font-weight', 600)
       .attr('fill', (f) => (forceSel.kind === 'front' && forceSel.name === f ? '#ffffff' : '#a6a6ab')).text((f) => f)
       .call((sel) => wrap(sel, lx - 22));
     const ag = svg.append('g').selectAll('g').data(assets).join('g').attr('class', 'node')
       .on('click', (e, a) => { forceSel = { kind: 'asset', name: a }; drawForces(); });
     ag.append('circle').attr('cx', rx).attr('cy', (a) => ay(a)).attr('r', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? 9 : 6))
-      .attr('fill', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? '#ffb829' : '#000')).attr('stroke', '#ffb829').attr('stroke-width', 2);
+      .attr('fill', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? '#ffb829' : '#07072a')).attr('stroke', '#ffb829').attr('stroke-width', 2);
     ag.append('text').attr('x', rx + 16).attr('y', (a) => ay(a) + 5).attr('font-size', fs).attr('font-weight', 600)
       .attr('fill', (a) => (forceSel.kind === 'asset' && forceSel.name === a ? '#ffffff' : '#a6a6ab')).text((a) => a)
       .call((sel) => wrap(sel, w - rx - 20));

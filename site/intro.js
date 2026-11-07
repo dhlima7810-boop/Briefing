@@ -1,6 +1,9 @@
-/* Abertura: a rede neural do ícone em 3D.
-   Analogia: o briefing é um cérebro que acorda. Cada arquivo do dia que chega acende uma região;
-   quando tudo acende, a pessoa entra mergulhando no centro (o ponto açafrão do ícone).
+/* Abertura: a constelação da Zyra, em 3D.
+   Analogia: um céu noturno com véus de seda violeta. As estrelas do nome estão espalhadas em
+   profundidades diferentes, como numa constelação de verdade (vistas daqui parecem vizinhas, mas
+   estão a distâncias muito diferentes). Só de um ponto de vista exato elas se alinham e formam ZYRA:
+   a câmera gira até esse ponto e o nome "encaixa". Arrastar desfaz o nome em estrelas soltas no
+   espaço; ao soltar, ele volta. Cada arquivo do dia que chega acende uma constelação do céu.
    Canvas 2D com projeção 3D feita à mão, sem biblioteca. */
 (function () {
   var root = document.getElementById('bx-intro');
@@ -21,79 +24,88 @@
   var dl = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
   dateEl.textContent = 'Seu briefing de ' + dl + '.';
 
-  /* ---------- the brain ---------- */
-  var REGIONS = 11;
-  var rnd = (function (s) { return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; })(20261105);
+  var rnd = (function (s) { return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; })(20261107);
+  var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  var mob = window.innerWidth < 760;
+  var CAM = 3.4, FOC = 1.9;          // camera distance and lens
+  var LINE = '190,182,255';          // the thin constellation thread, lavender
+
+  /* ---------- star glow: a ready-made halo is far cheaper than blurring every frame ---------- */
+  var sprite = function (stops) {
+    var c = document.createElement('canvas'); c.width = c.height = 64;
+    var g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    stops.forEach(function (s) { gr.addColorStop(s[0], s[1]); });
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return c;
+  };
+  var HALO_V = sprite([[0, 'rgba(255,255,255,1)'], [0.09, 'rgba(232,230,255,.92)'], [0.26, 'rgba(168,140,255,.36)'], [0.6, 'rgba(118,86,255,.08)'], [1, 'rgba(96,70,255,0)']]);
+  var HALO_B = sprite([[0, 'rgba(255,255,255,1)'], [0.09, 'rgba(224,234,255,.92)'], [0.26, 'rgba(128,160,255,.36)'], [0.6, 'rgba(84,112,255,.08)'], [1, 'rgba(64,92,255,0)']]);
+
   var nodes = [], edges = [], adj = [];
-  // the name ZYRA, written as a constellation in front of the brain: each stroke is a line of stars
-  var L = 0.7, GAP = 0.3, K = 0.78;              // letter width, gap, overall scale
+  var addNode = function (n) { n.flash = 0; nodes.push(n); adj.push([]); return nodes.length - 1; };
+  var link = function (a, b, o) { edges.push({ a: a, b: b, name: !!o.name, order: o.order || 0, grp: o.grp }); adj[a].push(edges.length - 1); adj[b].push(edges.length - 1); };
+
+  /* ---------- the name: an anamorphic constellation ---------- */
+  // each letter is a few stars joined by threads, like a real constellation drawing
+  var L = 0.7, GAP = 0.3, K = 0.78;
   var LETTERS = [
-    [[[0, 0], [L, 0], [0, 1], [L, 1]]],                                                    // Z
-    [[[0, 0], [L / 2, 0.5]], [[L, 0], [L / 2, 0.5], [L / 2, 1]]],                         // Y
-    [[[0, 1], [0, 0], [0.45, 0], [0.62, 0.06], [L, 0.25], [0.62, 0.44], [0.45, 0.5], [0, 0.5]], [[0.3, 0.5], [L, 1]]], // R
-    [[[0, 1], [L / 2, 0], [L, 1]], [[0.16, 0.62], [L - 0.16, 0.62]]]                       // A
+    [[[0, 0], [L, 0], [L / 2, 0.5], [0, 1], [L, 1]]],                                                     // Z
+    [[[0, 0], [L / 2, 0.5]], [[L, 0], [L / 2, 0.5], [L / 2, 1]]],                                          // Y
+    [[[0, 1], [0, 0.5], [0, 0], [0.45, 0], [L, 0.25], [0.45, 0.5], [0.3, 0.5], [0, 0.5]], [[0.3, 0.5], [L, 1]]], // R
+    [[[0, 1], [0.133, 0.62], [L / 2, 0], [L - 0.133, 0.62], [L, 1]], [[0.133, 0.62], [L - 0.133, 0.62]]]      // A
   ];
-  var WORD_W = 4 * L + 3 * GAP, strokeOrder = 0, key = {};
-  var star = function (x, y, big) {
+  var WORD_W = 4 * L + 3 * GAP, key = {}, order = 0;
+  var star = function (x, y) {
     var id = Math.round(x * 1000) + ':' + Math.round(y * 1000);
     if (key[id] != null) return key[id];
-    nodes.push({ x: (x - WORD_W / 2) * K, y: (y - 0.5) * K, z: -0.75, core: true, r: big ? 4.6 : 2.6, col: '#ffffff', reg: -1, lit: 1 });
-    return (key[id] = nodes.length - 1);
+    var X = (x - WORD_W / 2) * K, Y = (y - 0.5) * K;
+    // a hidden depth, pushed out along the line of sight so the front view stays exact
+    var d = (rnd() * 2 - 1) * 1.25, f = (CAM + d) / CAM;
+    return (key[id] = addNode({ name: true, x: X * f, y: Y * f, z: d, u: x / WORD_W, r: 2.4 + rnd() * 1.3, halo: rnd() < 0.5 ? HALO_V : HALO_B, lit: 1, first: 1e9 }));
   };
-  var CORE_LINKS = [];
   LETTERS.forEach(function (strokes, li) {
     var ox = li * (L + GAP);
     strokes.forEach(function (pts) {
-      for (var q = 0; q < pts.length - 1; q++) {
-        var a = pts[q], b = pts[q + 1], len = Math.hypot(b[0] - a[0], b[1] - a[1]), steps = Math.max(1, Math.round(len / 0.24));
-        var prev = star(ox + a[0], a[1], true);
-        for (var t = 1; t <= steps; t++) {
-          var cur = star(ox + a[0] + (b[0] - a[0]) * t / steps, a[1] + (b[1] - a[1]) * t / steps, t === steps);
-          CORE_LINKS.push([prev, cur, strokeOrder++]); prev = cur;
-        }
-      }
+      for (var q = 0; q < pts.length - 1; q++) link(star(ox + pts[q][0], pts[q][1]), star(ox + pts[q + 1][0], pts[q + 1][1]), { name: true, order: order++ });
     });
   });
-  // accents from the icon: the A's apex is the saffron star, the top of the R the green one
-  nodes[star(3 * (L + GAP) + L / 2, 0, true)].col = '#ffb829'; nodes[star(3 * (L + GAP) + L / 2, 0, true)].r = 6.5;
-  nodes[star(2 * (L + GAP) + 0.45, 0, true)].col = '#34c9a3'; nodes[star(2 * (L + GAP) + 0.45, 0, true)].r = 5.2;
-  var NOVA = star(3 * (L + GAP) + L / 2, 0, true); // the saffron star the entrance dives into
-  var ICON = nodes.slice(); // the word's stars
-  var N = window.innerWidth < 600 ? 230 : 340;
-  while (nodes.length < N + ICON.length) {
-    var x = rnd() * 2 - 1, y = rnd() * 2 - 1, z = rnd() * 2 - 1;
-    var d = x * x / 1.0 + y * y / 0.62 + z * z / 0.8;
-    if (d > 1 || d < 0.35) continue;            // a shell, like the cortex
-    if (Math.abs(x) < 0.05) continue;           // the fissure between hemispheres
-    var sx = x * 1.35, sy = y * 1.05 - 0.05 + (x * x) * 0.12, sz = z * 1.1;
-    var ang = Math.atan2(sz, sx);
-    nodes.push({ x: sx, y: sy, z: sz, core: false, r: 1.2 + rnd() * 1.6,
-      col: rnd() < 0.12 ? '#a98bff' : rnd() < 0.08 ? '#5fb8ff' : '#e4e4e6',
-      reg: Math.floor(((ang + Math.PI) / (2 * Math.PI)) * REGIONS) % REGIONS, lit: 0 });
-  }
-  nodes.forEach(function () { adj.push([]); });
-  var link = function (a, b, core) { edges.push({ a: a, b: b, core: !!core }); adj[a].push(edges.length - 1); adj[b].push(edges.length - 1); };
-  CORE_LINKS.forEach(function (l) { link(l[0], l[1], true); edges[edges.length - 1].order = l[2]; });
-  var STROKES = strokeOrder;
-  // the brain's own wiring; the word's stars keep only their strokes so the name stays readable
-  for (var i = 0; i < nodes.length; i++) {
-    if (nodes[i].core) continue;
-    var near = [];
-    for (var j = 0; j < nodes.length; j++) if (j !== i && !nodes[j].core) {
-      var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y, dz = nodes[i].z - nodes[j].z;
-      near.push([dx * dx + dy * dy + dz * dz, j]);
+  var STROKES = order;
+  var NOVA = star(3 * (L + GAP) + L / 2, 0); // the apex of the A: the star the entrance dives into
+  nodes[NOVA].r = 4.6; nodes[NOVA].halo = HALO_B;
+  edges.forEach(function (e) { nodes[e.a].first = Math.min(nodes[e.a].first, e.order); nodes[e.b].first = Math.min(nodes[e.b].first, e.order + 1); });
+
+  /* ---------- the sky: small constellations, one per file of the day ---------- */
+  // placed by screen share (0..1) at a depth, kept out of the name's band; turned into space on resize
+  var GROUPS = 11, centers = [];
+  var free = function (fx, fy) {
+    // keep clear of the name, the greeting and the buttons
+    if (mob ? (fy > 0.14 && fy < 0.5) || fy > 0.7 : (fy > 0.08 && fy < 0.58 && fx > 0.22 && fx < 0.99) || (fy > 0.5 && fx < 0.42) || (fy > 0.82 && fx > 0.66)) return false;
+    for (var c = 0; c < centers.length; c++) if (Math.hypot(centers[c][0] - fx, (centers[c][1] - fy) * 0.8) < 0.2) return false;
+    return true;
+  };
+  for (var g = 0; g < GROUPS; g++) {
+    var fx, fy, tries = 0;
+    do { fx = 0.06 + rnd() * 0.88; fy = 0.05 + rnd() * 0.9; } while (!free(fx, fy) && ++tries < 80);
+    centers.push([fx, fy]);
+    var z = 0.8 + rnd() * 1.8, cnt = 4 + Math.floor(rnd() * 4), ang = rnd() * 6.283, ox = 0, oy = 0, ids = [];
+    for (var s = 0; s < cnt; s++) {
+      ids.push(addNode({ grp: g, fx: fx, fy: fy, z: z + (rnd() - 0.5) * 0.3, ox: ox, oy: oy, r: 1.1 + rnd() * 1.5, halo: rnd() < 0.55 ? HALO_V : HALO_B, lit: 0, delay: 0.2 + rnd() * 0.9 }));
+      if (s) link(ids[s - 1], ids[s], { grp: g });
+      ang += (rnd() - 0.5) * 2.2; var st = 0.13 + rnd() * 0.15; ox += Math.cos(ang) * st; oy += Math.sin(ang) * st;
     }
-    near.sort(function (p, q) { return p[0] - q[0]; });
-    for (var k = 0; k < 3; k++) {
-      var jj = near[k][1];
-      if (!edges.some(function (e) { return (e.a === i && e.b === jj) || (e.a === jj && e.b === i); })) link(i, jj, false);
-    }
+    if (cnt > 4 && rnd() < 0.6) link(ids[Math.floor(rnd() * (cnt - 2))], ids[cnt - 1], { grp: g }); // close a loop, like the reference's kites
   }
-  // every node starts scattered far away and flies into place
-  nodes.forEach(function (n) { n.sx = (rnd() * 2 - 1) * 6; n.sy = (rnd() * 2 - 1) * 6; n.sz = 4 + rnd() * 8; n.delay = rnd() * 0.5; n.first = 1e9; });
-  // a star of the name shows up when the pen reaches it
-  edges.forEach(function (e) { if (e.core) { nodes[e.a].first = Math.min(nodes[e.a].first, e.order); nodes[e.b].first = Math.min(nodes[e.b].first, e.order + 1); } });
-  var WRITE_AT = 1.5, WRITE_FOR = 2.2; // seconds: the pen starts after the stars arrive
+  // star dust: thousands of tiny points at every depth
+  var dust = [];
+  for (var di = 0, DN = mob ? 420 : 760; di < DN; di++) dust.push({ fx: rnd() * 1.3 - 0.15, fy: rnd() * 1.3 - 0.15, z: -0.4 + rnd() * 5.5, r: 0.5 + rnd() * rnd() * 1.6, ph: rnd() * 6.283, tw: 0.6 + rnd() * 2.2, blue: rnd() < 0.35, glow: rnd() < 0.05 });
+  // veils of light: silk ribbons sweeping up to the right, each a fan of thin threads
+  var VEILS = [
+    { y0: 0.1, tilt: -0.22, amp: 0.045, k: 5.2, sp: 0.11, ph: 0.4, z: 2.6, n: 14, spread: 0.011, rgb: '126,84,255' },
+    { y0: 0.5, tilt: -0.34, amp: 0.06, k: 3.6, sp: 0.08, ph: 2.1, z: 1.9, n: 18, spread: 0.012, rgb: '108,94,255' },
+    { y0: 0.8, tilt: -0.3, amp: 0.05, k: 4.3, sp: 0.1, ph: 4.0, z: 1.3, n: 20, spread: 0.010, rgb: '92,112,255' },
+    { y0: 0.99, tilt: -0.16, amp: 0.04, k: 3.1, sp: 0.07, ph: 5.3, z: 0.9, n: 12, spread: 0.013, rgb: '146,92,255' }
+  ];
+  var WRITE_AT = 0.5, WRITE_FOR = 2.6;               // the threads of the name are drawn while the sky turns
+  var OPEN_YAW = 1.05, OPEN_PITCH = -0.42, TURN_AT = 0.5, TURN_FOR = 3.1;
 
   /* ---------- sound: tiny bells made in the browser, no file to download ---------- */
   // audio only starts after a tap (browsers' rule), so the opening itself stays silent
@@ -155,64 +167,76 @@
     breath(c, t + 0.35);
   };
 
-  /* ---------- camera and input ---------- */
-  var W = 0, H = 0, dpr = 1;
-  var yaw = 0, pitch = 0.05, vyaw = 0, vpitch = 0, cam = 3.4, t0 = performance.now();
-  var drag = null, tilt = { x: 0, y: 0 }, ptr = { x: -1, y: -1, on: false };
+  /* ---------- screen and space ---------- */
+  var W = 0, H = 0, dpr = 1, scale = 1, cx = 0, cy = 0, SF = 1, cam = CAM, t0 = performance.now();
+  // a point at screen share (fx, fy) and depth z, seen from the front
+  var toX = function (fx, z) { return (fx * W - cx) * (CAM + z) / (FOC * scale); };
+  var toY = function (fy, z) { return (fy * H - cy) * (CAM + z) / (FOC * scale); };
   var resize = function () {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = root.clientWidth; H = root.clientHeight;
+    W = root.clientWidth; H = root.clientHeight; mob = W < 760;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // the name fills most of a phone's width, a bit more than half a computer screen
+    scale = Math.min(H * (mob ? 0.62 : 0.95), (mob ? W * 0.86 : W * 0.58) / (WORD_W * K * FOC / CAM));
+    cx = W * (mob ? 0.5 : 0.6); cy = H * (mob ? 0.31 : 0.32);
+    SF = Math.max(1, Math.min(2, scale / 280));
+    nodes.forEach(function (n) { if (n.name) return; var f = (CAM + n.z) / CAM * 0.95; n.x = toX(n.fx, n.z) + n.ox * f; n.y = toY(n.fy, n.z) + n.oy * f; });
+    dust.forEach(function (d) { d.x = toX(d.fx, d.z); d.y = toY(d.fy, d.z); });
   };
   resize(); window.addEventListener('resize', resize);
-  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: yaw, pitch: pitch, t: performance.now() }; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
+
+  /* ---------- input: drag breaks the name apart, letting go puts it back ---------- */
+  var drag = null, uy = 0, up = 0, vyaw = 0, vpitch = 0, tilt = { x: 0, y: 0 }, ptr = { x: -1, y: -1, on: false };
+  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, uy: uy, up: up }; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
   cv.addEventListener('pointermove', function (e) {
     ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
     if (!drag) return;
-    var ny = drag.yaw + (e.clientX - drag.x) * 0.006, np = Math.max(-1, Math.min(1, drag.pitch + (e.clientY - drag.y) * 0.004));
-    vyaw = ny - yaw; vpitch = np - pitch; yaw = ny; pitch = np;
+    var ny = drag.uy + (e.clientX - drag.x) * 0.006, np = Math.max(-1, Math.min(1, drag.up + (e.clientY - drag.y) * 0.004));
+    vyaw = ny - uy; vpitch = np - up; uy = ny; up = np;
   });
-  var up = function () { drag = null; };
-  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  var release = function () { drag = null; };
+  cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
   cv.addEventListener('pointerleave', function () { ptr.on = false; });
   window.addEventListener('deviceorientation', function (e) {
     if (e.gamma == null) return;
     tilt.x = Math.max(-1, Math.min(1, e.gamma / 35)); tilt.y = Math.max(-1, Math.min(1, (e.beta - 45) / 35));
   });
 
-  /* ---------- synapses: light that runs along the links ---------- */
-  var pulses = [];
+  /* ---------- light running along the threads ---------- */
+  var pulses = [], PCOL = ['#ffffff', '#c3ceff', '#ab92ff'];
   var fire = function (from, depth, col) {
     adj[from].forEach(function (ei) {
-      if (pulses.length > 160) return;
-      if (depth > 0 && rnd() > 0.55) return;
+      if (pulses.length > 120) return;
+      if (depth > 0 && rnd() > 0.6) return;
       var e = edges[ei];
-      pulses.push({ e: ei, dir: e.a === from ? 1 : -1, t: 0, sp: 0.022 + rnd() * 0.02, depth: depth, col: col || (rnd() < 0.5 ? '#ffb829' : '#34c9a3') });
+      pulses.push({ e: ei, dir: e.a === from ? 1 : -1, t: 0, sp: 0.02 + rnd() * 0.02, depth: depth, col: col || PCOL[Math.floor(rnd() * 3)] });
     });
   };
   var proj = [];
-  var fireNear = function (cx, cy) {
-    var best = -1, bd = 70 * 70;
-    proj.forEach(function (p, i) { if (!p) return; var dx = p.x - cx, dy = p.y - cy, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } });
+  var fireNear = function (x, y) {
+    var best = -1, bd = 60 * 60;
+    proj.forEach(function (p, i) { if (!p) return; var dx = p.x - x, dy = p.y - y, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = i; } });
     if (best >= 0) { nodes[best].flash = 1; fire(best, 0); return true; }
     return false;
   };
 
-  /* ---------- loading drives the light ---------- */
-  var lit = 0, ready = false, leaving = 0, leaveStart = 0, done = false, novaAt = null, shift = null;
+  /* ---------- loading lights the sky ---------- */
+  var ready = false, leaving = 0, leaveStart = 0, done = false, novaAt = null, locked = false, lockAt = -9;
+  var lightGroup = function (gi) {
+    var first = -1;
+    nodes.forEach(function (nd, i) { if (nd.grp === gi) { nd.target = 1; if (first < 0) first = i; } });
+    if (first >= 0) { nodes[first].flash = 1; fire(first, 0, '#ffffff'); }
+  };
   window.__intro = {
     step: function (label, n, total) {
-      lit = Math.max(lit, n);
-      var reg = (n - 1) % REGIONS;
-      nodes.forEach(function (nd, i) { if (nd.reg === reg) { nd.target = 1; if (rnd() < 0.08) fire(i, 1); } });
+      lightGroup((n - 1) % GROUPS);
       statusEl.textContent = 'Conectando ' + label + '…';
       barEl.style.transform = 'scaleX(' + (n / total).toFixed(3) + ')';
     },
     ready: function () {
       ready = true;
-      nodes.forEach(function (nd) { nd.target = 1; });
-      fire(3, 0, '#ffb829');
+      for (var gi = 0; gi < GROUPS; gi++) nodes.forEach(function (nd) { if (nd.grp === gi) nd.target = 1; });
+      fire(NOVA, 0, '#ffffff');
       statusEl.textContent = 'Tudo conectado.';
       barEl.style.transform = 'scaleX(1)';
       root.classList.add('is-ready');
@@ -226,7 +250,7 @@
     if (withVoice) { var st = document.getElementById('bx-stage'); if (st) st.click(); } // same tap starts Zyra (audio needs a gesture)
     chime();
     leaving = 1; leaveStart = performance.now();
-    nodes[NOVA].flash = 1; fire(NOVA, 0, '#ffb829');
+    nodes[NOVA].flash = 1; fire(NOVA, 0, '#ffffff');
     root.classList.add('is-leaving');
     document.documentElement.classList.add('bx-entering');
     setTimeout(finish, reduced ? 350 : 1400);
@@ -243,127 +267,191 @@
 
   /* ---------- draw ---------- */
   var ease = function (x) { return 1 - Math.pow(1 - x, 4); };
+  var inout = function (x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+  var R = { cy: 1, sy: 0, cp: 1, sp: 0 };
+  var rot = function (yaw, pitch) { R.cy = Math.cos(yaw); R.sy = Math.sin(yaw); R.cp = Math.cos(pitch); R.sp = Math.sin(pitch); };
+  var P = function (x, y, z) {
+    var x1 = x * R.cy - z * R.sy, z1 = x * R.sy + z * R.cy;
+    var y1 = y * R.cp - z1 * R.sp, z2 = y * R.sp + z1 * R.cp, dz = cam + z2;
+    if (dz < 0.08) return null;
+    var s = FOC / dz;
+    return { x: cx + x1 * s * scale, y: cy + y1 * s * scale, s: s, z: z2 };
+  };
+  var S0 = FOC / CAM; // size of the name's plane, so sizes can be given "as seen on the name"
   var frame = function (now) {
     if (done) return;
     var el = (now - t0) / 1000;
-    // the name sways gently and springs back after a drag, so it can always be read
-    if (!drag) { var sway = reduced ? 0 : Math.sin(el * 0.35) * 0.28; yaw += vyaw; vyaw *= 0.9; yaw += (sway - yaw) * 0.025; pitch += vpitch; vpitch *= 0.9; pitch += (0.05 + tilt.y * 0.25 - pitch) * 0.03; }
-    var yw = yaw + tilt.x * 0.4;
-    var pen = reduced ? STROKES : Math.max(0, Math.min(1, (el - WRITE_AT) / WRITE_FOR)) * STROKES;
+    // camera: the opening turn, the user's drag (springs back), a slow breath, and the phone's tilt
+    var turn = reduced ? 1 : inout(clamp((el - TURN_AT) / TURN_FOR));
+    if (!drag) { uy += vyaw; vyaw *= 0.88; uy *= 0.94; up += vpitch; vpitch *= 0.88; up *= 0.94; }
+    var still = reduced ? 0 : turn;
+    var yawN = OPEN_YAW * (1 - turn) + uy + Math.sin(el * 0.4) * 0.03 * still + tilt.x * 0.1;
+    var pitchN = OPEN_PITCH * (1 - turn) + up + Math.sin(el * 0.31) * 0.015 * still + tilt.y * 0.05;
+    var align = clamp(1 - (Math.abs(yawN) + Math.abs(pitchN)) / 0.4);
+    if (align > 0.96 && !locked) { locked = true; lockAt = el; }
+    if (align < 0.75 && locked) { locked = false; nodes.forEach(function (n) { n.hit = false; }); }
+    var shine = clamp(1 - (el - lockAt) / 1.3);
+    var pen = reduced ? STROKES : clamp((el - WRITE_AT) / WRITE_FOR) * STROKES;
     var lt = leaving ? Math.max(0, Math.min(1.4, (now - leaveStart) / 1000)) : 0;
-    if (leaving) { cam = 3.4 - Math.pow(Math.min(1, Math.max(0, lt - 0.25) / 0.95), 2.2) * 3.75; nodes[NOVA].flash = Math.max(nodes[NOVA].flash || 0, lt < 0.5 ? 1 : 0); }
-    // the word (about 2.9 units wide) must fit: most of a phone's width, half a computer screen
-    // the word fills most of the width; the brain around it is blown up to fill the empty sky above the text
-    var mob = W < 760;
-    var scale = Math.min(H * (mob ? 0.5 : 0.75), (mob ? W * 0.92 : W * 0.6) / (WORD_W * K * 0.72));
-    var BS = mob ? Math.max(1.4, (H * 0.3) / (0.75 * 0.72 * scale)) : Math.max(1.2, (H * 0.4) / (0.75 * 0.72 * scale));
-    var cx = W * (mob ? 0.5 : 0.6), cy = H * (mob ? 0.33 : 0.32);
-    var SF = Math.max(1, Math.min(2, scale / 220)); // bigger word, bolder stars and strokes
-    var cyw = Math.cos(yw), syw = Math.sin(yw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    if (leaving) { cam = CAM - Math.pow(clamp((lt - 0.25) / 0.95), 2.2) * 3.75; nodes[NOVA].flash = Math.max(nodes[NOVA].flash, lt < 0.5 ? 1 : 0); }
+    var fadeIn = reduced ? 1 : ease(clamp(el / 1.4));
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
+    // the whole sky glides so the dive star comes to the middle of the screen
+    if (leaving && !reduced) {
+      var npj = proj[NOVA];
+      if (npj) novaAt = { x: npj.x, y: npj.y };
+      if (novaAt) { var gk = ease(clamp((lt - 0.12) / 0.75)); ctx.setTransform(dpr, 0, 0, dpr, (W / 2 - novaAt.x) * gk * dpr, (H / 2 - novaAt.y) * gk * dpr); }
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+    // 1. veils: the far layers turn only a little (parallax), so the backdrop stays framed
+    rot(yawN * 0.22, pitchN * 0.22);
+    var step = mob ? 0.04 : 0.025, tv = reduced ? 0 : el, f0 = leaving ? -0.7 : -0.15, f1 = leaving ? 1.7 : 1.16; // wider while the sky glides
+    for (var v = 0; v < VEILS.length; v++) {
+      var vl = VEILS[v], rows = [];
+      for (var j = 0; j < vl.n; j++) {
+        var row = [];
+        for (var fx = f0; fx <= f1; fx += step) {
+          var fy = vl.y0 + vl.tilt * (fx - 0.5) + vl.amp * Math.sin(vl.k * fx + tv * vl.sp + vl.ph)
+            + j * vl.spread * (0.55 + 0.45 * Math.sin(2.3 * fx + j * 0.33 + tv * 0.13 + vl.ph));
+          var pz = vl.z + 0.25 * Math.sin(1.7 * fx + vl.ph);
+          var pp = P(toX(fx, pz), toY(fy, pz), pz);
+          if (pp) row.push(pp);
+        }
+        rows.push(row);
+      }
+      var top = rows[0], bot = rows[rows.length - 1];
+      ctx.globalAlpha = fadeIn;
+      ctx.fillStyle = 'rgba(' + vl.rgb + ',0.075)';
+      ctx.beginPath();
+      top.forEach(function (p, i) { if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); });
+      for (var b = bot.length - 1; b >= 0; b--) ctx.lineTo(bot[b].x, bot[b].y);
+      ctx.closePath(); ctx.fill();
+      for (var r = 0; r < rows.length; r++) {
+        var edge = r === rows.length - 1, q = r / (rows.length - 1);
+        ctx.strokeStyle = edge ? 'rgba(204,188,255,0.62)' : 'rgba(' + vl.rgb + ',' + (0.05 + 0.2 * q * q) + ')';
+        ctx.lineWidth = edge ? 1.1 : 0.8;
+        ctx.beginPath();
+        rows[r].forEach(function (p, i) { if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); });
+        ctx.stroke();
+        if (edge) { ctx.strokeStyle = 'rgba(150,120,255,0.07)'; ctx.lineWidth = 7; ctx.stroke(); }
+      }
+    }
+
+    // 2. star dust, twinkling
+    for (var d = 0; d < dust.length; d++) {
+      var du = dust[d], dp = P(du.x, du.y, du.z);
+      if (!dp) continue;
+      var tw = reduced ? 0.8 : 0.55 + 0.45 * Math.sin(el * du.tw + du.ph);
+      var dr = du.r * dp.s / S0;
+      ctx.globalAlpha = fadeIn * tw * Math.min(1, 0.35 + dp.s);
+      if (du.glow) { var gs = dr * 9; ctx.drawImage(du.blue ? HALO_B : HALO_V, dp.x - gs / 2, dp.y - gs / 2, gs, gs); }
+      else { ctx.fillStyle = du.blue ? '#b9c8ff' : '#e6e2ff'; ctx.fillRect(dp.x - dr / 2, dp.y - dr / 2, dr, dr); }
+    }
+
+    // 3. project every star: the sky with the backdrop's gentle turn, the name with the full turn
     proj.length = nodes.length;
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i];
-      var a = reduced ? 1 : ease(Math.max(0, Math.min(1, (el - n.delay) / 1.6)));
-      var bs = n.core ? 1 : BS;
-      var x = n.sx + (n.x * bs - n.sx) * a, y = n.sy + (n.y * bs - n.sy) * a, z = n.sz + (n.z * Math.min(bs, 1.5) - n.sz) * a;
-      var x1 = x * cyw - z * syw, z1 = x * syw + z * cyw;
-      var y1 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
-      var dz = cam + z2;
-      if (dz < 0.08) { proj[i] = null; continue; }
-      var s = 1.9 / dz;
-      n.lit += ((n.core ? 1 : (n.target ? 0.62 : 0.16)) - n.lit) * 0.05;
-      if (n.core && n.first > pen) { proj[i] = null; continue; }
-      if (n.flash) n.flash *= 0.94;
-      proj[i] = { x: cx + x1 * s * scale, y: cy + y1 * s * scale, s: s, z: z2, a: a };
+      if (n.name) continue;
+      n.lit += ((n.target ? 0.85 : 0.2) - n.lit) * 0.05;
+      n.flash *= 0.94;
+      var pj = P(n.x, n.y, n.z);
+      if (pj) pj.a = reduced ? 1 : ease(clamp((el - n.delay) / 1.2));
+      proj[i] = pj;
     }
-    // on the way in, the whole sky glides so the saffron star comes to the middle of the screen
-    if (leaving && !reduced) {
-      var np = proj[NOVA];
-      if (np) { novaAt = { x: np.x, y: np.y }; }
-      if (novaAt) {
-        var gk = ease(Math.min(1, Math.max(0, lt - 0.12) / 0.75));
-        shift = { x: (W / 2 - novaAt.x) * gk, y: (H / 2 - novaAt.y) * gk };
-        ctx.setTransform(dpr, 0, 0, dpr, shift.x * dpr, shift.y * dpr);
-      }
+    rot(yawN, pitchN);
+    for (var i2 = 0; i2 < nodes.length; i2++) {
+      var nn = nodes[i2];
+      if (!nn.name) continue;
+      nn.flash *= 0.94;
+      // the lock: once the stars line up, a wave of light runs through the name, left to right
+      if (locked && !nn.hit && (el - lockAt) / 0.8 >= nn.u) { nn.hit = true; nn.flash = 1; }
+      var pa = clamp((pen - nn.first) * 1.6);
+      if (pa <= 0) { proj[i2] = null; continue; }
+      var pn = P(nn.x, nn.y, nn.z);
+      if (pn) pn.a = pa;
+      proj[i2] = pn;
     }
-    // links
-    ctx.lineCap = 'round';
+
+    // 4. threads
     for (var k = 0; k < edges.length; k++) {
-      var e = edges[k], p = proj[e.a], q = proj[e.b];
-      if (e.core) {
-        // the pen draws the name stroke by stroke
-        var part = Math.max(0, Math.min(1, pen - e.order));
+      var e = edges[k], p = proj[e.a], qq = proj[e.b];
+      if (e.name) {
+        var part = clamp(pen - e.order);
         if (part <= 0 || !p) continue;
-        var A2 = p, B2 = q || p, ex = A2.x + (B2.x - A2.x) * part, ey = A2.y + (B2.y - A2.y) * part;
-        ctx.strokeStyle = 'rgba(128,82,255,0.28)'; ctx.lineWidth = 9 * SF * Math.min(A2.s, 1.6);
-        ctx.beginPath(); ctx.moveTo(A2.x, A2.y); ctx.lineTo(ex, ey); ctx.stroke();
-        ctx.strokeStyle = 'rgba(214,200,255,0.95)'; ctx.lineWidth = 2.2 * SF * Math.min(A2.s, 1.6);
-        ctx.beginPath(); ctx.moveTo(A2.x, A2.y); ctx.lineTo(ex, ey); ctx.stroke();
+        var B = qq || p, ex = p.x + (B.x - p.x) * part, ey = p.y + (B.y - p.y) * part, sr = Math.min(1.6, p.s / S0);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(132,108,255,' + (0.1 + 0.16 * align + 0.25 * shine) + ')'; ctx.lineWidth = 7 * SF * sr;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(ex, ey); ctx.stroke();
+        ctx.strokeStyle = 'rgba(' + LINE + ',' + (0.5 + 0.35 * align + 0.15 * shine) + ')'; ctx.lineWidth = 1.4 * SF * sr;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(ex, ey); ctx.stroke();
         continue;
       }
-      if (!p || !q) continue;
-      var depth = Math.max(0, Math.min(1, 1 - ((p.z + q.z) / 2 + 1.4) / 2.8));
+      if (!p || !qq) continue;
       var l = (nodes[e.a].lit + nodes[e.b].lit) / 2;
-      ctx.strokeStyle = e.core ? 'rgba(128,82,255,' + (0.35 + 0.5 * depth) * Math.min(p.a, q.a) + ')' : 'rgba(128,82,255,' + (0.05 + 0.32 * l * depth) * Math.min(p.a, q.a) + ')';
-      ctx.lineWidth = e.core ? 2.2 * Math.min(p.s, 1.6) : 1;
-      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+      ctx.globalAlpha = Math.min(p.a, qq.a);
+      ctx.strokeStyle = 'rgba(' + LINE + ',' + (0.06 + 0.4 * l) + ')'; ctx.lineWidth = 0.9;
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(qq.x, qq.y); ctx.stroke();
     }
-    // pulses
-    if (!reduced && !leaving && rnd() < (ready ? 0.12 : 0.06)) fire(Math.floor(rnd() * nodes.length), 1);
+
+    // 5. pulses
+    if (!reduced && !leaving && rnd() < (ready ? 0.07 : 0.04)) fire(Math.floor(rnd() * nodes.length), 1);
     for (var m = pulses.length - 1; m >= 0; m--) {
       var pu = pulses[m], ed = edges[pu.e];
       pu.t += pu.sp;
-      var from = pu.dir > 0 ? ed.a : ed.b, to = pu.dir > 0 ? ed.b : ed.a, P = proj[from], Q = proj[to];
-      if (pu.t >= 1) { pulses.splice(m, 1); nodes[to].flash = Math.max(nodes[to].flash || 0, 0.8); if (pu.depth < 4) fire(to, pu.depth + 1, pu.col); continue; }
-      if (!P || !Q) continue;
-      var px = P.x + (Q.x - P.x) * pu.t, py = P.y + (Q.y - P.y) * pu.t;
-      ctx.globalAlpha = 0.25; ctx.fillStyle = pu.col; ctx.beginPath(); ctx.arc(px, py, 6 * Math.min(P.s, 1.5), 0, 6.283); ctx.fill();
-      ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(px, py, 1.8 * Math.min(P.s, 1.5), 0, 6.283); ctx.fill();
+      var from = pu.dir > 0 ? ed.a : ed.b, to = pu.dir > 0 ? ed.b : ed.a, PA = proj[from], PB = proj[to];
+      if (pu.t >= 1) { pulses.splice(m, 1); nodes[to].flash = Math.max(nodes[to].flash, 0.8); if (pu.depth < 3) fire(to, pu.depth + 1, pu.col); continue; }
+      if (!PA || !PB) continue;
+      var px = PA.x + (PB.x - PA.x) * pu.t, py = PA.y + (PB.y - PA.y) * pu.t, ps = 16 * Math.min(1.5, PA.s / S0);
+      ctx.globalAlpha = 0.9; ctx.drawImage(pu.col === '#ab92ff' ? HALO_V : HALO_B, px - ps / 2, py - ps / 2, ps, ps);
     }
-    // nodes, far to near
-    var order = [];
-    for (var o = 0; o < proj.length; o++) if (proj[o]) order.push(o);
-    order.sort(function (u, v) { return proj[v].z - proj[u].z; });
-    for (var w = 0; w < order.length; w++) {
-      var id = order[w], pr = proj[id], nd = nodes[id];
-      var dep = Math.max(0.15, Math.min(1, 1 - (pr.z + 1.4) / 2.8));
+
+    // 6. stars: a soft halo and a tiny white core, like the reference
+    for (var w = 0; w < nodes.length; w++) {
+      var pr = proj[w], nd = nodes[w];
+      if (!pr) continue;
       var hover = ptr.on ? Math.max(0, 1 - Math.hypot(pr.x - ptr.x, pr.y - ptr.y) / 90) : 0;
-      var glow = Math.min(1, nd.lit + (nd.flash || 0) + hover * 0.8);
-      var rr = nd.r * pr.s * (nd.core ? SF : 1) * (1 + (nd.flash || 0) * 0.6 + hover * 0.5);
-      ctx.fillStyle = nd.col;
-      ctx.globalAlpha = 0.14 * glow * pr.a; ctx.beginPath(); ctx.arc(pr.x, pr.y, rr * 3.4, 0, 6.283); ctx.fill();
-      ctx.globalAlpha = (0.25 + 0.75 * glow) * dep * pr.a; ctx.beginPath(); ctx.arc(pr.x, pr.y, rr, 0, 6.283); ctx.fill();
+      var glow = Math.min(1.6, (nd.name ? 0.75 + 0.25 * align : nd.lit) + nd.flash + hover * 0.7);
+      var rr = nd.r * Math.min(1.8, pr.s / S0) * (nd.name ? SF : 1) * (1 + nd.flash * 0.5 + hover * 0.4);
+      var hs = rr * (nd.name ? 9 : 7) * (0.7 + 0.3 * glow);
+      ctx.globalAlpha = Math.min(1, glow) * pr.a;
+      ctx.drawImage(nd.halo, pr.x - hs / 2, pr.y - hs / 2, hs, hs);
+      ctx.fillStyle = '#ffffff';
+      ctx.globalAlpha = Math.min(1, 0.35 + 0.65 * glow) * pr.a;
+      ctx.beginPath(); ctx.arc(pr.x, pr.y, Math.max(0.6, rr * 0.42), 0, 6.283); ctx.fill();
     }
     ctx.globalAlpha = 1;
-    // the star bursts: a four-point sparkle, a ring, then its light fills the screen
+
+    // 7. the dive: the A's star bursts into a four-point sparkle, a ring, then its light fills the screen
     if (leaving && novaAt) {
       var sx0 = novaAt.x, sy0 = novaAt.y, burst = Math.min(1, lt / 0.45);
       var arm = (30 + 260 * ease(burst)) * SF, fadeArm = Math.max(0, 1 - Math.max(0, lt - 0.35) / 0.5);
       ctx.save(); ctx.translate(sx0, sy0); ctx.rotate(lt * 0.6);
-      ctx.globalCompositeOperation = 'lighter';
       for (var r4 = 0; r4 < 4; r4++) {
         var len = r4 % 2 ? arm * 0.62 : arm;
         var g4 = ctx.createLinearGradient(0, 0, len, 0);
-        g4.addColorStop(0, 'rgba(255,244,220,' + 0.95 * fadeArm + ')'); g4.addColorStop(0.35, 'rgba(255,184,41,' + 0.45 * fadeArm + ')'); g4.addColorStop(1, 'rgba(255,184,41,0)');
+        g4.addColorStop(0, 'rgba(255,255,255,' + 0.95 * fadeArm + ')'); g4.addColorStop(0.35, 'rgba(160,176,255,' + 0.5 * fadeArm + ')'); g4.addColorStop(1, 'rgba(130,100,255,0)');
         ctx.fillStyle = g4; ctx.beginPath(); ctx.moveTo(0, -3 * SF); ctx.lineTo(len, 0); ctx.lineTo(0, 3 * SF); ctx.closePath(); ctx.fill();
         ctx.rotate(Math.PI / 2);
       }
       ctx.restore();
       var ring = ease(Math.min(1, lt / 0.7));
-      ctx.globalAlpha = Math.max(0, 0.6 * (1 - ring)); ctx.strokeStyle = '#ffd27a'; ctx.lineWidth = 2 * SF;
+      ctx.globalAlpha = Math.max(0, 0.6 * (1 - ring)); ctx.strokeStyle = '#c4b4ff'; ctx.lineWidth = 2 * SF;
       ctx.beginPath(); ctx.arc(sx0, sy0, 12 * SF + ring * Math.max(W, H) * 0.45, 0, 6.283); ctx.stroke();
       ctx.globalAlpha = 1;
-      var bl = Math.min(1, Math.max(0, lt - 0.3) / 0.55), bloomA = Math.sin(Math.PI * Math.min(1, bl * 0.85 + 0.0)) * 0.85;
+      var bl = clamp((lt - 0.3) / 0.55), bloomA = Math.sin(Math.PI * Math.min(1, bl * 0.85)) * 0.85;
       if (bl > 0) {
-        var R = 20 + ease(bl) * Math.hypot(W, H);
-        var gb = ctx.createRadialGradient(sx0, sy0, 0, sx0, sy0, R);
-        gb.addColorStop(0, 'rgba(255,246,228,' + bloomA + ')'); gb.addColorStop(0.3, 'rgba(255,190,80,' + bloomA * 0.55 + ')'); gb.addColorStop(1, 'rgba(128,82,255,0)');
-        ctx.fillStyle = gb; ctx.fillRect(sx0 - R, sy0 - R, R * 2, R * 2);
+        var RR = 20 + ease(bl) * Math.hypot(W, H);
+        var gb = ctx.createRadialGradient(sx0, sy0, 0, sx0, sy0, RR);
+        gb.addColorStop(0, 'rgba(244,246,255,' + bloomA + ')'); gb.addColorStop(0.3, 'rgba(150,130,255,' + bloomA * 0.55 + ')'); gb.addColorStop(1, 'rgba(60,40,160,0)');
+        ctx.fillStyle = gb; ctx.fillRect(sx0 - RR, sy0 - RR, RR * 2, RR * 2);
       }
-      ctx.globalCompositeOperation = 'source-over';
     }
+    ctx.globalCompositeOperation = 'source-over';
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);

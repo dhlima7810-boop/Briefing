@@ -168,7 +168,15 @@
   };
 
   /* ---------- screen and space ---------- */
-  var W = 0, H = 0, dpr = 1, scale = 1, cx = 0, cy = 0, SF = 1, cam = CAM, t0 = performance.now();
+  var W = 0, H = 0, dpr = 1, scale = 1, cx = 0, cy = 0, SF = 1, cam = CAM;
+  /* the Big Bang comes first: the clock starts BB seconds in the future, so everything below that reads
+     "el" (seconds since the sky was born) waits while the bang plays at negative times.
+     0..0.75 s: a single point of light gathers matter in the dark; 0.75 s: it explodes in a flash;
+     then the stars fly out of it, the plasma cools from white-gold to violet and the sky is born. */
+  var BB = reduced ? 0 : 2.1, BANG = 0.75, t0 = performance.now() + BB * 1000, born = reduced, bangLit = reduced;
+  var motes = [];
+  for (var mi = 0; mi < 46; mi++) motes.push({ a: rnd() * 6.283, r: 0.25 + rnd() * 0.6, s: 0.6 + rnd() * 1.6 });
+  if (reduced) { root.classList.remove('is-bang'); root.classList.add('is-born'); }
   // a point at screen share (fx, fy) and depth z, seen from the front
   var toX = function (fx, z) { return (fx * W - cx) * (CAM + z) / (FOC * scale); };
   var toY = function (fy, z) { return (fy * H - cy) * (CAM + z) / (FOC * scale); };
@@ -239,16 +247,20 @@
       fire(NOVA, 0, '#ffffff');
       statusEl.textContent = 'Tudo conectado.';
       barEl.style.transform = 'scaleX(1)';
-      root.classList.add('is-ready');
-      goBtn.disabled = false; readBtn.disabled = false;
-      // the two stars ignite with a small flash each
-      setTimeout(function () { supernova(goBtn, false); }, 120); setTimeout(function () { supernova(readBtn, false); }, 280);
+      if (born) ignite(); // otherwise the buttons ignite right after the universe is born
     },
     fail: function (msg) { statusEl.textContent = msg; root.classList.add('is-failed'); }
   };
 
   /* ---------- the buttons are stars: they tilt toward the finger and burst into a supernova ---------- */
   var novas = [];
+  var ignite = function () {
+    if (root.classList.contains('is-ready')) return;
+    root.classList.add('is-ready');
+    goBtn.disabled = false; readBtn.disabled = false;
+    // the two stars ignite with a small flash each
+    setTimeout(function () { supernova(goBtn, false); }, 120); setTimeout(function () { supernova(readBtn, false); }, 280);
+  };
   var supernova = function (btn, big) {
     if (reduced) return;
     var r = btn.getBoundingClientRect(), parts = [], n = big ? 70 : 22;
@@ -325,10 +337,38 @@
     var pen = reduced ? STROKES : clamp((el - WRITE_AT) / WRITE_FOR) * STROKES;
     var lt = leaving ? Math.max(0, Math.min(1.4, (now - leaveStart) / 1000)) : 0;
     if (leaving) { cam = CAM - Math.pow(clamp((lt - 0.25) / 0.95), 2.2) * 3.75; nodes[NOVA].flash = Math.max(nodes[NOVA].flash, lt < 0.5 ? 1 : 0); }
-    var fadeIn = reduced ? 1 : ease(clamp(el / 1.4));
+    // the bang: bt counts from the moment the app opens; matter flies out after BANG
+    var bt = el + BB, since = bt - BANG, BX = W / 2, BY = H / 2, DIAG = Math.hypot(W, H);
+    if (!bangLit && since > 0.05) { bangLit = true; root.classList.remove('is-bang'); }
+    if (!born && el > -0.25) { born = true; root.classList.add('is-born'); if (ready) ignite(); }
+    var fadeIn = reduced ? 1 : clamp((since - 0.05) / 0.3);       // dust and stars are born in the flash
+    var veilIn = reduced ? 1 : ease(clamp((el + 0.5) / 1.5));    // the silk veils settle last, as the sky cools
+    var expand = function (p, lag) { // matter thrown out from the bang point, slowing as it reaches its place
+      if (reduced || !p) return p;
+      var k = ease(clamp((since - lag) / 1.6));
+      p.x = BX + (p.x - BX) * k; p.y = BY + (p.y - BY) * k; return p;
+    };
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
+    if (!reduced && bt < BB + 0.4) {
+      // the dark before the sky: it lifts as the universe cools
+      var cool = since < 0 ? 0 : ease(clamp((since - 0.1) / 1.5));
+      if (cool < 1) { ctx.globalAlpha = 1 - cool; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
+      // the plasma cloud: white-gold at first, cooling to violet as it spreads
+      if (since > 0) {
+        var pc = clamp(since / 1.5), cc = clamp(since / 0.6), PR = 30 + ease(clamp(since / 1.3)) * DIAG * 0.75, pa = 1 - pc;
+        var gp = ctx.createRadialGradient(BX, BY, 0, BX, BY, PR);
+        gp.addColorStop(0, 'rgba(' + Math.round(255 - 70 * cc) + ',' + Math.round(248 - 60 * cc) + ',' + Math.round(232 + 23 * cc) + ',' + 0.95 * pa * pa + ')'); // white-hot, cooling to lavender
+        gp.addColorStop(0.22, 'rgba(255,' + Math.round(200 - 90 * cc) + ',' + Math.round(130 + 125 * cc) + ',' + 0.55 * pa * pa + ')'); // gold at the start, rose as it cools (dim gold reads as brown)
+        gp.addColorStop(0.5, 'rgba(160,104,255,' + 0.45 * pa + ')');
+        gp.addColorStop(0.8, 'rgba(70,52,210,' + 0.25 * pa + ')');
+        gp.addColorStop(1, 'rgba(40,30,140,0)');
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gp; ctx.fillRect(BX - PR, BY - PR, PR * 2, PR * 2);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+      ctx.globalAlpha = 1;
+    }
     // the whole sky glides so the dive star comes to the middle of the screen
     if (leaving && !reduced) {
       var npj = proj[NOVA];
@@ -355,7 +395,7 @@
         rows.push(row);
       }
       var top = rows[0], bot = rows[rows.length - 1];
-      ctx.globalAlpha = fadeIn;
+      ctx.globalAlpha = veilIn;
       ctx.fillStyle = 'rgba(' + vl.rgb + ',0.075)';
       ctx.beginPath();
       top.forEach(function (p, i) { if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); });
@@ -374,7 +414,7 @@
 
     // 2. star dust, twinkling
     for (var d = 0; d < dust.length; d++) {
-      var du = dust[d], dp = P(du.x, du.y, du.z);
+      var du = dust[d], dp = expand(P(du.x, du.y, du.z), du.ph * 0.04);
       if (!dp) continue;
       var tw = reduced ? 0.8 : 0.55 + 0.45 * Math.sin(el * du.tw + du.ph);
       var dr = du.r * dp.s / S0;
@@ -390,8 +430,8 @@
       if (n.name) continue;
       n.lit += ((n.target ? 0.85 : 0.2) - n.lit) * 0.05;
       n.flash *= 0.94;
-      var pj = P(n.x, n.y, n.z);
-      if (pj) pj.a = reduced ? 1 : ease(clamp((el - n.delay) / 1.2));
+      var pj = expand(P(n.x, n.y, n.z), n.delay * 0.15);
+      if (pj) pj.a = reduced ? 1 : clamp((since - n.delay * 0.15) / 0.35);
       proj[i] = pj;
     }
     rot(yawN, pitchN);
@@ -508,6 +548,32 @@
           ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay); ctx.stroke();
           var hz = (4 + pt.z * 10) * (1 - nt * 0.5); ctx.drawImage(pt.b ? HALO_B : HALO_V, ax - hz / 2, ay - hz / 2, hz, hz);
         }
+      }
+      ctx.globalAlpha = 1;
+    }
+    // 9. the Big Bang itself, on top of everything
+    if (!reduced && bt < BANG + 1.4) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (since < 0) {
+        // the singularity: matter spirals into one point that pulses brighter and brighter
+        var g0 = clamp(bt / BANG), pulse = 0.75 + 0.25 * Math.sin(bt * 26 * (0.5 + g0));
+        for (var mo = 0; mo < motes.length; mo++) {
+          var mt = motes[mo], mr = mt.r * Math.min(W, H) * Math.pow(1 - g0, 1.6), ma = mt.a + g0 * mt.s * 3;
+          ctx.globalAlpha = 0.25 + 0.6 * g0; ctx.fillStyle = mo % 3 ? '#cfd6ff' : '#ffd9a0';
+          ctx.fillRect(BX + Math.cos(ma) * mr - 1, BY + Math.sin(ma) * mr * 0.8 - 1, 2, 2);
+        }
+        var hs0 = (14 + 120 * g0 * g0) * pulse;
+        ctx.globalAlpha = 0.5 + 0.5 * g0; ctx.drawImage(HALO_B, BX - hs0 / 2, BY - hs0 / 2, hs0, hs0);
+        ctx.globalAlpha = 1; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(BX, BY, 1.2 + 3 * g0 * pulse, 0, 6.283); ctx.fill();
+      } else {
+        // the shockwave and the flash
+        var sw = ease(clamp(since / 1.0));
+        ctx.globalAlpha = Math.max(0, 0.85 * (1 - sw)); ctx.strokeStyle = '#fff6e6'; ctx.lineWidth = 3 + 6 * (1 - sw);
+        ctx.beginPath(); ctx.arc(BX, BY, 10 + sw * DIAG * 0.62, 0, 6.283); ctx.stroke();
+        var sw2 = ease(clamp((since - 0.12) / 1.2));
+        if (sw2 > 0) { ctx.globalAlpha = Math.max(0, 0.5 * (1 - sw2)); ctx.strokeStyle = '#b7a4ff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(BX, BY, 10 + sw2 * DIAG * 0.5, 0, 6.283); ctx.stroke(); }
+        var fl0 = Math.pow(Math.max(0, 1 - since / 0.5), 2);
+        if (fl0 > 0) { ctx.globalAlpha = 0.95 * fl0; ctx.fillStyle = '#fffaf0'; ctx.fillRect(0, 0, W, H); }
       }
       ctx.globalAlpha = 1;
     }

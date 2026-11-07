@@ -28,7 +28,7 @@ jobs:
           pip install -q torch==2.8.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cpu
           pip install -q torchcodec==0.7.0
           if [ "${{ matrix.motor }}" = xtts ]; then pip install -q -c /tmp/c.txt coqui-tts; else pip install -q -c /tmp/c.txt f5-tts; fi
-          pip install -q numpy soundfile huggingface_hub
+          pip install -q numpy soundfile huggingface_hub six
       - name: Gerar
         run: |
           ffmpeg -loglevel error -y -i voz/referencia-dheryck.m4a -ac 1 -ar 24000 /tmp/ref.wav

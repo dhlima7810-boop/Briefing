@@ -85,12 +85,15 @@ jobs:
           curl -sSL -o k.tar.bz2 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2
           tar xjf k.tar.bz2 && rm k.tar.bz2
 
-      - name: Narrar (Alex e Dora em paralelo)
+      # Com o secret ELEVENLABS_API_KEY, a voz feminina vira a Roberta (ElevenLabs, pago).
+      # Sem o secret, ou se a ElevenLabs falhar, continua a Dora (Kokoro, grátis).
+      - name: Narrar (Alex e Dora/Roberta em paralelo)
         id: voz
         continue-on-error: true
         env:
           VOZ_FILES: '1'
           VOZ_THREADS: '2'
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: |
           mkdir -p /tmp/voz
           VOZ_ONLY=alex python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & a=$!

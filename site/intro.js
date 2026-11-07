@@ -173,9 +173,28 @@
      "el" (seconds since the sky was born) waits while the bang plays at negative times.
      0..0.75 s: a single point of light gathers matter in the dark; 0.75 s: it explodes in a flash;
      then the stars fly out of it, the plasma cools from white-gold to violet and the sky is born. */
-  var BB = reduced ? 0 : 2.1, BANG = 0.75, t0 = performance.now() + BB * 1000, born = reduced, bangLit = reduced;
+  var BB = reduced ? 0 : 2.5, BANG = 0.85, t0 = performance.now() + BB * 1000, born = reduced, bangLit = reduced;
   var motes = [];
   for (var mi = 0; mi < 46; mi++) motes.push({ a: rnd() * 6.283, r: 0.25 + rnd() * 0.6, s: 0.6 + rnd() * 1.6 });
+  // after the bang (after the NASA Goddard animation the owner shared): streaks of matter rushing past,
+  // violet nebula clouds and small galaxies that condense and then dissolve into Zyra's sky
+  var streaks = [], nebulae = [], galaxies = [];
+  for (var si = 0; si < (mob ? 110 : 170); si++) streaks.push({ a: rnd() * 6.283, v: 0.35 + rnd() * 0.75, w: 0.5 + rnd() * 1.4, lag: rnd() * 0.3 });
+  ['126,64,236', '176,84,230', '86,64,214', '150,70,250', '110,80,230', '190,100,240'].forEach(function (rgb) { nebulae.push({ fx: rnd(), fy: rnd(), r: 0.22 + rnd() * 0.3, rgb: rgb }); });
+  var galaxySprite = function (tint) {
+    var c = document.createElement('canvas'); c.width = c.height = 64;
+    var g = c.getContext('2d'), core = g.createRadialGradient(32, 32, 0, 32, 32, 12);
+    core.addColorStop(0, 'rgba(255,250,245,1)'); core.addColorStop(0.4, 'rgba(' + tint + ',.6)'); core.addColorStop(1, 'rgba(' + tint + ',0)');
+    g.fillStyle = core; g.fillRect(0, 0, 64, 64);
+    for (var arm = 0; arm < 2; arm++) for (var k = 0; k < 70; k++) {
+      var t = k / 70, ang = arm * Math.PI + t * 4.4, rad = 3 + t * 26;
+      g.globalAlpha = (1 - t) * 0.75; g.fillStyle = 'rgba(' + tint + ',1)';
+      g.beginPath(); g.arc(32 + Math.cos(ang) * rad, 32 + Math.sin(ang) * rad, 1.6 - t, 0, 6.283); g.fill();
+    }
+    return c;
+  };
+  var GAL = [galaxySprite('150,220,255'), galaxySprite('255,170,220'), galaxySprite('200,182,255')];
+  for (var gi0 = 0; gi0 < (mob ? 9 : 14); gi0++) galaxies.push({ fx: 0.04 + rnd() * 0.92, fy: 0.04 + rnd() * 0.92, s: 7 + rnd() * 18, rot: rnd() * 6.283, tilt: 0.3 + rnd() * 0.55, g: gi0 % 3 });
   if (reduced) { root.classList.remove('is-bang'); root.classList.add('is-born'); }
   // a point at screen share (fx, fy) and depth z, seen from the front
   var toX = function (fx, z) { return (fx * W - cx) * (CAM + z) / (FOC * scale); };
@@ -351,20 +370,39 @@
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    if (!reduced && bt < BB + 0.4) {
+    if (!reduced && bt < BB + 0.8) {
       // the dark before the sky: it lifts as the universe cools
-      var cool = since < 0 ? 0 : ease(clamp((since - 0.1) / 1.5));
-      if (cool < 1) { ctx.globalAlpha = 1 - cool; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
-      // the plasma cloud: white-gold at first, cooling to violet as it spreads
+      var cool = since < 0 ? 0 : ease(clamp((since - 0.3) / 1.7));
+      if (cool < 1) { ctx.globalAlpha = 1 - cool; ctx.fillStyle = '#04030f'; ctx.fillRect(0, 0, W, H); }
       if (since > 0) {
-        var pc = clamp(since / 1.5), cc = clamp(since / 0.6), PR = 30 + ease(clamp(since / 1.3)) * DIAG * 0.75, pa = 1 - pc;
+        ctx.globalCompositeOperation = 'lighter';
+        // the fireball: white core, pink-magenta rim, violet all around (the reference's colours)
+        var pc = clamp(since / 1.7), PR = 30 + ease(clamp(since / 1.0)) * DIAG * 0.8, pa = 1 - pc;
         var gp = ctx.createRadialGradient(BX, BY, 0, BX, BY, PR);
-        gp.addColorStop(0, 'rgba(' + Math.round(255 - 70 * cc) + ',' + Math.round(248 - 60 * cc) + ',' + Math.round(232 + 23 * cc) + ',' + 0.95 * pa * pa + ')'); // white-hot, cooling to lavender
-        gp.addColorStop(0.22, 'rgba(255,' + Math.round(200 - 90 * cc) + ',' + Math.round(130 + 125 * cc) + ',' + 0.55 * pa * pa + ')'); // gold at the start, rose as it cools (dim gold reads as brown)
-        gp.addColorStop(0.5, 'rgba(160,104,255,' + 0.45 * pa + ')');
-        gp.addColorStop(0.8, 'rgba(70,52,210,' + 0.25 * pa + ')');
-        gp.addColorStop(1, 'rgba(40,30,140,0)');
-        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gp; ctx.fillRect(BX - PR, BY - PR, PR * 2, PR * 2);
+        gp.addColorStop(0, 'rgba(255,255,255,' + 0.95 * pa * pa + ')');
+        gp.addColorStop(0.16, 'rgba(255,196,246,' + 0.7 * pa * pa + ')');
+        gp.addColorStop(0.32, 'rgba(222,120,255,' + 0.55 * pa + ')');
+        gp.addColorStop(0.6, 'rgba(140,80,255,' + 0.5 * pa + ')');
+        gp.addColorStop(0.85, 'rgba(80,50,200,' + 0.3 * pa + ')');
+        gp.addColorStop(1, 'rgba(40,24,120,0)');
+        ctx.globalAlpha = 1; ctx.fillStyle = gp; ctx.fillRect(BX - PR, BY - PR, PR * 2, PR * 2);
+        // nebula clouds condense, then thin out into the sky
+        var na = Math.sin(Math.PI * clamp((since - 0.25) / 2.1)) * 0.45;
+        if (na > 0.005) nebulae.forEach(function (nb) {
+          var nx = nb.fx * W, ny = nb.fy * H, nr = nb.r * Math.max(W, H) * (0.8 + 0.35 * clamp(since / 2.2));
+          var gn = ctx.createRadialGradient(nx, ny, 0, nx, ny, nr);
+          gn.addColorStop(0, 'rgba(' + nb.rgb + ',' + na + ')'); gn.addColorStop(0.5, 'rgba(' + nb.rgb + ',' + na * 0.45 + ')'); gn.addColorStop(1, 'rgba(' + nb.rgb + ',0)');
+          ctx.fillStyle = gn; ctx.fillRect(nx - nr, ny - nr, nr * 2, nr * 2);
+        });
+        // galaxies drift outward and fade, leaving the stars of the sky
+        var ga = Math.sin(Math.PI * clamp((since - 0.45) / 2.0));
+        if (ga > 0.005) galaxies.forEach(function (gx) {
+          var spread = 0.8 + 0.3 * clamp(since / 2.4);
+          ctx.save(); ctx.translate(BX + (gx.fx * W - BX) * spread, BY + (gx.fy * H - BY) * spread);
+          ctx.rotate(gx.rot + since * 0.15); ctx.scale(1, gx.tilt);
+          ctx.globalAlpha = ga * 0.9; ctx.drawImage(GAL[gx.g], -gx.s, -gx.s, gx.s * 2, gx.s * 2);
+          ctx.restore();
+        });
         ctx.globalCompositeOperation = 'source-over';
       }
       ctx.globalAlpha = 1;
@@ -552,28 +590,57 @@
       ctx.globalAlpha = 1;
     }
     // 9. the Big Bang itself, on top of everything
-    if (!reduced && bt < BANG + 1.4) {
+    if (!reduced && since < 2.4) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'lighter';
       if (since < 0) {
-        // the singularity: matter spirals into one point that pulses brighter and brighter
-        var g0 = clamp(bt / BANG), pulse = 0.75 + 0.25 * Math.sin(bt * 26 * (0.5 + g0));
+        // the singularity: a violet star in the dark, pulling matter in and pulsing faster and brighter
+        var g0 = clamp(bt / BANG), pulse = 0.78 + 0.22 * Math.sin(bt * 24 * (0.5 + g0));
         for (var mo = 0; mo < motes.length; mo++) {
           var mt = motes[mo], mr = mt.r * Math.min(W, H) * Math.pow(1 - g0, 1.6), ma = mt.a + g0 * mt.s * 3;
-          ctx.globalAlpha = 0.25 + 0.6 * g0; ctx.fillStyle = mo % 3 ? '#cfd6ff' : '#ffd9a0';
+          ctx.globalAlpha = 0.2 + 0.6 * g0; ctx.fillStyle = mo % 3 ? '#cfc4ff' : '#e6b8ff';
           ctx.fillRect(BX + Math.cos(ma) * mr - 1, BY + Math.sin(ma) * mr * 0.8 - 1, 2, 2);
         }
-        var hs0 = (14 + 120 * g0 * g0) * pulse;
-        ctx.globalAlpha = 0.5 + 0.5 * g0; ctx.drawImage(HALO_B, BX - hs0 / 2, BY - hs0 / 2, hs0, hs0);
-        ctx.globalAlpha = 1; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(BX, BY, 1.2 + 3 * g0 * pulse, 0, 6.283); ctx.fill();
+        var hs0 = (24 + 170 * g0 * g0) * pulse;
+        ctx.globalAlpha = 0.55 + 0.45 * g0; ctx.drawImage(HALO_V, BX - hs0 / 2, BY - hs0 / 2, hs0, hs0);
+        var spk = (8 + 60 * g0 * g0) * pulse;
+        ctx.save(); ctx.translate(BX, BY); ctx.rotate(bt * 0.35);
+        for (var r6 = 0; r6 < 6; r6++) {
+          var sl = r6 % 3 ? spk * 0.55 : spk, gs6 = ctx.createLinearGradient(0, 0, sl, 0);
+          gs6.addColorStop(0, 'rgba(255,255,255,.95)'); gs6.addColorStop(1, 'rgba(180,140,255,0)');
+          ctx.globalAlpha = 0.6 + 0.4 * g0; ctx.fillStyle = gs6; ctx.beginPath(); ctx.moveTo(0, -1); ctx.lineTo(sl, 0); ctx.lineTo(0, 1); ctx.closePath(); ctx.fill();
+          ctx.rotate(Math.PI / 3);
+        }
+        ctx.restore();
+        ctx.globalAlpha = 1; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(BX, BY, 1.4 + 2.6 * g0 * pulse, 0, 6.283); ctx.fill();
       } else {
-        // the shockwave and the flash
+        // matter rushing out toward us: streaks that lengthen as they come closer
+        for (var sk = 0; sk < streaks.length; sk++) {
+          var sx = streaks[sk], st = clamp((since - sx.lag) / 1.15);
+          if (st <= 0 || st >= 1) continue;
+          var r1 = 8 + Math.pow(st, 1.7) * DIAG * 0.75 * sx.v, r0 = r1 * (0.8 - 0.25 * st), ca = Math.cos(sx.a), sa = Math.sin(sx.a);
+          ctx.globalAlpha = (1 - st) * 0.8; ctx.strokeStyle = sk % 4 ? 'rgba(226,216,255,1)' : 'rgba(255,190,240,1)'; ctx.lineWidth = sx.w * (0.5 + 1.6 * st);
+          ctx.beginPath(); ctx.moveTo(BX + ca * r0, BY + sa * r0); ctx.lineTo(BX + ca * r1, BY + sa * r1); ctx.stroke();
+        }
+        // the shockwave
         var sw = ease(clamp(since / 1.0));
-        ctx.globalAlpha = Math.max(0, 0.85 * (1 - sw)); ctx.strokeStyle = '#fff6e6'; ctx.lineWidth = 3 + 6 * (1 - sw);
+        ctx.globalAlpha = Math.max(0, 0.7 * (1 - sw)); ctx.strokeStyle = '#f0d8ff'; ctx.lineWidth = 2 + 6 * (1 - sw);
         ctx.beginPath(); ctx.arc(BX, BY, 10 + sw * DIAG * 0.62, 0, 6.283); ctx.stroke();
-        var sw2 = ease(clamp((since - 0.12) / 1.2));
-        if (sw2 > 0) { ctx.globalAlpha = Math.max(0, 0.5 * (1 - sw2)); ctx.strokeStyle = '#b7a4ff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(BX, BY, 10 + sw2 * DIAG * 0.5, 0, 6.283); ctx.stroke(); }
-        var fl0 = Math.pow(Math.max(0, 1 - since / 0.5), 2);
-        if (fl0 > 0) { ctx.globalAlpha = 0.95 * fl0; ctx.fillStyle = '#fffaf0'; ctx.fillRect(0, 0, W, H); }
+        // the beam: a vertical flare that splits the sky from top to bottom, then fades
+        var bm = since < 0.12 ? since / 0.12 : Math.pow(Math.max(0, 1 - (since - 0.12) / 1.7), 1.5);
+        if (bm > 0) {
+          var bw = 26 + 110 * (1 - clamp(since / 1.4)), gbm = ctx.createLinearGradient(BX - bw, 0, BX + bw, 0);
+          gbm.addColorStop(0, 'rgba(170,140,255,0)'); gbm.addColorStop(0.5, 'rgba(236,226,255,' + 0.6 * bm + ')'); gbm.addColorStop(1, 'rgba(170,140,255,0)');
+          ctx.globalAlpha = 1; ctx.fillStyle = gbm; ctx.fillRect(BX - bw, 0, bw * 2, H);
+          ctx.globalAlpha = bm; ctx.fillStyle = '#fff'; ctx.fillRect(BX - 1, 0, 2, H);
+          var cg = 40 + 140 * bm; ctx.globalAlpha = bm; ctx.drawImage(HALO_V, BX - cg / 2, BY - cg / 2, cg, cg);
+        }
+        // the flash: the whole screen goes white for an instant
+        ctx.globalCompositeOperation = 'source-over';
+        var fl0 = Math.pow(Math.max(0, 1 - (since - 0.06) / 0.6), 2) * clamp(since / 0.06);
+        if (fl0 > 0) { // a violet glow under the white, so the fade passes through lavender instead of grey
+          ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = Math.min(1, fl0 * 1.6); ctx.fillStyle = '#7a4dff'; ctx.fillRect(0, 0, W, H);
+          ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 0.92 * fl0 * fl0; ctx.fillStyle = '#fbf6ff'; ctx.fillRect(0, 0, W, H); }
       }
       ctx.globalAlpha = 1;
     }

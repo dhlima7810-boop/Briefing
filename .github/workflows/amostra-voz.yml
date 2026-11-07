@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         motor: [xtts, f5]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # FFmpeg 6, que o torchcodec aceita
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4

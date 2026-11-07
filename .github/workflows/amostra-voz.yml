@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg espeak-ng
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg espeak-ng libavformat-dev libavcodec-dev libavutil-dev libswresample-dev libavdevice-dev libavfilter-dev libswscale-dev
       - name: Instalar
         run: |
           # torch 2.8 + torchcodec 0.7 são compatíveis entre si (o 2.9 quebrou o torchcodec)

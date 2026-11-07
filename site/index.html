@@ -32,17 +32,29 @@
   #bx-intro .load { margin-top: 28px; display: flex; align-items: center; gap: 14px; font-size: 13px; color: #9a9cc8; min-height: 20px; }
   #bx-intro .track { flex: 0 0 120px; height: 2px; background: rgba(190, 182, 255, .16); border-radius: 2px; overflow: hidden; }
   #bx-intro-bar { display: block; height: 100%; background: linear-gradient(90deg, #7b54ff, #9fb6ff); transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
-  #bx-intro .acts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; opacity: .35; transform: translateY(6px); transition: opacity .5s ease, transform .5s cubic-bezier(.2, .7, .2, 1); }
-  #bx-intro.is-ready .acts { opacity: 1; transform: none; }
-  #bx-intro .acts button { font: 600 14px/1 inherit; font-family: inherit; border-radius: 9999px; padding: 15px 22px; cursor: pointer; border: 1px solid transparent; transition: transform .2s ease, background-color .2s ease, border-color .2s ease; }
+  /* the two buttons are stars: dim protostars while loading, they ignite when the day is ready,
+     pulse like a supernova, tilt in 3D toward the finger, and burst when pressed */
+  #bx-intro .acts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; perspective: 700px; }
+  #bx-intro .acts button { --rx: 0deg; --ry: 0deg; --mx: 32%; --my: 30%; position: relative; isolation: isolate; font: 600 14px/1 inherit; font-family: inherit; border-radius: 9999px; padding: 16px 24px; cursor: pointer; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 11px; transform: rotateX(var(--rx)) rotateY(var(--ry)); transform-style: preserve-3d; transition: transform .35s cubic-bezier(.16, 1, .3, 1), box-shadow .35s ease, border-color .25s ease; opacity: .3; filter: blur(1.5px) saturate(.4); }
   #bx-intro .acts button:disabled { cursor: default; }
-  #bx-intro-go { background: #6a4dff; color: #fff; box-shadow: 0 8px 28px -10px rgba(110, 84, 255, .9); display: inline-flex; align-items: center; gap: 10px; }
-  #bx-intro-go:not(:disabled):hover { background: #7b60ff; transform: translateY(-1px); }
-  #bx-intro-go i { width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); }
-  #bx-intro.is-ready #bx-intro-go i { animation: bx-intro-ping 1.8s ease-out infinite; }
-  #bx-intro-read { background: rgba(10, 10, 46, .35); color: #e6e6ff; border-color: rgba(190, 182, 255, .28) !important; }
-  #bx-intro-read:not(:disabled):hover { border-color: rgba(190, 182, 255, .6) !important; }
-  #bx-intro ::selection { background: rgba(123, 84, 255, .45); color: #fff; }
+  #bx-intro.is-ready .acts button { opacity: 1; filter: none; animation: bx-ignite .9s cubic-bezier(.16, 1, .3, 1) both; }
+  #bx-intro.is-ready #bx-intro-read { animation-delay: .16s; }
+  #bx-intro .acts button i { position: relative; flex: 0 0 auto; width: 9px; height: 9px; border-radius: 50%; transform: translateZ(18px); }
+  #bx-intro .acts button::before, #bx-intro .acts button::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; opacity: 0; z-index: -1; }
+  #bx-intro-go { color: #fff; background: radial-gradient(130% 160% at var(--mx) var(--my), #b3a2ff 0%, #7458ff 34%, #4a35d8 70%, #2c1f9a 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 0 0 1px rgba(214, 206, 255, .3), 0 14px 34px -12px rgba(110, 84, 255, .95), 0 0 46px -8px rgba(150, 130, 255, .7); }
+  #bx-intro-go i { background: #fff; box-shadow: 0 0 6px 2px rgba(255, 255, 255, .9), 0 0 16px 5px rgba(170, 190, 255, .7); }
+  #bx-intro-read { color: #e9e8ff; background: radial-gradient(130% 160% at var(--mx) var(--my), rgba(70, 56, 190, .55) 0%, rgba(16, 14, 60, .55) 60%, rgba(8, 8, 36, .6) 100%); border-color: rgba(190, 182, 255, .3) !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 10px 26px -14px rgba(90, 70, 255, .8); }
+  #bx-intro-read i { width: 7px; height: 7px; background: #c9d4ff; box-shadow: 0 0 5px 1px rgba(170, 190, 255, .8); }
+  /* the supernova pulse: shells of light that leave the button and fade */
+  #bx-intro.is-ready #bx-intro-go::before { border: 1.5px solid rgba(200, 190, 255, .75); box-shadow: 0 0 18px rgba(150, 130, 255, .55); animation: bx-nova 2.6s cubic-bezier(.16, 1, .3, 1) 1s infinite; }
+  #bx-intro.is-ready #bx-intro-go::after { background: radial-gradient(closest-side, rgba(170, 150, 255, .5), rgba(170, 150, 255, 0)); animation: bx-nova-glow 2.6s cubic-bezier(.16, 1, .3, 1) 1s infinite; }
+  #bx-intro.is-ready #bx-intro-go i { animation: bx-core 2.6s ease-in-out 1s infinite; }
+  #bx-intro.is-ready #bx-intro-read::before { border: 1px solid rgba(190, 182, 255, .5); animation: bx-nova 2.6s cubic-bezier(.16, 1, .3, 1) 2.3s infinite; }
+  #bx-intro .acts button:not(:disabled):hover { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), inset 0 0 0 1px rgba(214, 206, 255, .45), 0 18px 40px -12px rgba(110, 84, 255, 1), 0 0 64px -6px rgba(160, 140, 255, .85); }
+  #bx-intro-read:not(:disabled):hover { border-color: rgba(190, 182, 255, .65) !important; }
+  #bx-intro .acts button:not(:disabled):active { transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(.96); transition-duration: .12s; }
+  /* pressed: the star collapses and bursts (the canvas draws the shockwave and the debris) */
+  #bx-intro .acts button.is-nova { animation: bx-burst .55s cubic-bezier(.2, .7, .2, 1) forwards !important; }
   #bx-intro .acts button:focus-visible { outline: 2px solid #b9a8ff; outline-offset: 3px; }
   #bx-intro .hint { position: absolute; right: max(24px, 6vw); bottom: max(32px, 8vh); font-size: 12px; color: #9a9cc8; letter-spacing: .02em; pointer-events: none; }
   #bx-intro.is-failed .load { color: #ff7ac9; }
@@ -50,7 +62,11 @@
   #bx-intro.is-leaving .copy, #bx-intro.is-leaving .brand, #bx-intro.is-leaving .hint { opacity: 0; transform: translateY(-10px); transition: opacity .35s ease, transform .35s ease; }
   html.bx-entering #dash-root { animation: bx-arrive 1.45s cubic-bezier(.2, .7, .2, 1) both; }
   @keyframes bx-arrive { 0% { transform: scale(1.06); filter: blur(10px); opacity: 0; } 55% { opacity: 0; } 100% { transform: none; filter: none; opacity: 1; } }
-  @keyframes bx-intro-ping { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .6); } 100% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } }
+  @keyframes bx-ignite { 0% { opacity: 0; transform: scale(.25); filter: blur(10px) brightness(3); } 35% { opacity: 1; transform: scale(1.07); filter: blur(0) brightness(1.9); } 100% { opacity: 1; transform: rotateX(var(--rx)) rotateY(var(--ry)); filter: none; } }
+  @keyframes bx-nova { 0% { opacity: .85; transform: scale(1); } 100% { opacity: 0; transform: scale(1.22, 1.9); } }
+  @keyframes bx-nova-glow { 0% { opacity: .9; transform: scale(.9); } 100% { opacity: 0; transform: scale(1.5, 2.6); } }
+  @keyframes bx-core { 0%, 100% { transform: translateZ(18px) scale(1); } 12% { transform: translateZ(18px) scale(1.7); } 30% { transform: translateZ(18px) scale(.9); } }
+  @keyframes bx-burst { 0% { transform: scale(1); filter: brightness(1); opacity: 1; } 25% { transform: scale(1.1); filter: brightness(2.4); opacity: 1; } 100% { transform: scale(1.5); filter: blur(12px) brightness(3); opacity: 0; } }
   @media (max-width: 759px) {
     #bx-intro .copy { left: 20px; right: 20px; bottom: max(24px, env(safe-area-inset-bottom)); }
     #bx-intro .brand { left: 20px; }
@@ -60,7 +76,8 @@
   @media (prefers-reduced-motion: reduce) {
     #bx-intro { transition: opacity .3s ease; }
     html.bx-entering #dash-root { animation: none; }
-    #bx-intro.is-ready #bx-intro-go i { animation: none; }
+    #bx-intro.is-ready .acts button, #bx-intro.is-ready .acts button::before, #bx-intro.is-ready .acts button::after, #bx-intro.is-ready .acts button i, #bx-intro .acts button.is-nova { animation: none !important; }
+    #bx-intro .acts button { transform: none !important; }
   }
 </style>
 <link rel="stylesheet" href="fonts.css">
@@ -76,7 +93,7 @@
     <div class="load" aria-live="polite"><span class="track"><span id="bx-intro-bar"></span></span><span id="bx-intro-status">Acordando a rede…</span></div>
     <div class="acts">
       <button type="button" id="bx-intro-go" disabled><i aria-hidden="true"></i>Entrar ouvindo a Zyra</button>
-      <button type="button" id="bx-intro-read" disabled>Só ler</button>
+      <button type="button" id="bx-intro-read" disabled><i aria-hidden="true"></i>Só ler</button>
     </div>
   </div>
   <p class="hint">Gire o nome como quiser. Quando parar, ele volta.</p>

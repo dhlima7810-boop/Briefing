@@ -1,6 +1,6 @@
 // Network first for the page and the day's data (always fresh), cache as offline fallback.
 // Audio files are versioned by the generation time, so they are served from cache once fetched.
-const CACHE = 'briefing-v9';
+const CACHE = 'briefing-v10';
 self.addEventListener('install', (e) => { self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));

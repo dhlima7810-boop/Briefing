@@ -185,14 +185,14 @@
   };
   resize(); window.addEventListener('resize', resize);
 
-  /* ---------- input: drag breaks the name apart, letting go puts it back ---------- */
-  var drag = null, uy = 0, up = 0, vyaw = 0, vpitch = 0, tilt = { x: 0, y: 0 }, ptr = { x: -1, y: -1, on: false };
-  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, uy: uy, up: up }; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
+  /* ---------- input: spin the name any way you like; once you stop for a moment, it comes back ---------- */
+  var drag = null, uy = 0, up = 0, vyaw = 0, vpitch = 0, lastTouch = -9, IDLE = 1.2, tilt = { x: 0, y: 0 }, ptr = { x: -1, y: -1, on: false };
+  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, uy: uy, up: up }; vyaw = vpitch = 0; lastTouch = (performance.now() - t0) / 1000; cv.setPointerCapture(e.pointerId); if (fireNear(e.clientX, e.clientY)) ping(); });
   cv.addEventListener('pointermove', function (e) {
     ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
     if (!drag) return;
-    var ny = drag.uy + (e.clientX - drag.x) * 0.006, np = Math.max(-1, Math.min(1, drag.up + (e.clientY - drag.y) * 0.004));
-    vyaw = ny - uy; vpitch = np - up; uy = ny; up = np;
+    var ny = drag.uy + (e.clientX - drag.x) * 0.006, np = Math.max(-1.45, Math.min(1.45, drag.up + (e.clientY - drag.y) * 0.005));
+    vyaw = ny - uy; vpitch = np - up; uy = ny; up = np; lastTouch = (performance.now() - t0) / 1000;
   });
   var release = function () { drag = null; };
   cv.addEventListener('pointerup', release); cv.addEventListener('pointercancel', release);
@@ -283,7 +283,13 @@
     var el = (now - t0) / 1000;
     // camera: the opening turn, the user's drag (springs back), a slow breath, and the phone's tilt
     var turn = reduced ? 1 : inout(clamp((el - TURN_AT) / TURN_FOR));
-    if (!drag) { uy += vyaw; vyaw *= 0.88; uy *= 0.94; up += vpitch; vpitch *= 0.88; up *= 0.94; }
+    if (!drag) {
+      // a flick keeps it spinning and slowing down, like a globe
+      uy += vyaw; vyaw *= 0.95; up = Math.max(-1.45, Math.min(1.45, up + vpitch)); vpitch *= 0.95;
+      if (Math.abs(vyaw) > 0.003 || Math.abs(vpitch) > 0.003) lastTouch = el;
+      // only after it has been still for a moment does it turn back (the short way) and the name reforms
+      if (el - lastTouch > IDLE) { uy = Math.atan2(Math.sin(uy), Math.cos(uy)) * 0.93; up *= 0.93; }
+    }
     var still = reduced ? 0 : turn;
     var yawN = OPEN_YAW * (1 - turn) + uy + Math.sin(el * 0.4) * 0.03 * still + tilt.x * 0.1;
     var pitchN = OPEN_PITCH * (1 - turn) + up + Math.sin(el * 0.31) * 0.015 * still + tilt.y * 0.05;
@@ -308,7 +314,7 @@
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
 
     // 1. veils: the far layers turn only a little (parallax), so the backdrop stays framed
-    rot(yawN * 0.22, pitchN * 0.22);
+    rot(Math.sin(yawN) * 0.3, Math.sin(pitchN) * 0.3); // bounded, so the backdrop never swings away
     var step = mob ? 0.04 : 0.025, tv = reduced ? 0 : el, f0 = leaving ? -0.7 : -0.15, f1 = leaving ? 1.7 : 1.16; // wider while the sky glides
     for (var v = 0; v < VEILS.length; v++) {
       var vl = VEILS[v], rows = [];

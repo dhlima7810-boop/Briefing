@@ -255,6 +255,25 @@
   .bx-rain .pct { color: var(--sky); font-weight: 600; }
   .bx-wx-tip { font-size: 18px; line-height: 1.55; color: var(--text); max-width: 540px; }
   .bx-wxchart { position: relative; margin-top: 40px; min-height: 150px; }
+  .bx-wxchart-leg { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--dim); margin-top: 6px; }
+  .bx-wxchart-leg i { width: 14px; height: 8px; border-radius: 2px; background: linear-gradient(90deg, rgba(95, 184, 255, .3), var(--sky)); }
+  .bx-day .nm { display: flex; flex-direction: column; min-width: 0; }
+  .bx-day .r { font-size: 12.5px; font-weight: 500; letter-spacing: 0; color: var(--sky); margin-top: 3px; }
+  .bx-day .r.dry { color: var(--dim); }
+  /* rain hour by hour, inside the day card */
+  .bx-hours { margin: 4px 0 24px; max-width: 540px; }
+  .bx-hours-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .bx-hours-top .t { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .bx-hours-top .v { font-size: 13px; font-weight: 600; color: var(--sky); font-variant-numeric: tabular-nums; }
+  .bx-hours-sum { font-size: 16px; line-height: 1.5; color: var(--bone); margin: 8px 0 12px; }
+  .bx-hours-bars { position: relative; display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); gap: 2px; align-items: end; height: 64px; border-bottom: 1px solid var(--hair); cursor: pointer; touch-action: pan-y; }
+  .bx-hours-bars i { display: block; height: 3px; min-height: 3px; border-radius: 2px 2px 0 0; background: rgba(95, 184, 255, .3); transition: height .7s cubic-bezier(.2, .7, .2, 1), opacity .2s ease; }
+  .bx-hours-bars i.wet { background: var(--sky); }
+  .bx-hours-bars i.past { opacity: .3; }
+  .bx-hours-bars i.sel { box-shadow: 0 0 0 1.5px #fff; }
+  .bx-hours-bars i.now { background: var(--saffron); }
+  .bx-hours-axis { display: grid; grid-template-columns: repeat(24, minmax(0, 1fr)); gap: 2px; margin-top: 6px; font-size: 11px; color: var(--dim); }
+  .bx-hours-axis span { white-space: nowrap; overflow: visible; }
 
   /* ---------- market ---------- */
   .bx-mkt { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); column-gap: 60px; }
@@ -351,6 +370,10 @@
   .bx-chart-title .t { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .bx-chart-title .h { font-size: 12px; color: var(--dim); }
   .bx-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .bx-chart-drop { font-size: 13px; font-weight: 600; color: var(--saffron); margin-bottom: 6px; }
+  @media (max-width: 640px) {
+    .bx-chartbox { min-height: 0; }
+  }
   .bx-chart .pt { cursor: pointer; }
   .bx-note { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; margin-top: 18px; min-height: 64px; }
   .bx-note .big { font-size: 38px; color: var(--bone); }
@@ -686,7 +709,8 @@
     inputs: ['weather'],
     fn: (weather) => weather.map((d) => ({
       day_label: d.day_label, weekday: d.weekday, date: d.date, condition: d.condition,
-      high: Math.round(Number(d.high)), low: Math.round(Number(d.low)), precip: Number(d.precip), tip: d.tip
+      high: Math.round(Number(d.high)), low: Math.round(Number(d.low)), precip: Number(d.precip), tip: d.tip,
+      hours: Array.isArray(d.hours) && d.hours.length >= 24 ? d.hours.slice(0, 24).map((v) => Math.max(0, Math.min(100, Math.round(Number(v) || 0)))) : null
     }))
   });
 
@@ -1166,6 +1190,103 @@
     return scene;
   };
 
+  // ---- rain hour by hour ----
+  // hours = 24 chances of rain (0h..23h). The daily routine leaves it in weather.json (filled from Open-Meteo when the
+  // site is published); the page also asks Open-Meteo for a fresher forecast when it opens, and keeps the file's if that fails.
+  const RAIN_MIN = 40; // from this chance on, the hour counts as "vai chover"
+  const liveHours = {};
+  let liveTried = false;
+  const hoursOf = (d) => (d && liveHours[d.date]) || (d && d.hours) || null;
+  const rainRuns = (hours) => {
+    if (!Array.isArray(hours) || hours.length < 24) return null;
+    const runs = []; let s = -1;
+    for (let h = 0; h < 24; h++) {
+      if (hours[h] >= RAIN_MIN) { if (s < 0) s = h; } else if (s >= 0) { runs.push([s, h]); s = -1; }
+    }
+    if (s >= 0) runs.push([s, 24]);
+    // a dry gap of a single hour does not split a rainy stretch
+    return runs.reduce((a, r) => { const l = a[a.length - 1]; if (l && r[0] - l[1] <= 1) l[1] = r[1]; else a.push(r.slice()); return a; }, []);
+  };
+  const joinPt = (parts) => (parts.length < 2 ? parts.join('') : parts.slice(0, -1).join(', ') + ' e ' + parts[parts.length - 1]);
+  const rainShort = (hours) => {
+    const runs = rainRuns(hours); if (!runs) return '';
+    if (!runs.length) return 'Sem chuva provável';
+    return 'Chuva ' + joinPt(runs.map(([a, b]) => a + 'h–' + (b % 24) + 'h'));
+  };
+  const rainSentence = (hours) => {
+    const runs = rainRuns(hours); if (!runs) return '';
+    if (!runs.length) return 'Nenhum horário com chuva provável.';
+    if (runs.length === 1 && runs[0][0] === 0 && runs[0][1] === 24) return 'Chuva provável o dia inteiro.';
+    return 'Chuva mais provável ' + joinPt(runs.map(([a, b]) => (a === 0 ? 'da 0h' : a === 1 ? 'da 1h' : 'das ' + a + 'h') + (b === 24 ? ' até a meia-noite' : ' às ' + b + 'h'))) + '.';
+  };
+  // the same idea, written the way Zyra says it out loud (same words as gen/voz_jarvis.py)
+  const rainSpeech = (hours) => {
+    const runs = rainRuns(hours); if (!runs) return '';
+    if (!runs.length) return 'Nenhum horário com chuva provável.';
+    if (runs.length === 1 && runs[0][0] === 0 && runs[0][1] === 24) return 'A chuva pode aparecer a qualquer hora do dia.';
+    return 'A chuva é mais provável ' + joinPt(runs.map(([a, b]) => (a === 0 ? 'da meia-noite' : a === 1 ? 'da uma' : 'das ' + a) + (b === 24 ? ' até a meia-noite' : ' às ' + b + ' horas'))) + '.';
+  };
+  const isoToday = () => { const n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); };
+  const fetchLiveHours = () => {
+    if (liveTried || typeof fetch !== 'function') return;
+    liveTried = true;
+    const ctl = 'AbortController' in window ? new AbortController() : null;
+    if (ctl) setTimeout(() => ctl.abort(), 8000);
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=-23.4538&longitude=-46.5333&hourly=precipitation_probability&timezone=America%2FSao_Paulo&forecast_days=8', ctl ? { signal: ctl.signal } : {})
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        const t = j && j.hourly && j.hourly.time, p = j && j.hourly && j.hourly.precipitation_probability;
+        if (!Array.isArray(t) || !Array.isArray(p)) return;
+        const by = {};
+        t.forEach((ts, i) => { const day = String(ts).slice(0, 10), h = Number(String(ts).slice(11, 13)); (by[day] = by[day] || new Array(24).fill(null))[h] = p[i]; });
+        let got = false;
+        Object.keys(by).forEach((day) => { if (by[day].every((v) => v !== null && v !== undefined)) { liveHours[day] = by[day].map((v) => Math.round(Number(v))); got = true; } });
+        if (got) safe(drawWeather);
+      })
+      .catch(() => {});
+  };
+  let hourPick = -1;
+  const buildHours = (d, animate) => {
+    const hours = hoursOf(d);
+    if (!hours) return null;
+    const box = el('div', 'bx-hours');
+    const top = el('div', 'bx-hours-top');
+    const read = el('span', 'v');
+    top.append(el('span', 't', 'Chuva hora a hora'), read);
+    const sum = el('p', 'bx-hours-sum', rainSentence(hours));
+    const bars = el('div', 'bx-hours-bars');
+    bars.setAttribute('role', 'img');
+    bars.setAttribute('aria-label', 'Chance de chuva em cada hora. ' + rainSentence(hours));
+    const today = d.date === isoToday();
+    const nowH = new Date().getHours();
+    const peak = hours.reduce((b, v, i) => (v > hours[b] ? i : b), 0);
+    const cells = hours.map((v, h) => {
+      const c = el('i', (v >= RAIN_MIN ? 'wet' : '') + (today && h < nowH ? ' past' : '') + (today && h === nowH ? ' now' : ''));
+      bars.appendChild(c);
+      return c;
+    });
+    const show = (h) => {
+      cells.forEach((c, i) => c.classList.toggle('sel', i === h));
+      const lab = today && h === nowH ? 'Agora (' + h + 'h)' : h + 'h';
+      read.textContent = lab + ' · ' + hours[h] + '% de chance';
+    };
+    const start = hourPick >= 0 ? hourPick : today ? nowH : peak;
+    show(start);
+    const pickAt = (e) => {
+      const r = bars.getBoundingClientRect();
+      const h = Math.max(0, Math.min(23, Math.floor((e.clientX - r.left) / r.width * 24)));
+      hourPick = h; show(h);
+    };
+    bars.addEventListener('pointerdown', pickAt);
+    bars.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.buttons) pickAt(e); });
+    const axis = el('div', 'bx-hours-axis');
+    for (let h = 0; h < 24; h++) axis.appendChild(el('span', '', h % 6 === 0 ? h + 'h' : ''));
+    box.append(top, sum, bars, axis);
+    const grow = () => cells.forEach((c, h) => { c.style.height = Math.max(3, hours[h]) + '%'; });
+    if (animate && !reduced()) requestAnimationFrame(() => requestAnimationFrame(grow)); else grow();
+    return box;
+  };
+
   let dayIndex = 0;
   let wxAnimate = false;
   // while Zyra reads the weather, the card shows the day she is talking about ("hoje", "sábado"…)
@@ -1182,7 +1303,7 @@
     });
     return best;
   };
-  const showDay = (i) => { if (i < 0 || i === dayIndex) return false; dayIndex = i; wxAnimate = true; drawWeather(); return true; };
+  const showDay = (i) => { if (i < 0 || i === dayIndex) return false; dayIndex = i; hourPick = -1; wxAnimate = true; drawWeather(); return true; };
   const drawWeather = () => {
     const days = document.getElementById('bx-days');
     const wx = document.getElementById('bx-wx');
@@ -1201,8 +1322,12 @@
       const t = el('span', 't');
       t.append(mark(el('span', '', d.high), { 'data-row': i, 'data-field': 'high' }), document.createTextNode('° / '),
         mark(el('span', '', d.low), { 'data-row': i, 'data-field': 'low' }), document.createTextNode('°'));
-      b.append(ic, mark(el('span', '', d.day_label), { 'data-row': i, 'data-field': 'day_label' }), t);
-      b.addEventListener('click', () => { if (dayIndex !== i) { dayIndex = i; wxAnimate = true; drawWeather(); } });
+      const nm = el('span', 'nm');
+      nm.append(mark(el('span', '', d.day_label), { 'data-row': i, 'data-field': 'day_label' }));
+      const rs = rainShort(hoursOf(d));
+      if (rs) nm.append(el('span', 'r' + (/^Sem/.test(rs) ? ' dry' : ''), rs));
+      b.append(ic, nm, t);
+      b.addEventListener('click', () => { if (dayIndex !== i) { dayIndex = i; hourPick = -1; wxAnimate = true; drawWeather(); } });
       b.addEventListener('keydown', (e) => {
         if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
         e.preventDefault();
@@ -1231,17 +1356,23 @@
     const pct = el('span', 'pct'); pct.append(mark(el('span', '', d.precip), { 'data-field': 'precip' }), document.createTextNode('%'));
     rain.append(el('span', '', 'Chance de chuva'), bar, pct);
     const tip = mark(el('p', 'bx-wx-tip', d.tip), { 'data-field': 'tip' });
-    card.append(buildScene(kind), when, num, cond, rain, tip);
+    card.append(buildScene(kind), when, num, cond, rain);
+    const hrs = buildHours(d, wxAnimate);
+    if (hrs) card.append(hrs);
+    card.append(tip);
     wx.replaceChildren(card);
     requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = Math.max(0, Math.min(100, d.precip)) + '%'; }));
     wxAnimate = false;
     drawWxChart(rows);
+    fetchLiveHours();
   };
 
   const drawWxChart = (rows) => {
     const box = document.getElementById('bx-wxchart');
-    const w = Math.max(box.clientWidth, 260), h = 150;
-    const m = { t: 22, r: 14, b: 26, l: 14 };
+    const strip = rows.some((d) => hoursOf(d));
+    const w = Math.max(box.clientWidth, 260), h = strip ? 184 : 150;
+    // with hourly rain, each day gets a little strip of 24 bars (0h to 23h) between the line and the day name
+    const m = { t: 22, r: 14, b: strip ? 60 : 26, l: 14 };
     box.replaceChildren();
     const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('aria-hidden', 'true');
     const x = d3.scalePoint(rows.map((d) => d.day_label), [m.l + 16, w - m.r - 16]);
@@ -1250,14 +1381,31 @@
     svg.append('path').datum(rows).attr('d', d3.line().x((d) => x(d.day_label)).y((d) => y(d.high))).attr('fill', 'none').attr('stroke', '#8052ff').attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
     svg.append('path').datum(rows).attr('d', d3.line().x((d) => x(d.day_label)).y((d) => y(d.low))).attr('fill', 'none').attr('stroke', '#6e6e74').attr('stroke-width', 1.5).attr('stroke-dasharray', '3 4');
     const g = svg.selectAll('g.day').data(rows).join('g').attr('class', 'day').style('cursor', 'pointer')
-      .on('click', (e, d) => { dayIndex = rows.indexOf(d); wxAnimate = true; drawWeather(); });
+      .on('click', (e, d) => { dayIndex = rows.indexOf(d); hourPick = -1; wxAnimate = true; drawWeather(); });
     g.append('rect').attr('x', (d) => x(d.day_label) - 22).attr('y', 0).attr('width', 44).attr('height', h).attr('fill', 'transparent');
+    if (strip) {
+      const sw = Math.min(46, (w - m.l - m.r) / rows.length - 8), base = h - 24, sh = 22, bw = sw / 24;
+      g.each(function (d, i) {
+        const hours = hoursOf(d); if (!hours) return;
+        const gx = d3.select(this), x0 = x(d.day_label) - sw / 2;
+        gx.append('line').attr('x1', x0).attr('x2', x0 + sw).attr('y1', base + 0.5).attr('y2', base + 0.5).attr('stroke', 'rgba(255,255,255,0.12)');
+        gx.selectAll('rect.h').data(hours).join('rect').attr('class', 'h')
+          .attr('x', (v, k) => x0 + k * bw + 0.2).attr('width', Math.max(0.8, bw - 0.4))
+          .attr('y', (v) => base - Math.max(1.5, v / 100 * sh)).attr('height', (v) => Math.max(1.5, v / 100 * sh))
+          .attr('fill', '#5fb8ff').attr('opacity', (v) => (v >= RAIN_MIN ? (i === dayIndex ? 1 : 0.8) : 0.28));
+      });
+    }
     g.append('circle').attr('cx', (d) => x(d.day_label)).attr('cy', (d) => y(d.high)).attr('r', (d, i) => (i === dayIndex ? 6 : 3.5))
       .attr('fill', (d, i) => (i === dayIndex ? '#8052ff' : '#000')).attr('stroke', '#8052ff').attr('stroke-width', 2);
     g.append('text').attr('x', (d) => x(d.day_label)).attr('y', (d) => y(d.high) - 11).attr('text-anchor', 'middle')
       .attr('fill', (d, i) => (i === dayIndex ? '#ffffff' : '#a6a6ab')).attr('font-size', 12).text((d) => d.high + '°');
     g.append('text').attr('x', (d) => x(d.day_label)).attr('y', h - 6).attr('text-anchor', 'middle')
       .attr('fill', (d, i) => (i === dayIndex ? '#ffb829' : '#a6a6ab')).attr('font-size', 11).text((d) => d.day_label.slice(0, 3));
+    if (strip) {
+      const leg = el('p', 'bx-wxchart-leg');
+      leg.append(el('i'), document.createTextNode('Chuva hora a hora, da 0h às 23h, embaixo de cada dia'));
+      box.appendChild(leg);
+    }
   };
 
   /* ================= market ================= */
@@ -1513,18 +1661,24 @@
     if (res.status !== 'ok') { box.replaceChildren(); note.replaceChildren(); if (res.status === 'error') box.append(el('p', 'bx-failed', 'Falha ao carregar')); return; }
     const rows = res.data.map((d) => ({ ...d, points: Number(d.points) }));
     if (chartPick >= rows.length) chartPick = rows.length - 1;
-    const w = Math.max(box.clientWidth, 300);
-    const h = Math.max(240, Math.min(340, w * 0.36));
-    const m = { t: 44, r: 30, b: 34, l: 30 };
+    const w = Math.max(box.clientWidth, 280);
+    // on a phone the chart is laid out differently: the headline goes above it, the scale sits in its own column,
+    // dates lose the year and only the chosen point shows its number, so nothing overlaps
+    const narrow = w < 560;
+    const h = narrow ? 260 : Math.max(240, Math.min(340, w * 0.36));
+    const m = narrow ? { t: 34, r: 18, b: 34, l: 50 } : { t: 44, r: 30, b: 34, l: 30 };
     box.replaceChildren();
     const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('aria-hidden', 'true');
-    const x = d3.scalePoint(rows.map((d) => d.date), [m.l + 40, w - m.r - 40]);
+    const x = d3.scalePoint(rows.map((d) => d.date), narrow ? [m.l + 16, w - m.r - 12] : [m.l + 40, w - m.r - 40]);
+    const short = (dt) => String(dt).replace(/\/\d{4}$/, '');
+    const tickTxt = (v) => (narrow ? fmtInt(Math.round(v / 1000)) + ' mil' : fmtInt(v));
     const lo = d3.min(rows, (d) => d.points), hi = d3.max(rows, (d) => d.points);
     const pad = (hi - lo) * 0.25 || 1000;
     const y = d3.scaleLinear([lo - pad, hi + pad], [h - m.b, m.t]);
     const ticks = y.ticks(4);
-    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', (v) => y(v)).attr('y2', (v) => y(v)).attr('stroke', 'rgba(255,255,255,0.07)');
-    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l).attr('y', (v) => y(v) - 6).attr('fill', '#6e6e74').attr('font-size', 11).text((v) => fmtInt(v));
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', narrow ? m.l - 4 : m.l).attr('x2', w - m.r).attr('y1', (v) => y(v)).attr('y2', (v) => y(v)).attr('stroke', 'rgba(255,255,255,0.07)');
+    if (narrow) svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l - 10).attr('y', (v) => y(v) + 4).attr('text-anchor', 'end').attr('fill', '#6e6e74').attr('font-size', 11).text(tickTxt);
+    else svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l).attr('y', (v) => y(v) - 6).attr('fill', '#6e6e74').attr('font-size', 11).text(tickTxt);
     const grad = svg.append('defs').append('linearGradient').attr('id', 'bx-ibov-fade').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
     [[0, .32], [.5, .1], [1, 0]].forEach(([o, a]) => grad.append('stop').attr('offset', o).attr('stop-color', '#8052ff').attr('stop-opacity', a));
     svg.append('path').datum(rows).attr('d', d3.area().x((d) => x(d.date)).y0(h - m.b).y1((d) => y(d.points))).attr('fill', 'url(#bx-ibov-fade)');
@@ -1535,17 +1689,24 @@
     }
     chartDrawn = true;
     const dropPct = (rows[rows.length - 1].points / rows[0].points - 1) * 100;
-    svg.append('text').attr('x', (x(rows[0].date) + x(rows[rows.length - 1].date)) / 2).attr('y', m.t - 18).attr('text-anchor', 'middle').attr('fill', '#ffb829').attr('font-size', 13).attr('font-weight', 600)
-      .text(dropPct.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '% do recorde ao último fechamento');
-    svg.append('g').selectAll('text').data(rows).join('text').attr('x', (d) => x(d.date)).attr('y', h - 10).attr('text-anchor', 'middle').attr('fill', (d, i) => (i === chartPick ? '#ffffff' : '#a6a6ab')).attr('font-size', 12).text((d) => d.date);
+    const dropTxt = dropPct.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '% do recorde ao último fechamento';
+    if (narrow) { const hd = el('p', 'bx-chart-drop', dropTxt); box.insertBefore(hd, box.firstChild); }
+    else svg.append('text').attr('x', (x(rows[0].date) + x(rows[rows.length - 1].date)) / 2).attr('y', m.t - 18).attr('text-anchor', 'middle').attr('fill', '#ffb829').attr('font-size', 13).attr('font-weight', 600).text(dropTxt);
+    svg.append('g').selectAll('text').data(rows).join('text').attr('x', (d) => x(d.date)).attr('y', h - 10).attr('text-anchor', 'middle').attr('fill', (d, i) => (i === chartPick ? '#ffb829' : '#a6a6ab')).attr('font-size', narrow ? 11 : 12).attr('font-weight', (d, i) => (narrow && i === chartPick ? 600 : 400)).text((d) => (narrow ? short(d.date) : d.date));
     const tip = el('div', 'bx-tip');
     box.appendChild(tip);
     const g = svg.selectAll('g.pt').data(rows).join('g').attr('class', 'pt');
-    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', 22).attr('fill', 'transparent');
+    g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', narrow ? Math.min(22, (x.step() || 44) / 2) : 22).attr('fill', 'transparent');
     g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 14 : 0)).attr('fill', 'rgba(255,184,41,0.18)');
     g.append('circle').attr('cx', (d) => x(d.date)).attr('cy', (d) => y(d.points)).attr('r', (d, i) => (i === chartPick ? 7 : 5.5)).attr('fill', '#000').attr('stroke', '#ffb829').attr('stroke-width', 2.5);
-    g.append('text').attr('x', (d) => x(d.date)).attr('y', (d) => y(d.points) - 16).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-size', 14).text((d) => fmtInt(d.points));
-    g.on('mouseenter', (e, d) => {
+    if (narrow) {
+      // only the chosen point gets its number on a phone, kept inside the chart's edges
+      const pd = rows[chartPick], px0 = x(pd.date), lbl = fmtInt(pd.points), half = lbl.length * 3.6 + 2;
+      svg.append('text').attr('x', Math.max(m.l + half - 8, Math.min(w - half, px0))).attr('y', y(pd.points) - 18).attr('text-anchor', 'middle')
+        .attr('fill', '#ffffff').attr('font-size', 13).attr('font-weight', 600).attr('pointer-events', 'none').text(lbl);
+    } else g.append('text').attr('x', (d) => x(d.date)).attr('y', (d) => y(d.points) - 16).attr('text-anchor', 'middle').attr('fill', '#ffffff').attr('font-size', 14).text((d) => fmtInt(d.points));
+    if (narrow) g.on('click', (e, d) => { chartPick = rows.indexOf(d); drawChart(); });
+    else g.on('mouseenter', (e, d) => {
       tip.replaceChildren(el('div', 'd', d.label + ' · ' + d.date), el('div', '', fmtInt(d.points) + ' pts'));
       const px = x(d.date) / w * box.clientWidth, py = y(d.points) / h * box.clientHeight;
       tip.style.left = Math.min(Math.max(px + 16, 0), box.clientWidth - 180) + 'px';
@@ -1851,7 +2012,7 @@
           const rest = w.data.slice(1);
           const hottest = rest.reduce((a, b) => (b.high > a.high ? b : a), rest[0] || d0);
           const wettest = rest.reduce((a, b) => (b.precip > a.precip ? b : a), rest[0] || d0);
-          sec('clima', 'Clima', [{ el: q('#bx-wx'), text: 'Primeiro, o tempo em Guarulhos. Hoje, ' + d0.condition.toLowerCase() + '. Máxima de ' + d0.high + ' graus, mínima de ' + d0.low + '. Chance de chuva de ' + d0.precip + ' por cento. ' + d0.tip + ' Nos próximos dias, o mais quente é ' + hottest.weekday.toLowerCase() + ', com ' + hottest.high + ' graus. E fique atento a ' + wettest.weekday.toLowerCase() + ': ' + wettest.condition.toLowerCase() + ', com ' + wettest.precip + ' por cento de chance de chuva.' }]);
+          sec('clima', 'Clima', [{ el: q('#bx-wx'), text: 'Primeiro, o tempo em Guarulhos. Hoje, ' + d0.condition.toLowerCase() + '. Máxima de ' + d0.high + ' graus, mínima de ' + d0.low + '. Chance de chuva de ' + d0.precip + ' por cento. ' + (d0.hours ? rainSpeech(d0.hours) + ' ' : '') + d0.tip + ' Nos próximos dias, o mais quente é ' + hottest.weekday.toLowerCase() + ', com ' + hottest.high + ' graus. E fique atento a ' + wettest.weekday.toLowerCase() + ': ' + wettest.condition.toLowerCase() + ', com ' + wettest.precip + ' por cento de chance de chuva.' }]);
         }
       });
       part(() => {
@@ -2207,7 +2368,7 @@
       const d = rows[idx];
       dayIndex = idx; wxAnimate = true; safe(drawWeather);
       const rain = /chov|chuva|guarda/.test(n);
-      return { text: (rain ? (d.precip >= 60 ? 'Sim, a chance é alta. ' : d.precip >= 35 ? 'Pode chover. ' : 'Pouco provável. ') : '') + d.day_label + ', ' + d.weekday.toLowerCase() + ': ' + d.condition.toLowerCase() + ', máxima de ' + d.high + ' e mínima de ' + d.low + ' graus, com ' + d.precip + ' por cento de chance de chuva. ' + d.tip, target: q('#bx-wx'), key: 'w' + idx };
+      return { text: (rain ? (d.precip >= 60 ? 'Sim, a chance é alta. ' : d.precip >= 35 ? 'Pode chover. ' : 'Pouco provável. ') : '') + d.day_label + ', ' + d.weekday.toLowerCase() + ': ' + d.condition.toLowerCase() + ', máxima de ' + d.high + ' e mínima de ' + d.low + ' graus, com ' + d.precip + ' por cento de chance de chuva. ' + (d.hours ? rainSpeech(d.hours) + ' ' : '') + d.tip, target: q('#bx-wx'), key: 'w' + idx };
     };
     const marketAnswer = (n) => {
       const m = dash.data('market');

@@ -85,22 +85,26 @@ jobs:
           curl -sSL -o k.tar.bz2 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2
           tar xjf k.tar.bz2 && rm k.tar.bz2
 
-      # Com o secret ELEVENLABS_API_KEY, a voz feminina vira a Roberta (ElevenLabs, pago).
-      # Sem o secret, ou se a ElevenLabs falhar, continua a Dora (Kokoro, grátis).
-      - name: Narrar (Alex e Dora/Roberta em paralelo)
+      # Primeira publicação só com a Dora (Kokoro, grátis; com o secret ELEVENLABS_API_KEY vira a Roberta).
+      # O Bond (voz clonada do Dheryck) é gerado depois, no job voz-dheryck, e entra numa 2ª publicação.
+      - name: Narrar (Dora)
         id: voz
         continue-on-error: true
         env:
           VOZ_FILES: '1'
-          VOZ_THREADS: '2'
+          VOZ_THREADS: '4'
+          VOZ_ONLY: dora
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: |
           mkdir -p /tmp/voz
-          VOZ_ONLY=alex python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & a=$!
-          VOZ_ONLY=dora python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & d=$!
-          wait $a && wait $d
+          python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz
           mv /tmp/voz/audio site/data/audio
           cp /tmp/voz/narration.json site/data/narration.json
+          python3 - <<'PY'
+          import json
+          m = json.load(open('site/data/meta.json', encoding='utf-8')); m['voices'] = ['dora']
+          json.dump(m, open('site/data/meta.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          PY
 
       - name: Aviso se a voz falhou
         if: steps.voz.outcome == 'failure'
@@ -134,9 +138,9 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 
-  # Voz do Dheryck (F5, clonada de voz/referencia-dheryck.m4a) no lugar do Alex.
-  # O site já saiu com a Dora (e o Alex do Kokoro); quando a voz clonada fica pronta,
-  # o mesmo site de hoje é publicado de novo, só trocando os áudios do Alex.
+  # Bond = voz do Dheryck (F5, clonada de voz/referencia-dheryck.m4a), arquivos audio/alex/.
+  # O site já saiu com a Dora; quando o Bond fica pronto, o mesmo site de hoje é publicado
+  # de novo com os áudios dele, e ele vira a voz padrão.
   # Se algo falhar aqui, o site continua como saiu na primeira publicação.
   voz-dheryck:
     needs: build
@@ -192,19 +196,20 @@ jobs:
           pattern: voz-dheryck-*
           merge-multiple: true
           path: /tmp/alex
-      - name: Trocar o Alex pela voz do Dheryck (só se veio tudo)
+      - name: Colocar o Bond (só se vieram todos os trechos)
         run: |
           python3 - <<'PY'
           import json, os, shutil, datetime
-          keys = [f[:-4] for f in os.listdir('site/data/audio/alex') if f.endswith('.mp3')]   # os mesmos trechos do Alex do Kokoro
+          keys = [f[:-4] for f in os.listdir('site/data/audio/dora') if f.endswith('.mp3')]   # os mesmos trechos da Dora
           have = {f[:-4] for f in os.listdir('/tmp/alex') if f.endswith('.mp3')}
           falta = [k for k in keys if k not in have]
           if falta: raise SystemExit(f'faltam {len(falta)} trechos: {falta[:5]}')
           shutil.rmtree('site/data/audio/alex', ignore_errors=True); shutil.copytree('/tmp/alex', 'site/data/audio/alex')
           m = json.load(open('site/data/meta.json', encoding='utf-8'))
           m['audio_stamp'] = datetime.datetime.now(datetime.timezone.utc).isoformat()   # o app baixa os áudios novos
+          m['voices'] = ['alex', 'dora']   # agora o Bond aparece (e vira a voz padrão)
           json.dump(m, open('site/data/meta.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-          print('voz do Dheryck:', len(keys), 'trechos')
+          print('Bond:', len(keys), 'trechos')
           PY
       - uses: actions/upload-pages-artifact@v3
         with:

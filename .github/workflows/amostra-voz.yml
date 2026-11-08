@@ -12,7 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        motor: [xtts, f5]
+        include:
+          - {motor: f5, nfe: 16}
+          - {motor: f5, nfe: 32}
     runs-on: ubuntu-24.04   # FFmpeg 6, que o torchcodec aceita
     timeout-minutes: 90
     steps:
@@ -33,12 +35,12 @@ jobs:
         run: |
           ffmpeg -loglevel error -y -i voz/referencia-dheryck.m4a -ac 1 -ar 24000 /tmp/ref.wav
           python3 gen/amostra/texto.py > /tmp/texto.txt; cat /tmp/texto.txt
-          python3 gen/amostra/${{ matrix.motor }}.py /tmp/ref.wav /tmp/out.wav
+          NFE=${{ matrix.nfe }} python3 gen/amostra/${{ matrix.motor }}.py /tmp/ref.wav /tmp/out.wav
           mkdir -p amostras
-          ffmpeg -loglevel error -y -i /tmp/out.wav -ac 1 -b:a 64k amostras/${{ matrix.motor }}.mp3
+          ffmpeg -loglevel error -y -i /tmp/out.wav -ac 1 -b:a 64k amostras/${{ matrix.motor }}-${{ matrix.nfe }}.mp3
       - name: Guardar na branch
         run: |
           git config user.name github-actions; git config user.email github-actions@users.noreply.github.com
-          git add amostras/${{ matrix.motor }}.mp3
-          git commit -m "Amostra ${{ matrix.motor }} [skip ci]"
+          git add amostras/${{ matrix.motor }}-${{ matrix.nfe }}.mp3
+          git commit -m "Amostra ${{ matrix.motor }}-${{ matrix.nfe }} [skip ci]"
           for i in 1 2 3; do git pull --rebase -q origin ${GITHUB_REF_NAME} && git push -q origin HEAD:${GITHUB_REF_NAME} && break; sleep 5; done

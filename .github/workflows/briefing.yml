@@ -150,7 +150,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        parte: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        parte: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -173,7 +173,7 @@ jobs:
       - name: Narrar a parte ${{ matrix.parte }}
         run: |
           ffmpeg -loglevel error -y -i voz/referencia-dheryck.m4a -ac 1 -ar 24000 /tmp/ref.wav
-          python3 gen/voz_f5.py /tmp/site/data/narration.json /tmp/ref.wav /tmp/alex ${{ matrix.parte }} 16
+          python3 gen/voz_f5.py /tmp/site/data/narration.json /tmp/ref.wav /tmp/alex ${{ matrix.parte }} 20
       - uses: actions/upload-artifact@v4
         with:
           name: voz-dheryck-${{ matrix.parte }}

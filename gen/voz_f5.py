@@ -25,7 +25,13 @@ spec = importlib.util.spec_from_file_location('vj', os.path.join(here, 'voz_jarv
 def main():
     nar, ref, out_dir, shard, shards = sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]), int(sys.argv[5])
     os.makedirs(out_dir, exist_ok=True)
-    units = [u for i, u in enumerate(json.load(open(nar, encoding='utf-8'))) if i % shards == shard]
+    allu = json.load(open(nar, encoding='utf-8'))
+    # balance the work: longest units first, each to the machine with the least work so far
+    load, mine = [0.0] * shards, []
+    for u in sorted(allu, key=lambda u: (-len(u['text']), u['key'])):
+        j = load.index(min(load)); load[j] += 1200 + len(u['text'])   # each chunk also re-reads the ~12 s reference
+        if j == shard: mine.append(u)
+    units = mine
     m = F5TTS(model='F5TTS_Base', ckpt_file=hf_hub_download(MODEL_REPO, MODEL_FILE), device='cpu')
     t0 = time.time(); chars = 0
     for u in units:

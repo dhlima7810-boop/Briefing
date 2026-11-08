@@ -1,6 +1,6 @@
 # Briefing Diário
 
-Painel pessoal com o resumo da manhã (clima em Guarulhos, mercado, notícias, IA, geopolítica) e narração em voz da Zyra (Dora ou Alex).
+Painel pessoal com o resumo da manhã (clima em Guarulhos, mercado, notícias, IA, geopolítica) e narração em voz do **Bond** (voz do Dheryck clonada com F5, padrão) ou da Zyra (Dora).
 
 Site: **https://dhlima7810-boop.github.io/Briefing/**
 
@@ -16,7 +16,8 @@ Pense numa padaria: o padeiro (Claude) faz o pão de madrugada, o entregador (Gi
 |---|---|---|
 | Publicador | `.github/workflows/briefing.yml` | Roda quando chegam JSON novos em `site/data/` ou manualmente |
 | Redator (modo API) | `gen/generate.py` | Chama o Claude com busca na web e grava `site/data/*.json` |
-| Voz | `gen/voz_jarvis.py` | Gera `narration.json` e os MP3 com o Kokoro (sherpa-onnx) |
+| Voz | `gen/voz_jarvis.py` | Gera `narration.json` e os MP3 da Dora (Kokoro; ElevenLabs se houver `ELEVENLABS_API_KEY`) |
+| Voz Bond | `gen/voz_f5.py` | Clona a voz de `voz/referencia-dheryck.m4a` (F5-TTS pt-BR) em 20 máquinas e publica de novo |
 | Site | `site/` | Página estática (PWA) que lê os JSON e toca o áudio |
 
 Regras de segurança:

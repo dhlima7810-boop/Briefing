@@ -39,7 +39,11 @@ SAY = [
     (r'\bB3\b', 'B três'), (r'\bCopom\b', 'Cópom'), (r'\bpts\b', 'pontos'), (r'\bp\.p\.', 'pontos percentuais'),
 ]
 
-def speakable(s):
+# ElevenLabs already says English names right; it only needs these
+SAY_EL = [(r'\bZyra\b', 'Záira'), (r'\bDheryck\b', 'Dérik'), (r'\bIA\b', 'I A'), (r'\bEUA\b', 'Estados Unidos'),
+          (r'\bpts\b', 'pontos'), (r'\bp\.p\.', 'pontos percentuais')]
+
+def speakable(s, say=None):
     s = str(s or '')
     s = re.sub(r'(\d{1,2})/(\d{1,2})/(\d{4})', lambda m: f"{int(m[1])} de {MONTHS[int(m[2]) - 1]} de {m[3]}" if 1 <= int(m[2]) <= 12 else m[0], s)
     s = re.sub(r'(\d{1,2})/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)/(\d{4})', lambda m: f"{int(m[1])} de {MONTHS[MON3[m[2].lower()]]} de {m[3]}", s, flags=re.I)
@@ -57,7 +61,7 @@ def speakable(s):
     s = re.sub(r'(\d)\.(?=\d{3}\b)', r'\1', s)
     s = re.sub(r'(?<![\w.,])([+−-])(?=\d)', lambda m: 'mais ' if m[1] == '+' else 'menos ', s)
     s = s.replace('%', ' por cento')
-    for pat, rep in SAY:
+    for pat, rep in (SAY if say is None else say):
         s = re.sub(pat, rep, s)
     s = re.sub(r'(\w)\s?[–—]\s?(\w)', r'\1, \2', s)
     s = re.sub(r'[▾▲▼·•"“”]', ' ', s)
@@ -269,6 +273,50 @@ def synth(text, sid, kdir):
 
 BITRATE = os.environ.get('VOZ_BITRATE', '24k')
 
+# ElevenLabs: when ELEVENLABS_API_KEY exists, the female voice (file name 'dora') is Roberta.
+# If any unit fails (no credit, network), the whole voice falls back to Kokoro Dora, so one
+# briefing never mixes two voices.
+EL_KEY = os.environ.get('ELEVENLABS_API_KEY', '').strip()
+EL_VOICE = os.environ.get('ELEVENLABS_VOICE', 'RGymW84CSmfVugnA5tvA')     # Roberta, pt-BR
+EL_MODEL = os.environ.get('ELEVENLABS_MODEL', 'eleven_flash_v2_5')
+EL_FOR = 'dora'
+
+def el_mp3(text):
+    import urllib.request
+    body = json.dumps({'text': speakable(text, SAY_EL), 'model_id': EL_MODEL, 'language_code': 'pt',
+                       'voice_settings': {'stability': 0.5, 'similarity_boost': 0.75, 'speed': 0.97}}).encode()
+    req = urllib.request.Request(f'https://api.elevenlabs.io/v1/text-to-speech/{EL_VOICE}?output_format=mp3_22050_32',
+                                 data=body, headers={'xi-api-key': EL_KEY, 'Content-Type': 'application/json', 'Accept': 'audio/mpeg'})
+    for tent in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return r.read()
+        except Exception as e:
+            code = getattr(e, 'code', None)
+            if code in (401, 402, 403, 422) or tent == 2: raise
+            import time; time.sleep(3 * (tent + 1))
+
+def mp3_secs(b):
+    with tempfile.NamedTemporaryFile(suffix='.mp3') as f:
+        f.write(b); f.flush()
+        r = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f.name], capture_output=True, text=True)
+        try: return float(r.stdout.strip())
+        except ValueError: return 0.0
+
+def eleven_voice(units):
+    """[(unit, mp3 bytes, secs)] for every unit, or None if ElevenLabs is off or failed."""
+    if not EL_KEY: return None
+    out = []
+    try:
+        for u in units:
+            if not speakable(u['text'], SAY_EL): continue
+            b = el_mp3(u['text']); out.append((u, b, mp3_secs(b)))
+    except Exception as e:
+        print(f'::warning::ElevenLabs falhou ({getattr(e, "code", "") or e}); usando a Dora (Kokoro).')
+        return None
+    print(f'ElevenLabs: {len(out)} trechos, {sum(len(speakable(u["text"], SAY_EL)) for u, _, _ in out)} caracteres')
+    return out
+
 def to_mp3_bytes(x, sr):
     import soundfile as sf
     with tempfile.TemporaryDirectory() as t:
@@ -296,7 +344,13 @@ def main():
         rows, total = [], 0.0
         adir = os.path.join(out_dir, 'audio', name)
         if as_files: os.makedirs(adir, exist_ok=True)
-        for u in units:
+        el = eleven_voice(units) if name == EL_FOR else None
+        if el is not None:
+            for u, b, secs in el:
+                total += secs
+                if as_files: open(os.path.join(adir, u['key'] + '.mp3'), 'wb').write(b)
+                else: rows.append({'key': u['key'], 'secs': round(secs, 2), 'mp3': base64.b64encode(b).decode('ascii')})
+        for u in (units if el is None else []):
             x, sr = synth(u['text'], sid, kdir)
             if x is None: continue
             total += len(x) / sr

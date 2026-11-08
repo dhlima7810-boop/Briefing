@@ -145,6 +145,7 @@
     return get('data/meta.json').then(function (r) { return r.json(); }).catch(function () { return {}; });
   }).then(function (meta) {
     stamp = (meta && (meta.audio_stamp || meta.generated_at)) || String(Date.now());
+    window.__bxVoices = meta && Array.isArray(meta.voices) ? meta.voices : null; // recorded voices published today
     var LABEL = { weather: 'o clima', market: 'o mercado', news: 'as notícias', ai_news: 'a IA', dossier: 'o dossiê', dossier_full: 'o dossiê completo', geopolitics: 'a geopolítica', ibov_trend: 'o Ibovespa', forces: 'o mapa de forças', glossary: 'o glossário', narration: 'a voz da Zyra' };
     var got = 0, tick = function (id) { got++; if (window.__intro) window.__intro.step(LABEL[id] || id, got, CORE.length); };
     return Promise.all(CORE.map(function (id) {

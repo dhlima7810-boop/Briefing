@@ -1873,9 +1873,10 @@
     const FEMALE = /(luciana|francisca|brenda|elza|giovanna|leila|leticia|letícia|manuela|yara|thalita|maria|raquel|fernanda|vitoria|vitória|joana|catarina|female|femin|google português)/i;
     let voices = [];
     const AC = window.AudioContext || window.webkitAudioContext;
-    const NEURAL_VOICES = [['n:dora', 'Zyra · feminina (neural)'], ['n:alex', 'Zyra · masculina (neural)']];
+    // 'alex' files hold Bond (Dheryck's cloned voice, the default); 'dora' is Zyra's female voice
+    const NEURAL_VOICES = [['n:alex', 'Bond'], ['n:dora', 'Zyra · feminina']];
     let picked = null;
-    try { picked = localStorage.getItem('bx-voice'); } catch (e) { }
+    try { picked = localStorage.getItem('bx-voice2'); } catch (e) { }
     const loadVoices = () => {
       const all = ok ? synth.getVoices().filter((v) => /^pt/i.test(v.lang)) : [];
       const score = (v) => (MALE.test(v.name) ? 100 : FEMALE.test(v.name) ? 0 : 40) + (/natural|neural|online|premium|enhanced/i.test(v.name) ? 20 : 0) + (/pt[-_]BR/i.test(v.lang) ? 10 : 0);
@@ -1883,7 +1884,8 @@
       const keep = voiceSel.value;
       voiceSel.replaceChildren();
       const nr = dash.data('narration'); // neural voices only when today's recorded narration exists
-      if (AC && nr.status === 'ok' && nr.data.length) NEURAL_VOICES.forEach(([v, l]) => voiceSel.append(new Option(l, v)));
+      const pub = window.__bxVoices; // null on older editions: offer both
+      if (AC && nr.status === 'ok' && nr.data.length) NEURAL_VOICES.filter(([v]) => !pub || pub.includes(v.slice(2))).forEach(([v, l]) => voiceSel.append(new Option(l, v)));
       voices.forEach((v) => {
         const tag = MALE.test(v.name) ? ' · masculina' : FEMALE.test(v.name) ? ' · feminina' : '';
         voiceSel.append(new Option('Aparelho · ' + v.name.replace(/Microsoft |Google |\(.*?\)| - .*$/g, '').trim() + tag, v.name));
@@ -2521,7 +2523,7 @@
     document.getElementById('bx-doc-listen').addEventListener('click', () => { root.classList.add('bx-awake'); startBriefing('dossie-completo'); });
     document.getElementById('bx-nav-jarvis').addEventListener('click', () => { document.getElementById('topo').scrollIntoView({ behavior: 'smooth', block: 'start' }); wake(); });
     voiceSel.addEventListener('change', () => {
-      picked = voiceSel.value; try { localStorage.setItem('bx-voice', picked); } catch (e) { }
+      picked = voiceSel.value; try { localStorage.setItem('bx-voice2', picked); } catch (e) { }
       script.forEach((x) => x.segs.forEach((g) => { delete g.noNeural; }));
       const nn = neuralName(); if (nn) voiceData(nn);
       if (state === 'playing' || state === 'paused') { cut(); state = 'playing'; pi = 0; speakPhrase(); } else setUI();

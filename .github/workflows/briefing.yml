@@ -85,28 +85,48 @@ jobs:
           curl -sSL -o k.tar.bz2 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2
           tar xjf k.tar.bz2 && rm k.tar.bz2
 
-      - name: Narrar (Alex e Dora em paralelo)
+      # Primeira publicação só com a Dora (Kokoro, grátis; com o secret ELEVENLABS_API_KEY vira a Roberta).
+      # O Bond (voz clonada do Dheryck) é gerado depois, no job voz-dheryck, e entra numa 2ª publicação.
+      - name: Narrar (Dora)
         id: voz
         continue-on-error: true
         env:
           VOZ_FILES: '1'
-          VOZ_THREADS: '2'
+          VOZ_THREADS: '4'
+          VOZ_ONLY: dora
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: |
           mkdir -p /tmp/voz
-          VOZ_ONLY=alex python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & a=$!
-          VOZ_ONLY=dora python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz & d=$!
-          wait $a && wait $d
+          python3 gen/voz_jarvis.py site/data kokoro-multi-lang-v1_0 /tmp/voz
           mv /tmp/voz/audio site/data/audio
           cp /tmp/voz/narration.json site/data/narration.json
+          python3 - <<'PY'
+          import json
+          m = json.load(open('site/data/meta.json', encoding='utf-8')); m['voices'] = ['dora']
+          json.dump(m, open('site/data/meta.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          PY
 
       - name: Aviso se a voz falhou
         if: steps.voz.outcome == 'failure'
         run: echo "::warning::A narração falhou; o site sai hoje sem voz (dados normais)."
 
+      - name: Marcar se há narração (para a voz do Dheryck)
+        id: nar
+        run: echo "ok=$(python3 -c "import json;print('1' if json.load(open('site/data/narration.json')) else '0')")" >> "$GITHUB_OUTPUT"
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
+
+      # o mesmo site de hoje, para a segunda publicação com a voz do Dheryck
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-do-dia
+          path: site
+          retention-days: 2
+    outputs:
+      narracao: ${{ steps.nar.outputs.ok }}
 
   deploy:
     needs: build
@@ -117,3 +137,85 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Bond = voz do Dheryck (F5, clonada de voz/referencia-dheryck.m4a), arquivos audio/alex/.
+  # O site já saiu com a Dora; quando o Bond fica pronto, o mesmo site de hoje é publicado
+  # de novo com os áudios dele, e ele vira a voz padrão.
+  # Se algo falhar aqui, o site continua como saiu na primeira publicação.
+  voz-dheryck:
+    needs: build
+    if: needs.build.outputs.narracao == '1'
+    runs-on: ubuntu-24.04   # FFmpeg 6, que o torchcodec aceita
+    timeout-minutes: 150
+    strategy:
+      fail-fast: true
+      matrix:
+        parte: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-do-dia
+          path: /tmp/site
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-f5-pt-br-v1
+      - name: Instalar
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg libavformat-dev libavcodec-dev libavutil-dev libswresample-dev libavdevice-dev libavfilter-dev libswscale-dev
+          printf 'torch==2.8.0\ntorchaudio==2.8.0\ntorchcodec==0.7.0\n' > /tmp/c.txt
+          pip install -q torch==2.8.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -q torchcodec==0.7.0 && pip install -q -c /tmp/c.txt f5-tts numpy soundfile huggingface_hub
+      - name: Narrar a parte ${{ matrix.parte }}
+        run: |
+          ffmpeg -loglevel error -y -i voz/referencia-dheryck.m4a -ac 1 -ar 24000 /tmp/ref.wav
+          python3 gen/voz_f5.py /tmp/site/data/narration.json /tmp/ref.wav /tmp/alex ${{ matrix.parte }} 20
+      - uses: actions/upload-artifact@v4
+        with:
+          name: voz-dheryck-${{ matrix.parte }}
+          path: /tmp/alex
+          retention-days: 1
+
+  publicar-voz-dheryck:
+    needs: [build, deploy, voz-dheryck]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-do-dia
+          path: site
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: voz-dheryck-*
+          merge-multiple: true
+          path: /tmp/alex
+      - name: Colocar o Bond (só se vieram todos os trechos)
+        run: |
+          python3 - <<'PY'
+          import json, os, shutil, datetime
+          keys = [f[:-4] for f in os.listdir('site/data/audio/dora') if f.endswith('.mp3')]   # os mesmos trechos da Dora
+          have = {f[:-4] for f in os.listdir('/tmp/alex') if f.endswith('.mp3')}
+          falta = [k for k in keys if k not in have]
+          if falta: raise SystemExit(f'faltam {len(falta)} trechos: {falta[:5]}')
+          shutil.rmtree('site/data/audio/alex', ignore_errors=True); shutil.copytree('/tmp/alex', 'site/data/audio/alex')
+          m = json.load(open('site/data/meta.json', encoding='utf-8'))
+          m['audio_stamp'] = datetime.datetime.now(datetime.timezone.utc).isoformat()   # o app baixa os áudios novos
+          m['voices'] = ['alex', 'dora']   # agora o Bond aparece (e vira a voz padrão)
+          json.dump(m, open('site/data/meta.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          print('Bond:', len(keys), 'trechos')
+          PY
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+          name: github-pages-dheryck
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-dheryck

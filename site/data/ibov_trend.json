@@ -6,12 +6,6 @@
   "note": "Maior fechamento da história, segundo a Suno."
  },
  {
-  "label": "Pós-reeleição",
-  "date": "26/10/2026",
-  "points": 176608,
-  "note": "Queda de 13,88%, com circuit breaker no dia seguinte à eleição."
- },
- {
   "label": "Fim de outubro",
   "date": "30/10/2026",
   "points": 167921.8,
@@ -30,9 +24,15 @@
   "note": "Alta de 1,23%, que interrompeu seis quedas seguidas."
  },
  {
-  "label": "Último fechamento",
+  "label": "Tombo da tecnologia",
   "date": "05/11/2026",
   "points": 166191.45,
-  "note": "Queda de 0,82%, com o tombo da tecnologia em Wall Street."
+  "note": "Queda de 0,82%, junto com Wall Street."
+ },
+ {
+  "label": "Último fechamento",
+  "date": "06/11/2026",
+  "points": 168498.45,
+  "note": "Alta de 1,39%. Na semana, subiu 0,34%."
  }
 ]

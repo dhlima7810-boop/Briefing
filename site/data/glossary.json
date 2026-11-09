@@ -1,5 +1,48 @@
 [
  {
+  "term": "Selic",
+  "aliases": [
+   "taxa Selic"
+  ],
+  "section": "mercado",
+  "text": "É a taxa básica de juros do Brasil. Serve de referência para empréstimos e investimentos."
+ },
+ {
+  "term": "Copom",
+  "aliases": [
+   "Comitê de Política Monetária"
+  ],
+  "section": "mercado",
+  "text": "É o grupo do Banco Central que decide a Selic. Ele se reúne a cada 45 dias, mais ou menos."
+ },
+ {
+  "term": "Ibovespa",
+  "aliases": [
+   "Ibov",
+   "bolsa"
+  ],
+  "section": "mercado",
+  "text": "É o principal índice da bolsa brasileira, a B3. Mostra o desempenho médio das maiores empresas."
+ },
+ {
+  "term": "Payroll",
+  "aliases": [
+   "relatório de emprego",
+   "payroll americano"
+  ],
+  "section": "mercado",
+  "text": "É o relatório mensal de empregos dos Estados Unidos. Mostra quantas vagas foram criadas fora do campo."
+ },
+ {
+  "term": "ETF",
+  "aliases": [
+   "ETFs",
+   "fundo de índice"
+  ],
+  "section": "mercado",
+  "text": "É um fundo negociado na bolsa como se fosse uma ação. Ele segue um índice ou um ativo, como o bitcoin."
+ },
+ {
   "term": "Nasdaq",
   "aliases": [
    "Nasdaq Composite"
@@ -8,189 +51,146 @@
   "text": "É o índice da bolsa americana onde estão as grandes empresas de tecnologia. Serve de termômetro do setor."
  },
  {
-  "term": "Ibovespa",
+  "term": "Fed",
   "aliases": [
-   "Ibov",
-   "Bovespa"
+   "Federal Reserve",
+   "banco central americano"
   ],
   "section": "mercado",
-  "text": "É o principal índice da bolsa brasileira, a B3. Mostra a média das ações mais negociadas."
+  "text": "É o banco central dos Estados Unidos. Ele decide os juros por lá, o que afeta o dólar no mundo todo."
  },
  {
-  "term": "Selic",
+  "term": "Dívida pública",
   "aliases": [
-   "taxa Selic",
-   "taxa básica de juros"
-  ],
-  "section": "mercado",
-  "text": "É a taxa básica de juros do Brasil. Ela influencia o custo de empréstimos e o rendimento da renda fixa."
- },
- {
-  "term": "Copom",
-  "aliases": [
-   "Comitê de Política Monetária"
-  ],
-  "section": "mercado",
-  "text": "É o comitê do Banco Central que define a Selic. Reúne-se oito vezes por ano."
- },
- {
-  "term": "liquidação",
-  "aliases": [
-   "liquidações",
-   "liquidado"
-  ],
-  "section": "mercado",
-  "text": "Acontece quando uma corretora encerra à força uma aposta feita com dinheiro emprestado. Ocorre quando o preço vai contra o investidor."
- },
- {
-  "term": "ETF",
-  "aliases": [
-   "fundo de índice",
-   "ETFs"
-  ],
-  "section": "mercado",
-  "text": "É um fundo negociado na bolsa como se fosse uma ação. Alguns acompanham o preço do bitcoin."
- },
- {
-  "term": "Brent",
-  "aliases": [
-   "petróleo Brent"
-  ],
-  "section": "mercado",
-  "text": "É o petróleo de referência internacional, extraído no Mar do Norte. Seu preço serve de base para muitos contratos."
- },
- {
-  "term": "resultado primário",
-  "aliases": [
-   "primário",
-   "superávit primário"
+   "dívida do governo"
   ],
   "section": "noticias",
-  "text": "É a diferença entre o que o governo arrecada e o que gasta, sem contar os juros da dívida."
+  "text": "É o total que o governo deve a quem emprestou dinheiro a ele. Quando cresce rápido, os juros tendem a subir."
  },
  {
-  "term": "regras fiscais",
+  "term": "Regras fiscais",
   "aliases": [
    "arcabouço fiscal",
-   "regra fiscal"
+   "metas fiscais"
   ],
   "section": "noticias",
-  "text": "São as normas que limitam quanto o governo pode gastar e se endividar."
+  "text": "São os limites que o governo se impõe para gastar e se endividar. Servem para dar previsibilidade às contas."
+ },
+ {
+  "term": "PIB",
+  "aliases": [
+   "Produto Interno Bruto"
+  ],
+  "section": "noticias",
+  "text": "É a soma de tudo o que o país produz em um período. Mede o tamanho da economia."
  },
  {
   "term": "COP31",
   "aliases": [
-   "COP 31",
+   "COP",
    "conferência do clima"
   ],
   "section": "noticias",
-  "text": "É a conferência anual da ONU sobre mudança do clima. Em 2026, acontece em Antália, na Turquia."
- },
- {
-  "term": "Asean",
-  "aliases": [
-   "Associação de Nações do Sudeste Asiático"
-  ],
-  "section": "noticias",
-  "text": "É o bloco de países do Sudeste Asiático, como Filipinas, Indonésia e Vietnã."
- },
- {
-  "term": "impeachment",
-  "aliases": [
-   "juicio político"
-  ],
-  "section": "noticias",
-  "text": "É o processo em que o Legislativo julga e pode afastar um presidente ou alto funcionário."
- },
- {
-  "term": "Ueno Bank",
-  "aliases": [
-   "Ueno",
-   "banco Ueno"
-  ],
-  "section": "noticias",
-  "text": "É um banco digital paraguaio que foi liquidado pelo Banco Central do país em novembro de 2026."
+  "text": "É a conferência anual da ONU sobre mudança do clima. Em 2026, acontece em Antalya, na Turquia."
  },
  {
   "term": "Estreito de Ormuz",
   "aliases": [
    "Ormuz"
   ],
-  "section": "geopolitica",
-  "text": "É a passagem marítima entre o Irã e Omã. Por ela passa uma grande parte do petróleo do mundo."
+  "section": "dossie",
+  "text": "É uma passagem marítima estreita entre o Irã e a península Arábica. Por ali passa boa parte do petróleo do mundo."
  },
  {
-  "term": "Guarda Revolucionária",
+  "term": "Urânio enriquecido",
   "aliases": [
-   "IRGC",
-   "Guarda Revolucionária Islâmica"
+   "enriquecimento de urânio"
   ],
   "section": "dossie",
-  "text": "É a força militar de elite do Irã, ligada diretamente ao líder supremo."
+  "text": "É urânio processado para ter mais do tipo que gera energia. Em alto grau, pode ser usado em armas nucleares."
  },
  {
-  "term": "data center",
+  "term": "Itamaraty",
   "aliases": [
-   "data centers",
-   "centro de dados"
+   "Ministério das Relações Exteriores"
   ],
-  "section": "ia",
-  "text": "É um prédio cheio de computadores que guardam dados e rodam serviços, incluindo a IA."
+  "section": "dossie",
+  "text": "É o ministério que cuida da diplomacia brasileira. O nome vem do palácio onde funcionou."
+ },
+ {
+  "term": "Mercosul",
+  "aliases": [],
+  "section": "noticias",
+  "text": "É o bloco comercial formado por Brasil, Argentina, Paraguai, Uruguai e Bolívia. Facilita o comércio entre eles."
+ },
+ {
+  "term": "Itaipu",
+  "aliases": [
+   "usina de Itaipu"
+  ],
+  "section": "noticias",
+  "text": "É a usina hidrelétrica que Brasil e Paraguai dividem, no rio Paraná. É uma das maiores do mundo."
  },
  {
   "term": "Nvidia",
   "aliases": [],
   "section": "ia",
-  "text": "É a empresa americana que fabrica os chips mais usados para treinar e rodar inteligência artificial."
+  "text": "É a empresa americana que mais vende chips para inteligência artificial. É uma das maiores empresas do mundo."
  },
  {
-  "term": "AMD",
+  "term": "Data center",
   "aliases": [
-   "Advanced Micro Devices"
+   "data centers",
+   "centro de dados"
   ],
   "section": "ia",
-  "text": "É uma fabricante americana de chips, concorrente da Nvidia e da Intel."
+  "text": "É um prédio cheio de computadores que guardam dados e rodam serviços, como a IA. Consome muita energia."
  },
  {
-  "term": "CoreWeave",
-  "aliases": [],
-  "section": "ia",
-  "text": "É uma empresa americana que aluga acesso a chips de IA pela nuvem."
- },
- {
-  "term": "agente de IA",
+  "term": "IPO",
   "aliases": [
-   "agentes de IA",
+   "abertura de capital",
+   "estreia na bolsa"
+  ],
+  "section": "ia",
+  "text": "É quando uma empresa passa a vender ações na bolsa pela primeira vez."
+ },
+ {
+  "term": "Agente de IA",
+  "aliases": [
+   "agentes",
    "agente"
   ],
   "section": "ia",
-  "text": "É uma IA que executa tarefas sozinha, como fazer compras ou escrever código, e não apenas responde perguntas."
+  "text": "É uma IA que executa tarefas sozinha, em várias etapas, em vez de só responder perguntas."
  },
  {
-  "term": "Codex",
+  "term": "Oracle",
   "aliases": [],
   "section": "ia",
-  "text": "É a ferramenta da OpenAI que escreve e corrige código de programas com inteligência artificial."
+  "text": "É uma empresa americana de software e computação em nuvem. Aluga servidores para empresas de IA."
  },
  {
-  "term": "GitHub",
+  "term": "Siri",
   "aliases": [],
   "section": "ia",
-  "text": "É o maior site do mundo para guardar e compartilhar código de programas. Pertence à Microsoft."
+  "text": "É a assistente de voz da Apple, presente no iPhone e em outros aparelhos."
  },
  {
-  "term": "Linux",
-  "aliases": [],
-  "section": "ia",
-  "text": "É um sistema operacional gratuito e aberto, usado na maioria dos servidores da internet e no Android."
- },
- {
-  "term": "Tesouro dos EUA",
+  "term": "Bitcoin",
   "aliases": [
-   "Departamento do Tesouro",
-   "Tesouro americano"
+   "BTC"
+  ],
+  "section": "mercado",
+  "text": "É a maior criptomoeda do mundo. É digital e não é emitida por nenhum governo."
+ },
+ {
+  "term": "Inflação ao consumidor",
+  "aliases": [
+   "CPI",
+   "índice de preços ao consumidor"
   ],
   "section": "dossie",
-  "text": "É o ministério da Fazenda dos Estados Unidos. Também aplica sanções econômicas a outros países."
+  "text": "Mede quanto sobem os preços que as famílias pagam. Nos Estados Unidos, a sigla é CPI."
  }
 ]

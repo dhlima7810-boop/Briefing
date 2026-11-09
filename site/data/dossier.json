@@ -3,22 +3,22 @@
   "block": "A",
   "country": "EUA",
   "title": "Bloco A — Trump, Irã e instrumentos executivos",
-  "summary": "O Irã mandou uma proposta nuclear pelo Catar, e Trump mistura ameaça com espera. Não achamos nova ordem executiva, só sanções do Tesouro.",
+  "summary": "Trump diz que novo ataque é improvável se houver acordo, mas mantém a ameaça. Não achamos ordem executiva nova sobre o Irã.",
   "events": [
    {
-    "date": "04/11/2026",
-    "headline": "Sanções contra apoio ao Irã",
-    "detail": "O Tesouro puniu empresas e pessoas na Índia e na Turquia. O objetivo é cortar as vendas de petróleo iraniano."
+    "date": "06/11/2026",
+    "headline": "Conversa com o emir do Catar",
+    "detail": "Trump discutiu a mediação do Catar. O Irã analisa propostas sobre o programa nuclear."
    },
    {
-    "date": "05/11/2026",
-    "headline": "Proposta nuclear via Catar",
-    "detail": "Segundo a Reuters, Washington analisa o texto. Trump disse que preferia não destruir o resto do Irã, mas que talvez precise."
+    "date": "08/11/2026",
+    "headline": "Ataque muito improvável, diz Trump",
+    "detail": "Ele disse à CNN que depende de um acordo muito forte. Afirmou ter três porta-aviões na região."
    },
    {
-    "date": "05/11/2026",
-    "headline": "Hegseth sob pressão",
-    "detail": "O deputado Thomas Massie quer forçar votação de impeachment do secretário de Defesa. Trump disse que ele faz um ótimo trabalho."
+    "date": "08/11/2026",
+    "headline": "Rubio mais cético",
+    "detail": "O secretário de Estado disse que não há um avanço iminente. Chamou as exigências do Irã de irreais."
    }
   ]
  },
@@ -26,22 +26,22 @@
   "block": "B",
   "country": "Brasil",
   "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
-  "summary": "Sem fato oficial novo hoje. O último foi a negativa argentina, em 1º de novembro, sobre o caso Flávio Bolsonaro.",
+  "summary": "Sem fato oficial novo. O último foi a negativa argentina, em 1º de novembro, sobre o caso Flávio Bolsonaro.",
   "events": [
-   {
-    "date": "27/10/2026",
-    "headline": "Flávio Bolsonaro sai pela Argentina",
-    "detail": "A família cruzou de Foz do Iguaçu a Puerto Iguazú e seguiu em voo privado até Miami."
-   },
    {
     "date": "29/10/2026",
     "headline": "Itamaraty convoca diplomata argentina",
-    "detail": "María Emilia Cortés foi chamada para explicar suposta ajuda do governo Milei. Não há prova pública dessa ajuda."
+    "detail": "Foi chamada para explicar suposta ajuda do governo Milei à saída de Flávio. Não há prova pública dessa ajuda."
    },
    {
     "date": "01/11/2026",
     "headline": "Buenos Aires nega pedido formal",
-    "detail": "O chanceler Pablo Quirno negou que o Brasil tenha pedido explicações. Não negou que a reunião ocorreu."
+    "detail": "O chanceler Pablo Quirno negou que o Brasil tenha pedido explicações."
+   },
+   {
+    "date": "08/11/2026",
+    "headline": "Soberania no pronunciamento",
+    "detail": "Lula disse que o Brasil não cabe no quintal de ninguém. Não citou a Argentina pelo nome."
    }
   ]
  },
@@ -49,22 +49,22 @@
   "block": "C",
   "country": "Análise",
   "title": "Bloco C — Leitura cruzada",
-  "summary": "O alívio de quarta durou pouco. O tombo da tecnologia nos EUA e a falta de medidas fiscais levaram o dólar ao maior valor do ano.",
+  "summary": "A semana fechou com respiro na bolsa e dólar firme. Agora o foco é se Lula vai transformar a promessa fiscal em medidas.",
   "events": [
    {
-    "date": "05/11/2026",
-    "headline": "Nasdaq cai 5,5%",
-    "detail": "O medo de regras para data centers de IA derrubou Nvidia e AMD. O bitcoin caiu junto."
+    "date": "06/11/2026",
+    "headline": "Emprego forte nos EUA",
+    "detail": "Foram 165 mil vagas em outubro. O dólar subiu no mundo e fechou a R$ 5,51 aqui."
    },
    {
-    "date": "05/11/2026",
-    "headline": "Reunião sem anúncio",
-    "detail": "Lula ouviu ministros e economistas. As medidas ficam para a volta da viagem à COP31 e à Asean."
+    "date": "06/11/2026",
+    "headline": "Ibovespa sobe 1,39%",
+    "detail": "A bolsa recuperou parte da queda de quinta e fechou a semana em leve alta."
    },
    {
-    "date": "05/11/2026",
-    "headline": "Dólar a R$ 5,49",
-    "detail": "A moeda subiu 0,68% e o Ibovespa caiu 0,82%. Petrobras e Bradesco pesaram."
+    "date": "08/11/2026",
+    "headline": "Promessa sem detalhes",
+    "detail": "Lula disse que dívida e juros o preocupam. As medidas ficam para as próximas semanas."
    }
   ]
  }

@@ -2,32 +2,32 @@
  {
   "id": "usd",
   "label": "Dólar (USD/BRL)",
-  "value": "R$ 5,489",
-  "delta": "+0,68%",
+  "value": "R$ 5,509",
+  "delta": "+0,37%",
   "trend": "up",
-  "note": "Fechamento de quinta-feira, 05/11/2026. É a maior cotação do ano.",
-  "why": "O tombo das bolsas americanas levou investidores a buscar o dólar. Aqui, a reunião de Lula com a equipe econômica terminou sem medidas fiscais. As propostas ficaram para depois da viagem do presidente.",
-  "source": "DGABC (Estadão Conteúdo); Diário do Sudoeste"
+  "note": "Fechamento de sexta-feira, 06/11/2026. Na semana, subiu 1,18%.",
+  "why": "O emprego nos EUA veio muito acima do esperado, com 165 mil vagas em outubro. Isso aumentou a aposta de alta de juros por lá. O dólar ganhou força no mundo todo.",
+  "source": "Times Brasil (CNBC); Acessa.com"
  },
  {
   "id": "ibov",
   "label": "Ibovespa",
-  "value": "166.191,45 pts",
-  "delta": "-0,82%",
-  "trend": "down",
-  "note": "Fechamento de quinta-feira, 05/11/2026. No ano, ainda sobe 3,14%.",
-  "why": "A bolsa chegou a subir pela manhã, mas virou com Wall Street. Petrobras e Bradesco pesaram. A Tenda despencou 17,7% após o balanço.",
-  "source": "DGABC (Estadão Conteúdo); Diário do Sudoeste"
+  "value": "168.498,45 pts",
+  "delta": "+1,39%",
+  "trend": "up",
+  "note": "Fechamento de sexta-feira, 06/11/2026. Na semana, subiu 0,34%.",
+  "why": "A bolsa recuperou parte da queda de quinta. Lula reafirmou o compromisso com as metas fiscais. Ainda assim, o índice segue bem abaixo dos 205 mil pontos de antes da eleição.",
+  "source": "Times Brasil (CNBC); Acessa.com"
  },
  {
   "id": "btc",
   "label": "Bitcoin",
-  "value": "US$ 75.881",
-  "delta": "-5,65%",
+  "value": "US$ 74.718",
+  "delta": "-1,43%",
   "trend": "down",
-  "note": "Cotação de 05/11/2026, por volta das 19h45 de Brasília, variação no dia.",
-  "why": "O bitcoin apagou a alta pós-eleição e seguiu a queda das ações de tecnologia. Cerca de US$ 1,1 bilhão em apostas foram liquidadas em 24 horas. Os ETFs tiveram saídas nos dias anteriores.",
-  "source": "Yahoo Finance; The Block"
+  "note": "Cotação da madrugada de segunda, 09/11/2026, variação em 24 horas.",
+  "why": "Os ETFs de bitcoin tiveram saídas de cerca de US$ 1,28 bilhão na semana. O emprego forte nos EUA mantém o risco de juros mais altos. A moeda não acompanhou a recuperação da tecnologia na sexta.",
+  "source": "DiarioBitcoin; KuCoin"
  },
  {
   "id": "selic",
@@ -36,7 +36,7 @@
   "delta": "estável",
   "trend": "flat",
   "note": "Decisão do Copom de 04/11/2026. Próxima reunião: 8 e 9 de dezembro.",
-  "why": "O Copom encerrou o ciclo de cortes por unanimidade. Citou inflação acima da meta, dólar e incerteza fiscal. O ministro Durigan disse que juros altos prejudicam toda a economia.",
-  "source": "Banco Central; Money Times"
+  "why": "O Copom encerrou o ciclo de cortes por unanimidade. Citou inflação acima da meta, dólar e incerteza fiscal. No domingo, Lula disse que os juros altos o preocupam.",
+  "source": "Banco Central; CNN Brasil"
  }
 ]

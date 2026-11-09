@@ -2,51 +2,51 @@
  {
   "id": "n1",
   "tag": "Brasil",
-  "headline": "Lula reúne equipe econômica, mas medidas fiscais ficam para depois",
-  "summary": "Encontro no Alvorada terminou sem anúncio. O dólar fechou no maior valor do ano.",
-  "what": "Lula reuniu ministros e economistas na quinta, dia 5. O ministro Dario Durigan disse que as propostas serão levadas ao presidente após a viagem à COP31 e à cúpula da Asean.",
-  "why": "O mercado espera sinais de controle dos gastos. Sem eles, dólar e juros futuros ficam pressionados.",
-  "source": "Money Times; Exame; CNN Brasil",
-  "date": "05/11/2026"
+  "headline": "Na TV, Lula diz que dívida e juros altos o preocupam",
+  "summary": "O pronunciamento de sete minutos prometeu responsabilidade fiscal, mas não trouxe medidas novas.",
+  "what": "No domingo, dia 8, Lula falou em rede nacional. Disse que fará o esforço fiscal preservando as regras. Prometeu levar o investimento a mais de 20% do PIB, com o setor privado.",
+  "why": "O mercado esperava sinais concretos de controle de gastos. Sem detalhes, o teste fica para as medidas prometidas para as próximas semanas.",
+  "source": "CNN Brasil; Metrópoles; Grupo A Hora",
+  "date": "08/11/2026"
  },
  {
   "id": "n2",
-  "tag": "Tecnologia",
-  "headline": "Ações de tecnologia despencam nos EUA com medo de regras para IA",
-  "summary": "O Nasdaq caiu 5,5%, e o S&P 500 perdeu cerca de 4,4%.",
-  "what": "Investidores temem que o Congresso democrata freie a construção de data centers de IA. A Nvidia caiu cerca de 7,5% e a AMD, mais de 14%, segundo a CBS.",
-  "why": "Essas empresas pesam muito nos índices e nos fundos do mundo todo. A queda se espalhou para o bitcoin e para a bolsa brasileira.",
-  "source": "CBS News; Diário do Sudoeste",
-  "date": "05/11/2026"
+  "tag": "Oriente Médio",
+  "headline": "Trump diz que novo ataque ao Irã é muito improvável se houver acordo",
+  "summary": "EUA e Irã negociam com mediação do Catar. Explosões e minas seguem em Ormuz.",
+  "what": "Trump disse à CNN que depende de um acordo muito forte. O Irã relatou explosões na ilha de Qeshm e dois petroleiros atingidos por minas. Trump deve receber o premiê do Catar nesta segunda.",
+  "why": "Ormuz é rota de boa parte do petróleo do mundo. Um acordo tende a aliviar o preço do barril. Novos incidentes fazem o contrário.",
+  "source": "CNN; ABC News (Austrália)",
+  "date": "08/11/2026"
  },
  {
   "id": "n3",
-  "tag": "Américas",
-  "headline": "Presidente do Paraguai renuncia após quebra do banco Ueno",
-  "summary": "Santiago Peña deixou o cargo em meio a um pedido de impeachment.",
-  "what": "O Banco Central paraguaio mandou liquidar o Ueno Bank, que tinha cerca de 2,9 milhões de clientes. Peña anunciou a renúncia em vídeo. A Promotoria acusou 27 pessoas.",
-  "why": "O Paraguai é vizinho e sócio do Brasil no Mercosul e em Itaipu. Uma crise política lá afeta a região.",
-  "source": "Infobae; CNN em Espanhol",
-  "date": "05/11/2026"
+  "tag": "Europa",
+  "headline": "COP31 começa hoje em Antalya, na Turquia",
+  "summary": "A conferência do clima vai até 20 de novembro. Lula é esperado na reunião de líderes.",
+  "what": "Turquia e Austrália dividem a presidência. Um dos temas é se o texto final cita o roteiro voluntário do Brasil para deixar os combustíveis fósseis. A reunião de líderes é nos dias 11 e 12.",
+  "why": "O Brasil sediou a COP30 e tenta manter influência na agenda. A viagem também adia a definição das medidas fiscais.",
+  "source": "Climate Home News",
+  "date": "09/11/2026"
  },
  {
   "id": "n4",
-  "tag": "Oriente Médio",
-  "headline": "Irã envia proposta nuclear aos EUA pelo Catar",
-  "summary": "Washington analisa o texto. Trump diz que preferiria não destruir o resto do Irã.",
-  "what": "Segundo a Reuters, a proposta chegou via Catar. A Guarda Revolucionária disse que dois petroleiros e um rebocador pegaram fogo em Ormuz, um deles após atingir uma mina.",
-  "why": "Um acordo pode reduzir o preço do petróleo. Já novos incidentes no estreito tendem a fazer o oposto.",
-  "source": "Reuters e The New York Times, via Foreign Exchanges; Just Security",
-  "date": "05/11/2026"
+  "tag": "Américas",
+  "headline": "Paraguai troca de presidente após quebra do banco Ueno",
+  "summary": "O vice Pedro Alliana assume no lugar de Santiago Peña, que renunciou.",
+  "what": "O Ueno Bank tinha cerca de 3 milhões de clientes e foi fechado no dia 3. A Promotoria acusou 27 pessoas. Uma lei sancionada por Peña quer acelerar a devolução do dinheiro aos clientes.",
+  "why": "O Paraguai é sócio do Brasil no Mercosul e em Itaipu. Instabilidade no vizinho afeta comércio e energia.",
+  "source": "BP Money",
+  "date": "06/11/2026"
  },
  {
   "id": "n5",
-  "tag": "Europa",
-  "headline": "França tem greve nacional contra a austeridade",
-  "summary": "Cerca de 600 mil pessoas protestaram, segundo o Ministério do Interior.",
-  "what": "Sindicatos, estudantes e agricultores foram às ruas contra cortes, custo de vida e condições das escolas. Houve relatos de confrontos com a polícia.",
-  "why": "A pressão social cresce a poucos meses da eleição presidencial francesa. Isso pesa sobre o orçamento do país.",
-  "source": "AP e Al Jazeera, via Foreign Exchanges",
-  "date": "05/11/2026"
+  "tag": "Tecnologia",
+  "headline": "Conselho da Nvidia investiga relação de Jensen Huang com executiva",
+  "summary": "O caso surgiu após reportagem sobre suposto alvo de espionagem chinesa.",
+  "what": "O New York Times relatou que um memorando do governo Trump citava a executiva Alice Huang como recrutada pela inteligência chinesa. O conselho da Nvidia abriu investigação independente no domingo.",
+  "why": "A Nvidia é a empresa que mais pesa nas bolsas americanas. O balanço sai no dia 17, em meio ao nervosismo com a IA.",
+  "source": "Nvidia; The New York Times",
+  "date": "08/11/2026"
  }
 ]

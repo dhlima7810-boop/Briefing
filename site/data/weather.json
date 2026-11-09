@@ -1,62 +1,62 @@
 [
  {
   "day_label": "Hoje",
-  "date": "2026-11-06",
-  "weekday": "Sexta-feira",
+  "date": "2026-11-09",
+  "weekday": "Segunda-feira",
   "condition": "Chuva",
-  "high": 23,
-  "low": 17,
-  "precip": 90,
-  "tip": "Dia fresco e úmido. Leve guarda-chuva e um casaco leve."
+  "high": 19,
+  "low": 14,
+  "precip": 83,
+  "tip": "Dia fresco com pancadas. Leve guarda-chuva e um casaco leve."
  },
  {
   "day_label": "Amanhã",
-  "date": "2026-11-07",
-  "weekday": "Sábado",
-  "condition": "Chuva",
-  "high": 31,
-  "low": 17,
-  "precip": 60,
-  "tip": "Calor de dia e risco de trovoadas. Evite áreas abertas à tarde."
- },
- {
-  "day_label": "Dom",
-  "date": "2026-11-08",
-  "weekday": "Domingo",
-  "condition": "Chuva forte",
-  "high": 26,
-  "low": 12,
-  "precip": 100,
-  "tip": "Chuva quase certa. Programe atividades em lugar coberto."
- },
- {
-  "day_label": "Seg",
-  "date": "2026-11-09",
-  "weekday": "Segunda-feira",
-  "condition": "Nublado",
-  "high": 17,
-  "low": 9,
-  "precip": 50,
-  "tip": "Manhã fria. Saia agasalhado e com guarda-chuva na bolsa."
- },
- {
-  "day_label": "Ter",
   "date": "2026-11-10",
   "weekday": "Terça-feira",
   "condition": "Nublado",
-  "high": 21,
-  "low": 10,
-  "precip": 50,
-  "tip": "Ainda fresco cedo. Um casaco ajuda na saída de casa."
+  "high": 22,
+  "low": 14,
+  "precip": 0,
+  "tip": "Céu fechado, mas sem chuva prevista. Bom dia para resolver coisas na rua."
  },
  {
   "day_label": "Qua",
   "date": "2026-11-11",
   "weekday": "Quarta-feira",
-  "condition": "Nublado",
+  "condition": "Chuva",
+  "high": 24,
+  "low": 14,
+  "precip": 88,
+  "tip": "Pancadas de chuva voltam. Saia com guarda-chuva."
+ },
+ {
+  "day_label": "Qui",
+  "date": "2026-11-12",
+  "weekday": "Quinta-feira",
+  "condition": "Chuva forte",
+  "high": 24,
+  "low": 17,
+  "precip": 100,
+  "tip": "Chuva quase certa, com risco de temporal. Evite áreas que alagam."
+ },
+ {
+  "day_label": "Sex",
+  "date": "2026-11-13",
+  "weekday": "Sexta-feira",
+  "condition": "Chuva",
   "high": 26,
-  "low": 11,
-  "precip": 50,
-  "tip": "Temperatura volta a subir. Tempo instável, com chance de chuva."
+  "low": 18,
+  "precip": 100,
+  "tip": "Mais um dia de chuva. Planeje deslocamentos com folga."
+ },
+ {
+  "day_label": "Sáb",
+  "date": "2026-11-14",
+  "weekday": "Sábado",
+  "condition": "Nublado",
+  "high": 23,
+  "low": 18,
+  "precip": 28,
+  "tip": "Chuva perde força. Dá para programar algo ao ar livre, com cautela."
  }
 ]

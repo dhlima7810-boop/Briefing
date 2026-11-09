@@ -1,38 +1,38 @@
 [
  {
-  "front": "Medo de regras para data centers de IA",
-  "asset": "Ações de chips nos EUA",
-  "effect": "caem",
-  "note": "A Nvidia caiu cerca de 7,5% e a AMD, mais de 14%."
- },
- {
-  "front": "Tombo da tecnologia em Wall Street",
-  "asset": "Bitcoin",
-  "effect": "cai",
-  "note": "Cerca de US$ 1,1 bilhão em apostas na alta foram liquidadas."
- },
- {
-  "front": "Aversão a risco no mundo",
+  "front": "Emprego forte nos EUA",
   "asset": "Dólar",
   "effect": "sobe",
-  "note": "A moeda fechou a R$ 5,49, a maior cotação do ano."
+  "note": "Foram 165 mil vagas em outubro, contra 65 mil esperadas."
  },
  {
-  "front": "Reunião de Lula sem medidas fiscais",
-  "asset": "Ibovespa",
+  "front": "Aposta de juros mais altos nos EUA",
+  "asset": "Bitcoin",
   "effect": "cai",
-  "note": "A bolsa virou e perdeu 0,82%, com Petrobras e Bradesco."
+  "note": "Os ETFs da moeda tiveram saídas de US$ 1,28 bilhão na semana."
  },
  {
-  "front": "Incidentes com petroleiros em Ormuz",
-  "asset": "Petróleo Brent",
+  "front": "Lula reafirma metas fiscais",
+  "asset": "Ibovespa",
   "effect": "sobe",
-  "note": "O barril recuperou parte da queda de quase 9% da véspera."
+  "note": "A bolsa subiu 1,39% na sexta, recuperando parte da queda."
  },
  {
-  "front": "Busca por proteção",
-  "asset": "Ouro",
+  "front": "Recuperação da tecnologia em Wall Street",
+  "asset": "Nasdaq",
   "effect": "sobe",
-  "note": "A onça subiu cerca de 1% e passou de US$ 4.100."
+  "note": "O índice subiu 1,09% na sexta, após cair 5,5% na quinta."
+ },
+ {
+  "front": "Investigação na Nvidia",
+  "asset": "Ações de chips",
+  "effect": "ficam sob pressão",
+  "note": "O conselho apura o caso Jensen Huang, a dias do balanço."
+ },
+ {
+  "front": "Minas e explosões em Ormuz",
+  "asset": "Petróleo",
+  "effect": "sobe o risco",
+  "note": "Dois petroleiros bateram em minas, segundo o Irã."
  }
 ]

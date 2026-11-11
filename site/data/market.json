@@ -2,32 +2,32 @@
  {
   "id": "usd",
   "label": "Dólar (USD/BRL)",
-  "value": "R$ 5,509",
-  "delta": "+0,37%",
+  "value": "R$ 5,586",
+  "delta": "+1,47%",
   "trend": "up",
-  "note": "Fechamento de sexta-feira, 06/11/2026. Na semana, subiu 1,18%.",
-  "why": "O emprego nos EUA veio muito acima do esperado, com 165 mil vagas em outubro. Isso aumentou a aposta de alta de juros por lá. O dólar ganhou força no mundo todo.",
-  "source": "Times Brasil (CNBC); Acessa.com"
+  "note": "Fechamento de terça-feira, 10/11/2026. É o maior fechamento do ano, segundo o Metrópoles.",
+  "why": "A inflação americana de outubro veio acima do esperado. Isso reforçou a aposta de alta de juros nos EUA em dezembro. Aqui, a falta de um plano fiscal claro aumentou a cautela.",
+  "source": "BP Money; Metrópoles"
  },
  {
   "id": "ibov",
   "label": "Ibovespa",
-  "value": "168.498,45 pts",
-  "delta": "+1,39%",
-  "trend": "up",
-  "note": "Fechamento de sexta-feira, 06/11/2026. Na semana, subiu 0,34%.",
-  "why": "A bolsa recuperou parte da queda de quinta. Lula reafirmou o compromisso com as metas fiscais. Ainda assim, o índice segue bem abaixo dos 205 mil pontos de antes da eleição.",
-  "source": "Times Brasil (CNBC); Acessa.com"
+  "value": "171.336,99 pts",
+  "delta": "-0,52%",
+  "trend": "down",
+  "note": "Fechamento de terça-feira, 10/11/2026. Na segunda, tinha subido 2,22%.",
+  "why": "A bolsa devolveu parte da alta de segunda. Pesaram a inflação dos EUA e a ata do Copom, que indicou juros altos por mais tempo. O petróleo também caiu.",
+  "source": "BP Money; Metrópoles; Times Brasil (CNBC)"
  },
  {
   "id": "btc",
   "label": "Bitcoin",
-  "value": "US$ 74.718",
-  "delta": "-1,43%",
+  "value": "US$ 73.905",
+  "delta": "-1,00%",
   "trend": "down",
-  "note": "Cotação da madrugada de segunda, 09/11/2026, variação em 24 horas.",
-  "why": "Os ETFs de bitcoin tiveram saídas de cerca de US$ 1,28 bilhão na semana. O emprego forte nos EUA mantém o risco de juros mais altos. A moeda não acompanhou a recuperação da tecnologia na sexta.",
-  "source": "DiarioBitcoin; KuCoin"
+  "note": "Cotação das 10h52 de terça, 10/11/2026, variação em 24 horas.",
+  "why": "A inflação dos EUA acima do esperado aumentou a aposta de alta de juros pelo Fed. Os ETFs de bitcoin tiveram três dias seguidos de saídas, mais de US$ 1 bilhão. A moeda está perto da mínima desde agosto.",
+  "source": "Exame; Cointelegraph Brasil"
  },
  {
   "id": "selic",
@@ -35,8 +35,8 @@
   "value": "13,75% a.a.",
   "delta": "estável",
   "trend": "flat",
-  "note": "Decisão do Copom de 04/11/2026. Próxima reunião: 8 e 9 de dezembro.",
-  "why": "O Copom encerrou o ciclo de cortes por unanimidade. Citou inflação acima da meta, dólar e incerteza fiscal. No domingo, Lula disse que os juros altos o preocupam.",
-  "source": "Banco Central; CNN Brasil"
+  "note": "Decisão do Copom de 04/11/2026. Ata publicada em 10/11. Próxima reunião: 8 e 9 de dezembro.",
+  "why": "A ata disse que projeções de inflação em alta pedem juros elevados por mais tempo. O Banco Central citou choques de oferta e pressão de demanda. Mas espera uma desaceleração da atividade.",
+  "source": "Banco Central; Metrópoles; BP Money"
  }
 ]

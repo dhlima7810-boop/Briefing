@@ -1,43 +1,23 @@
 [
  {
   "day_label": "Hoje",
-  "date": "2026-11-09",
-  "weekday": "Segunda-feira",
-  "condition": "Chuva",
-  "high": 19,
-  "low": 14,
-  "precip": 83,
-  "tip": "Dia fresco com pancadas. Leve guarda-chuva e um casaco leve."
- },
- {
-  "day_label": "Amanhã",
-  "date": "2026-11-10",
-  "weekday": "Terça-feira",
-  "condition": "Nublado",
-  "high": 22,
-  "low": 14,
-  "precip": 0,
-  "tip": "Céu fechado, mas sem chuva prevista. Bom dia para resolver coisas na rua."
- },
- {
-  "day_label": "Qua",
   "date": "2026-11-11",
   "weekday": "Quarta-feira",
   "condition": "Chuva",
-  "high": 24,
-  "low": 14,
-  "precip": 88,
-  "tip": "Pancadas de chuva voltam. Saia com guarda-chuva."
+  "high": 26,
+  "low": 15,
+  "precip": 79,
+  "tip": "Sol de manhã e pancadas com trovoadas à tarde. Leve o guarda-chuva na volta."
  },
  {
-  "day_label": "Qui",
+  "day_label": "Amanhã",
   "date": "2026-11-12",
   "weekday": "Quinta-feira",
   "condition": "Chuva forte",
-  "high": 24,
-  "low": 17,
-  "precip": 100,
-  "tip": "Chuva quase certa, com risco de temporal. Evite áreas que alagam."
+  "high": 25,
+  "low": 16,
+  "precip": 96,
+  "tip": "É o dia mais chuvoso da semana, com até 11 milímetros. Saia mais cedo e evite pontos de alagamento."
  },
  {
   "day_label": "Sex",
@@ -45,18 +25,38 @@
   "weekday": "Sexta-feira",
   "condition": "Chuva",
   "high": 26,
-  "low": 18,
-  "precip": 100,
-  "tip": "Mais um dia de chuva. Planeje deslocamentos com folga."
+  "low": 17,
+  "precip": 90,
+  "tip": "Mais pancadas à tarde. Deixe roupa no varal só pela manhã."
  },
  {
   "day_label": "Sáb",
   "date": "2026-11-14",
   "weekday": "Sábado",
-  "condition": "Nublado",
-  "high": 23,
+  "condition": "Poucas nuvens",
+  "high": 27,
   "low": 18,
-  "precip": 28,
-  "tip": "Chuva perde força. Dá para programar algo ao ar livre, com cautela."
+  "precip": 0,
+  "tip": "Sem chuva prevista. Bom dia para resolver coisas na rua."
+ },
+ {
+  "day_label": "Dom",
+  "date": "2026-11-15",
+  "weekday": "Domingo",
+  "condition": "Poucas nuvens",
+  "high": 29,
+  "low": 17,
+  "precip": 0,
+  "tip": "O dia mais quente da semana. Use protetor solar e beba água."
+ },
+ {
+  "day_label": "Seg",
+  "date": "2026-11-16",
+  "weekday": "Segunda-feira",
+  "condition": "Chuva forte",
+  "high": 25,
+  "low": 20,
+  "precip": 75,
+  "tip": "Chuva com trovoadas, perto de 18 milímetros. Planeje o trajeto com folga."
  }
 ]

@@ -1,38 +1,38 @@
 [
  {
-  "front": "Emprego forte nos EUA",
+  "front": "Inflação dos EUA acima do esperado",
   "asset": "Dólar",
   "effect": "sobe",
-  "note": "Foram 165 mil vagas em outubro, contra 65 mil esperadas."
+  "note": "Os preços subiram 0,4% em outubro, contra 0,3% esperado."
  },
  {
-  "front": "Aposta de juros mais altos nos EUA",
+  "front": "Aposta de alta de juros pelo Fed",
   "asset": "Bitcoin",
   "effect": "cai",
-  "note": "Os ETFs da moeda tiveram saídas de US$ 1,28 bilhão na semana."
+  "note": "Os ETFs da moeda tiveram mais de US$ 1 bilhão de saídas em três dias."
  },
  {
-  "front": "Lula reafirma metas fiscais",
+  "front": "Ata do Copom",
   "asset": "Ibovespa",
-  "effect": "sobe",
-  "note": "A bolsa subiu 1,39% na sexta, recuperando parte da queda."
+  "effect": "cai",
+  "note": "O BC indicou juros altos por mais tempo."
  },
  {
-  "front": "Recuperação da tecnologia em Wall Street",
-  "asset": "Nasdaq",
-  "effect": "sobe",
-  "note": "O índice subiu 1,09% na sexta, após cair 5,5% na quinta."
- },
- {
-  "front": "Investigação na Nvidia",
-  "asset": "Ações de chips",
-  "effect": "ficam sob pressão",
-  "note": "O conselho apura o caso Jensen Huang, a dias do balanço."
- },
- {
-  "front": "Minas e explosões em Ormuz",
+  "front": "Trump diz que a guerra acabou",
   "asset": "Petróleo",
-  "effect": "sobe o risco",
-  "note": "Dois petroleiros bateram em minas, segundo o Irã."
+  "effect": "cai",
+  "note": "O Brent caiu quase 6% na segunda e mais 1,17% na terça."
+ },
+ {
+  "front": "Investigação sobre Jensen Huang",
+  "asset": "Ações da Nvidia",
+  "effect": "caem",
+  "note": "Recuaram quase 4% com a apuração do conselho."
+ },
+ {
+  "front": "Ormuz fechado e ataques a navios",
+  "asset": "Fretes e seguros",
+  "effect": "sobem o risco",
+  "note": "Novembro já tem ao menos 37 ataques na região."
  }
 ]

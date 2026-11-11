@@ -3,22 +3,22 @@
   "block": "A",
   "country": "EUA",
   "title": "Bloco A — Trump, Irã e instrumentos executivos",
-  "summary": "Trump diz que novo ataque é improvável se houver acordo, mas mantém a ameaça. Não achamos ordem executiva nova sobre o Irã.",
+  "summary": "Trump fala em impulso positivo e diz que novos ataques são desnecessários. O Irã nega negociar. Não achamos ordem executiva nova.",
   "events": [
    {
-    "date": "06/11/2026",
-    "headline": "Conversa com o emir do Catar",
-    "detail": "Trump discutiu a mediação do Catar. O Irã analisa propostas sobre o programa nuclear."
+    "date": "09/11/2026",
+    "headline": "Guerra efetivamente encerrada, diz Trump",
+    "detail": "Ele disse que as forças seguem prontas para atacar de novo, se preciso."
    },
    {
-    "date": "08/11/2026",
-    "headline": "Ataque muito improvável, diz Trump",
-    "detail": "Ele disse à CNN que depende de um acordo muito forte. Afirmou ter três porta-aviões na região."
+    "date": "10/11/2026",
+    "headline": "Premiê do Catar na Casa Branca",
+    "detail": "O Catar é o principal mediador. Depois, o premiê se reuniu com sauditas e europeus em Paris."
    },
    {
-    "date": "08/11/2026",
-    "headline": "Rubio mais cético",
-    "detail": "O secretário de Estado disse que não há um avanço iminente. Chamou as exigências do Irã de irreais."
+    "date": "10/11/2026",
+    "headline": "Rubio aposta na pressão econômica",
+    "detail": "Disse que a campanha econômica é tão dura que não há necessidade de grandes combates agora."
    }
   ]
  },
@@ -26,12 +26,12 @@
   "block": "B",
   "country": "Brasil",
   "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
-  "summary": "Sem fato oficial novo. O último foi a negativa argentina, em 1º de novembro, sobre o caso Flávio Bolsonaro.",
+  "summary": "Sem fato oficial novo nesta semana. O último foi o pronunciamento de Lula, em 8 de novembro, sem citar a Argentina.",
   "events": [
    {
     "date": "29/10/2026",
     "headline": "Itamaraty convoca diplomata argentina",
-    "detail": "Foi chamada para explicar suposta ajuda do governo Milei à saída de Flávio. Não há prova pública dessa ajuda."
+    "detail": "Pediu explicações sobre suposta ajuda do governo Milei à saída de Flávio Bolsonaro. Não há prova pública."
    },
    {
     "date": "01/11/2026",
@@ -41,7 +41,7 @@
    {
     "date": "08/11/2026",
     "headline": "Soberania no pronunciamento",
-    "detail": "Lula disse que o Brasil não cabe no quintal de ninguém. Não citou a Argentina pelo nome."
+    "detail": "Lula disse que o Brasil não cabe no quintal de ninguém. Desde agosto, as embaixadas estão sem embaixador."
    }
   ]
  },
@@ -49,22 +49,22 @@
   "block": "C",
   "country": "Análise",
   "title": "Bloco C — Leitura cruzada",
-  "summary": "A semana fechou com respiro na bolsa e dólar firme. Agora o foco é se Lula vai transformar a promessa fiscal em medidas.",
+  "summary": "O alívio do petróleo durou um dia. A inflação americana e a ata do Copom levaram o dólar ao maior nível do ano.",
   "events": [
    {
-    "date": "06/11/2026",
-    "headline": "Emprego forte nos EUA",
-    "detail": "Foram 165 mil vagas em outubro. O dólar subiu no mundo e fechou a R$ 5,51 aqui."
+    "date": "09/11/2026",
+    "headline": "Ibovespa sobe 2,22%",
+    "detail": "O Brent caiu quase 6% com a fala de Trump sobre o Irã."
    },
    {
-    "date": "06/11/2026",
-    "headline": "Ibovespa sobe 1,39%",
-    "detail": "A bolsa recuperou parte da queda de quinta e fechou a semana em leve alta."
+    "date": "10/11/2026",
+    "headline": "Inflação dos EUA a 0,4%",
+    "detail": "Ficou acima do esperado. Cresceu a aposta de alta de juros pelo Fed."
    },
    {
-    "date": "08/11/2026",
-    "headline": "Promessa sem detalhes",
-    "detail": "Lula disse que dívida e juros o preocupam. As medidas ficam para as próximas semanas."
+    "date": "10/11/2026",
+    "headline": "Dólar a R$ 5,59",
+    "detail": "Subiu 1,47%. A ata do Copom indicou juros altos por mais tempo."
    }
   ]
  }

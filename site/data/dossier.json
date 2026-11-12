@@ -3,22 +3,22 @@
   "block": "A",
   "country": "EUA",
   "title": "Bloco A — Trump, Irã e instrumentos executivos",
-  "summary": "Trump fala em impulso positivo e diz que novos ataques são desnecessários. O Irã nega negociar. Não achamos ordem executiva nova.",
+  "summary": "Washington aposta na pressão econômica, e Teerã responde com ameaças. Não achamos ordem executiva nova sobre o Irã.",
   "events": [
    {
-    "date": "09/11/2026",
-    "headline": "Guerra efetivamente encerrada, diz Trump",
-    "detail": "Ele disse que as forças seguem prontas para atacar de novo, se preciso."
+    "date": "10/11/2026",
+    "headline": "Rubio fala em linhas vermelhas",
+    "detail": "Disse que a pressão econômica tornou desnecessário um grande combate. Mas a força pode voltar, se o Irã cruzar certos limites."
    },
    {
-    "date": "10/11/2026",
-    "headline": "Premiê do Catar na Casa Branca",
-    "detail": "O Catar é o principal mediador. Depois, o premiê se reuniu com sauditas e europeus em Paris."
+    "date": "11/11/2026",
+    "headline": "Irã ameaça bases distantes",
+    "detail": "Mohsen Rezaei disse que o material nuclear não sai do país. Novos ataques teriam resposta contra bases americanas."
    },
    {
-    "date": "10/11/2026",
-    "headline": "Rubio aposta na pressão econômica",
-    "detail": "Disse que a campanha econômica é tão dura que não há necessidade de grandes combates agora."
+    "date": "11/11/2026",
+    "headline": "Bessent muda para base militar",
+    "detail": "Segundo o New York Times, ele saiu de casa após ameaças iranianas. A gravidade das ameaças não está clara."
    }
   ]
  },
@@ -26,7 +26,7 @@
   "block": "B",
   "country": "Brasil",
   "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
-  "summary": "Sem fato oficial novo nesta semana. O último foi o pronunciamento de Lula, em 8 de novembro, sem citar a Argentina.",
+  "summary": "Sem fato oficial novo entre os dois governos. O último foi o pronunciamento de Lula, em 8 de novembro. Na COP31, ele falou de clima.",
   "events": [
    {
     "date": "29/10/2026",
@@ -34,14 +34,14 @@
     "detail": "Pediu explicações sobre suposta ajuda do governo Milei à saída de Flávio Bolsonaro. Não há prova pública."
    },
    {
-    "date": "01/11/2026",
-    "headline": "Buenos Aires nega pedido formal",
-    "detail": "O chanceler Pablo Quirno negou que o Brasil tenha pedido explicações."
-   },
-   {
     "date": "08/11/2026",
     "headline": "Soberania no pronunciamento",
     "detail": "Lula disse que o Brasil não cabe no quintal de ninguém. Desde agosto, as embaixadas estão sem embaixador."
+   },
+   {
+    "date": "11/11/2026",
+    "headline": "Irã mira forças argentinas",
+    "detail": "Teerã chamou a Marinha e a Força Aérea da Argentina de terroristas. O Brasil não comentou."
    }
   ]
  },
@@ -49,22 +49,22 @@
   "block": "C",
   "country": "Análise",
   "title": "Bloco C — Leitura cruzada",
-  "summary": "O alívio do petróleo durou um dia. A inflação americana e a ata do Copom levaram o dólar ao maior nível do ano.",
+  "summary": "Depois do susto de terça, o real respirou com o pacote fiscal. Lá fora, o petróleo voltou a subir.",
   "events": [
    {
-    "date": "09/11/2026",
-    "headline": "Ibovespa sobe 2,22%",
-    "detail": "O Brent caiu quase 6% com a fala de Trump sobre o Irã."
+    "date": "10/11/2026",
+    "headline": "Dólar no maior nível em 15 meses",
+    "detail": "A inflação dos EUA e a ata do Copom pressionaram o real."
    },
    {
-    "date": "10/11/2026",
-    "headline": "Inflação dos EUA a 0,4%",
-    "detail": "Ficou acima do esperado. Cresceu a aposta de alta de juros pelo Fed."
+    "date": "11/11/2026",
+    "headline": "Pacote fiscal no Congresso",
+    "detail": "Prevê de R$ 50 a 60 bilhões em 2027. O dólar caiu 0,42%."
    },
    {
-    "date": "10/11/2026",
-    "headline": "Dólar a R$ 5,59",
-    "detail": "Subiu 1,47%. A ata do Copom indicou juros altos por mais tempo."
+    "date": "11/11/2026",
+    "headline": "Brent a US$ 92,76",
+    "detail": "Subiu 1,39%, com incerteza sobre o Irã e Ormuz."
    }
   ]
  }

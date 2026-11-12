@@ -1,38 +1,38 @@
 [
  {
-  "front": "Inflação dos EUA acima do esperado",
-  "asset": "Dólar",
+  "front": "Pacote fiscal de até R$ 60 bilhões",
+  "asset": "Real",
   "effect": "sobe",
-  "note": "Os preços subiram 0,4% em outubro, contra 0,3% esperado."
+  "note": "O dólar caiu 0,42%, para R$ 5,563."
  },
  {
-  "front": "Aposta de alta de juros pelo Fed",
-  "asset": "Bitcoin",
-  "effect": "cai",
-  "note": "Os ETFs da moeda tiveram mais de US$ 1 bilhão de saídas em três dias."
- },
- {
-  "front": "Ata do Copom",
+  "front": "Pacote fiscal no Congresso",
   "asset": "Ibovespa",
-  "effect": "cai",
-  "note": "O BC indicou juros altos por mais tempo."
+  "effect": "sobe",
+  "note": "A bolsa subiu 0,42%, para 172 mil pontos."
  },
  {
-  "front": "Trump diz que a guerra acabou",
+  "front": "Ameaças do Irã e incidente em Ormuz",
   "asset": "Petróleo",
-  "effect": "cai",
-  "note": "O Brent caiu quase 6% na segunda e mais 1,17% na terça."
+  "effect": "sobe",
+  "note": "O Brent subiu 1,39%, para US$ 92,76."
  },
  {
-  "front": "Investigação sobre Jensen Huang",
-  "asset": "Ações da Nvidia",
+  "front": "Balanço abaixo do esperado",
+  "asset": "Ações da Petrobras",
   "effect": "caem",
-  "note": "Recuaram quase 4% com a apuração do conselho."
+  "note": "As preferenciais recuaram 3,11%."
  },
  {
-  "front": "Ormuz fechado e ataques a navios",
-  "asset": "Fretes e seguros",
-  "effect": "sobem o risco",
-  "note": "Novembro já tem ao menos 37 ataques na região."
+  "front": "Saídas dos ETFs e juros dos EUA",
+  "asset": "Bitcoin",
+  "effect": "perde fluxo",
+  "note": "Quarto dia seguido de saídas dos fundos."
+ },
+ {
+  "front": "Resultado forte da CoreWeave",
+  "asset": "Ações de tecnologia",
+  "effect": "sobem",
+  "note": "O Nasdaq subiu cerca de 1,6%."
  }
 ]

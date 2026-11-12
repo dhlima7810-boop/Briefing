@@ -2,51 +2,51 @@
  {
   "id": "n1",
   "tag": "Brasil",
-  "headline": "Lula fala hoje na COP31, na Turquia",
-  "summary": "O presidente participa da cúpula de líderes do clima em Antália, nesta quarta e quinta.",
-  "what": "Lula deve apresentar o Mapa do Caminho, plano para reduzir a dependência de combustíveis fósseis e o desmatamento. O Brasil já passou a presidência da COP à Turquia.",
-  "why": "É a primeira viagem de Lula após a reeleição. Também deve ser oficializado um aporte de US$ 500 milhões ao fundo de florestas tropicais.",
-  "source": "Jornal do Brasil; Agência Brasil",
+  "headline": "Governo envia pacote fiscal de até R$ 60 bilhões",
+  "summary": "O ministro Bruno Moretti apresentou o projeto ao Congresso nesta quarta.",
+  "what": "O texto limita o crescimento real dos gastos a 2%, quando faltar receita. Também corta mais 10% dos benefícios fiscais e restringe compensações de impostos.",
+  "why": "O mercado esperava um sinal sobre as contas públicas. O efeito previsto é de R$ 50 a 60 bilhões em 2027. Ainda precisa passar no Congresso.",
+  "source": "O Povo; Imirante",
   "date": "11/11/2026"
  },
  {
   "id": "n2",
-  "tag": "Oriente Médio",
-  "headline": "Irã nega negociar com os EUA e mantém Ormuz fechado",
-  "summary": "Teerã diz que espera resposta às suas sete condições. Trump fala em impulso positivo para a paz.",
-  "what": "O chefe de segurança iraniano chamou de mentira os relatos de conversas no Catar. Trump recebeu o premiê do Catar na Casa Branca na segunda.",
-  "why": "Ormuz é rota de boa parte do petróleo do mundo. Novembro já tem ao menos 37 ataques a navios na região, o maior número da guerra.",
-  "source": "Al Jazeera, com Reuters",
+  "tag": "Brasil",
+  "headline": "Na COP31, Lula cobra países ricos",
+  "summary": "Lula abriu a Cúpula de Líderes, na Turquia, e disse que o clima perdeu espaço para guerras.",
+  "what": "Ele pediu US$ 1,3 trilhão por ano para o clima. Defendeu planos para reduzir petróleo e desmatamento. Disse que o desmatamento na Amazônia caiu 71% desde 2022.",
+  "why": "O Brasil acabou de entregar a presidência da COP à Turquia. Lula tenta manter o tema do clima na agenda mundial.",
+  "source": "Estado de Minas",
   "date": "11/11/2026"
  },
  {
   "id": "n3",
-  "tag": "Américas",
-  "headline": "Inflação dos EUA vem acima do esperado",
-  "summary": "Os preços ao consumidor subiram 0,4% em outubro. O mercado esperava 0,3%.",
-  "what": "O dado reforçou a aposta de alta de juros pelo Fed em dezembro. As apostas nisso chegaram a cerca de 85%.",
-  "why": "Juros mais altos nos EUA atraem dinheiro para lá. Isso fortalece o dólar e pressiona moedas como o real.",
-  "source": "Metrópoles; Exame; Cointelegraph Brasil",
-  "date": "10/11/2026"
+  "tag": "Oriente Médio",
+  "headline": "Irã ameaça bases americanas distantes",
+  "summary": "Um chefe de segurança iraniano disse que novos ataques dos EUA terão resposta.",
+  "what": "Mohsen Rezaei disse que o material nuclear enriquecido não sai do Irã. Rubio disse que a pressão econômica tornou desnecessário um grande combate. Houve novo incidente com petroleiro em Ormuz.",
+  "why": "A guerra não tem acordo formal. Cada declaração mexe com o petróleo. O Brent subiu 1,39%, para US$ 92,76.",
+  "source": "Reuters; New York Times; UKMTO, via Just Security e Times of Israel",
+  "date": "11/11/2026"
  },
  {
   "id": "n4",
   "tag": "Europa",
-  "headline": "Ucrânia e Rússia voltam a negociar em Abu Dhabi",
-  "summary": "As conversas, mediadas pelos EUA, recomeçaram. Há relatos de alguma flexibilidade sobre território.",
-  "what": "Ao mesmo tempo, a Dinamarca prometeu 643 milhões de euros em ajuda militar a Kiev. Na União Europeia, há briga sobre ligar o orçamento a mais ajuda à Ucrânia.",
-  "why": "Um avanço na guerra mexe com energia, alimentos e segurança na Europa. Por enquanto, não há acordo.",
-  "source": "Euronews",
-  "date": "10/11/2026"
+  "headline": "Ucrânia e Rússia acertam grande troca de prisioneiros",
+  "summary": "As conversas em Abu Dhabi, com os EUA, terminaram após dois dias.",
+  "what": "Os dois lados concordaram com uma grande troca de prisioneiros de guerra. Os números ainda serão definidos. Não houve acordo de paz.",
+  "why": "É o primeiro resultado concreto da rodada. Mas drones perdidos entraram no espaço aéreo dos países bálticos, e a OTAN acionou caças.",
+  "source": "AP; BBC; Reuters, via Just Security",
+  "date": "11/11/2026"
  },
  {
   "id": "n5",
-  "tag": "Ásia",
-  "headline": "China tem superávit comercial recorde",
-  "summary": "O saldo comercial chinês passou de US$ 1 trilhão em outubro, puxado por exportações ligadas à IA.",
-  "what": "A China vendeu muito mais do que comprou. Produtos para inteligência artificial foram destaque.",
-  "why": "Superávits assim alimentam tensões comerciais com EUA e Europa. E mostram o peso da IA no comércio mundial.",
-  "source": "Euronews",
-  "date": "10/11/2026"
+  "tag": "Américas",
+  "headline": "Irã chama forças argentinas de terroristas",
+  "summary": "O Irã classificou a Marinha e a Força Aérea da Argentina como organizações terroristas.",
+  "what": "Teerã citou o princípio da reciprocidade. Em abril, a Argentina tinha colocado a Guarda Revolucionária do Irã na lista de terroristas.",
+  "why": "O governo Milei é um aliado próximo de Trump e de Israel. A medida aumenta a tensão do Irã com a América do Sul.",
+  "source": "Reuters, via Just Security e Times of Israel",
+  "date": "11/11/2026"
  }
 ]

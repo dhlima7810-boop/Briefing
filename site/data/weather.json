@@ -1,62 +1,62 @@
 [
  {
   "day_label": "Hoje",
-  "date": "2026-11-11",
-  "weekday": "Quarta-feira",
+  "date": "2026-11-12",
+  "weekday": "Quinta-feira",
   "condition": "Chuva",
-  "high": 26,
-  "low": 15,
-  "precip": 79,
-  "tip": "Sol de manhã e pancadas com trovoadas à tarde. Leve o guarda-chuva na volta."
+  "high": 25,
+  "low": 17,
+  "precip": 99,
+  "tip": "Sol entre nuvens e pancadas com trovoadas. Leve o guarda-chuva."
  },
  {
   "day_label": "Amanhã",
-  "date": "2026-11-12",
-  "weekday": "Quinta-feira",
-  "condition": "Chuva forte",
-  "high": 25,
-  "low": 16,
-  "precip": 96,
-  "tip": "É o dia mais chuvoso da semana, com até 11 milímetros. Saia mais cedo e evite pontos de alagamento."
- },
- {
-  "day_label": "Sex",
   "date": "2026-11-13",
   "weekday": "Sexta-feira",
   "condition": "Chuva",
   "high": 26,
   "low": 17,
-  "precip": 90,
-  "tip": "Mais pancadas à tarde. Deixe roupa no varal só pela manhã."
+  "precip": 95,
+  "tip": "Chuva rápida, com pouco volume. Guarda-chuva na bolsa resolve."
  },
  {
   "day_label": "Sáb",
   "date": "2026-11-14",
   "weekday": "Sábado",
-  "condition": "Poucas nuvens",
+  "condition": "Nublado",
   "high": 27,
-  "low": 18,
-  "precip": 0,
-  "tip": "Sem chuva prevista. Bom dia para resolver coisas na rua."
+  "low": 17,
+  "precip": 10,
+  "tip": "Muitas nuvens, mas sem chuva prevista. Bom para resolver coisas na rua."
  },
  {
   "day_label": "Dom",
   "date": "2026-11-15",
   "weekday": "Domingo",
-  "condition": "Poucas nuvens",
+  "condition": "Chuva",
   "high": 29,
-  "low": 17,
-  "precip": 0,
-  "tip": "O dia mais quente da semana. Use protetor solar e beba água."
+  "low": 16,
+  "precip": 61,
+  "tip": "Dia mais quente da semana, com chance de pancada. Beba bastante água."
  },
  {
   "day_label": "Seg",
   "date": "2026-11-16",
   "weekday": "Segunda-feira",
-  "condition": "Chuva forte",
+  "condition": "Nublado",
+  "high": 28,
+  "low": 18,
+  "precip": 10,
+  "tip": "Céu carregado, mas sem chuva prevista. Roupa leve funciona."
+ },
+ {
+  "day_label": "Ter",
+  "date": "2026-11-17",
+  "weekday": "Terça-feira",
+  "condition": "Chuva",
   "high": 25,
-  "low": 20,
-  "precip": 75,
-  "tip": "Chuva com trovoadas, perto de 18 milímetros. Planeje o trajeto com folga."
+  "low": 19,
+  "precip": 90,
+  "tip": "Volta a chuva com trovoadas. Saia com guarda-chuva e atenção no trânsito."
  }
 ]

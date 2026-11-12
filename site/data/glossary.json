@@ -16,30 +16,21 @@
   "text": "É o grupo do Banco Central que decide a Selic. Reúne-se a cada 45 dias, mais ou menos."
  },
  {
-  "term": "Ata do Copom",
-  "aliases": [
-   "ata"
-  ],
-  "section": "mercado",
-  "text": "É o documento que explica a decisão do Copom. Sai alguns dias depois da reunião."
- },
- {
   "term": "Ibovespa",
   "aliases": [
    "Ibov",
-   "índice Bovespa"
+   "Bovespa"
   ],
   "section": "mercado",
-  "text": "É o principal índice da bolsa brasileira. Mostra a média de preço das ações mais negociadas."
+  "text": "É o principal índice da bolsa brasileira. Mostra a média das ações mais negociadas."
  },
  {
-  "term": "CPI",
+  "term": "ETF",
   "aliases": [
-   "inflação americana",
-   "índice de preços ao consumidor"
+   "fundo de índice"
   ],
-  "section": "noticias",
-  "text": "É o índice de inflação ao consumidor dos Estados Unidos. Mede quanto os preços subiram no mês."
+  "section": "mercado",
+  "text": "É um fundo negociado na bolsa como uma ação. Os ETFs de bitcoin compram a moeda pelos investidores."
  },
  {
   "term": "Fed",
@@ -48,46 +39,67 @@
    "banco central americano"
   ],
   "section": "mercado",
-  "text": "É o banco central dos Estados Unidos. Decide os juros do país."
- },
- {
-  "term": "ETF",
-  "aliases": [
-   "fundo de índice"
-  ],
-  "section": "mercado",
-  "text": "É um fundo negociado na bolsa como uma ação. Um ETF de bitcoin acompanha o preço da moeda."
+  "text": "É o banco central dos Estados Unidos. Decide os juros de lá, que afetam o mundo todo."
  },
  {
   "term": "Brent",
   "aliases": [
    "petróleo Brent"
   ],
-  "section": "mercado",
-  "text": "É o tipo de petróleo usado como referência de preço no mundo."
+  "section": "geopolitica",
+  "text": "É o tipo de petróleo usado como referência de preço no mundo. É cotado em dólares por barril."
  },
  {
-  "term": "Estreito de Ormuz",
+  "term": "Pacote fiscal",
   "aliases": [
-   "Ormuz"
+   "ajuste fiscal",
+   "PLP"
+  ],
+  "section": "noticias",
+  "text": "É um conjunto de medidas para equilibrar as contas do governo. Mistura corte de gastos e aumento de receita."
+ },
+ {
+  "term": "Arcabouço fiscal",
+  "aliases": [
+   "arcabouço"
   ],
   "section": "dossie",
-  "text": "É a passagem de mar entre o Irã e Omã. Por ali passa boa parte do petróleo do mundo."
+  "text": "É a regra que limita o crescimento dos gastos do governo federal. Hoje o limite é de 2,5% acima da inflação."
+ },
+ {
+  "term": "Superávit primário",
+  "aliases": [
+   "superávit",
+   "meta fiscal"
+  ],
+  "section": "dossie",
+  "text": "É quando o governo arrecada mais do que gasta, sem contar os juros da dívida."
+ },
+ {
+  "term": "Benefício fiscal",
+  "aliases": [
+   "isenção",
+   "incentivo fiscal"
+  ],
+  "section": "noticias",
+  "text": "É um desconto de imposto dado a um setor ou atividade. O pacote propõe cortar 10% deles."
+ },
+ {
+  "term": "Contingenciamento",
+  "aliases": [
+   "bloqueio de gastos"
+  ],
+  "section": "dossie",
+  "text": "É quando o governo congela parte das despesas previstas, para cumprir a meta."
  },
  {
   "term": "COP31",
   "aliases": [
-   "COP",
-   "conferência do clima"
+   "COP 31",
+   "Cúpula do Clima"
   ],
   "section": "noticias",
-  "text": "É a conferência anual da ONU sobre clima. Em 2026, acontece em Antália, na Turquia."
- },
- {
-  "term": "Mapa do Caminho",
-  "aliases": [],
-  "section": "noticias",
-  "text": "É o plano do governo brasileiro para reduzir combustíveis fósseis e o desmatamento."
+  "text": "É a conferência do clima da ONU deste ano, em Antália, na Turquia. Vai de 9 a 20 de novembro."
  },
  {
   "term": "TFFF",
@@ -95,35 +107,21 @@
    "Fundo Florestas Tropicais para Sempre"
   ],
   "section": "noticias",
-  "text": "É um fundo internacional que paga países por manter florestas tropicais em pé."
+  "text": "É um fundo proposto pelo Brasil para pagar países que mantêm florestas tropicais de pé."
  },
  {
-  "term": "Superávit comercial",
+  "term": "Estreito de Ormuz",
   "aliases": [
-   "superávit"
+   "Ormuz"
   ],
+  "section": "geopolitica",
+  "text": "É uma passagem marítima estreita entre o Irã e a Península Arábica. Por ali passa grande parte do petróleo do mundo."
+ },
+ {
+  "term": "UKMTO",
+  "aliases": [],
   "section": "noticias",
-  "text": "É quando um país vende ao exterior mais do que compra."
- },
- {
-  "term": "Dívida bruta",
-  "aliases": [],
-  "section": "dossie",
-  "text": "É tudo o que o governo deve. Costuma ser medida como parte do PIB."
- },
- {
-  "term": "PIB",
-  "aliases": [
-   "Produto Interno Bruto"
-  ],
-  "section": "dossie",
-  "text": "É a soma de tudo o que o país produz em um período."
- },
- {
-  "term": "Encarregado de negócios",
-  "aliases": [],
-  "section": "dossie",
-  "text": "É o diplomata que chefia uma embaixada quando não há embaixador."
+  "text": "É o centro da Marinha britânica que monitora a segurança dos navios no Oriente Médio."
  },
  {
   "term": "Itamaraty",
@@ -131,7 +129,7 @@
    "Ministério das Relações Exteriores"
   ],
   "section": "dossie",
-  "text": "É o ministério que cuida da política externa do Brasil."
+  "text": "É o ministério que cuida da diplomacia do Brasil."
  },
  {
   "term": "IPO",
@@ -140,7 +138,13 @@
    "abertura de capital"
   ],
   "section": "ia",
-  "text": "É quando uma empresa vende ações na bolsa pela primeira vez."
+  "text": "É a estreia de uma empresa na bolsa, quando ela vende ações ao público pela primeira vez."
+ },
+ {
+  "term": "Nasdaq",
+  "aliases": [],
+  "section": "ia",
+  "text": "É uma bolsa de valores dos EUA, onde estão muitas empresas de tecnologia. Também dá nome a um índice."
  },
  {
   "term": "Token",
@@ -148,22 +152,22 @@
    "tokens"
   ],
   "section": "ia",
-  "text": "É um pedaço de texto que a IA lê ou escreve. Os preços de IA costumam ser por milhão de tokens."
+  "text": "É um pedaço de texto que a IA lê ou escreve. O preço dos modelos é cobrado por milhão de tokens."
+ },
+ {
+  "term": "API",
+  "aliases": [],
+  "section": "ia",
+  "text": "É a porta de acesso para que programas conversem com um serviço, como um modelo de IA."
  },
  {
   "term": "Agente de IA",
   "aliases": [
-   "agentes",
-   "agente"
+   "agente",
+   "agentes"
   ],
   "section": "ia",
-  "text": "É uma IA que executa tarefas sozinha, em várias etapas, e não só responde perguntas."
- },
- {
-  "term": "TPU",
-  "aliases": [],
-  "section": "ia",
-  "text": "É o chip de inteligência artificial criado pelo Google."
+  "text": "É uma IA que executa tarefas sozinha, em várias etapas, como pesquisar, preencher e enviar."
  },
  {
   "term": "Nvidia",
@@ -172,17 +176,25 @@
   "text": "É a maior fabricante de chips usados para treinar e rodar inteligência artificial."
  },
  {
-  "term": "Data center",
-  "aliases": [
-   "centro de dados"
-  ],
-  "section": "ia",
-  "text": "É um prédio cheio de computadores que guardam dados e rodam serviços como a IA."
+  "term": "CoreWeave",
+  "aliases": [],
+  "section": "mercado",
+  "text": "É uma empresa americana que aluga poder de computação para IA, em grandes centros de dados."
  },
  {
-  "term": "Anthropic",
-  "aliases": [],
+  "term": "Gemini",
+  "aliases": [
+   "Gemini 4 Carbon"
+  ],
   "section": "ia",
-  "text": "É a empresa americana que cria o Claude, um assistente de inteligência artificial."
+  "text": "É a família de modelos de inteligência artificial do Google."
+ },
+ {
+  "term": "Grok",
+  "aliases": [
+   "xAI"
+  ],
+  "section": "ia",
+  "text": "É o assistente de inteligência artificial da xAI, empresa ligada a Elon Musk."
  }
 ]

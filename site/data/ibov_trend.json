@@ -6,12 +6,6 @@
   "note": "Maior fechamento da história, segundo a Suno."
  },
  {
-  "label": "Fim de outubro",
-  "date": "30/10/2026",
-  "points": 167921.8,
-  "note": "Outubro fechou com perda de 9,88%."
- },
- {
   "label": "Sexta queda",
   "date": "03/11/2026",
   "points": 164993,
@@ -30,9 +24,15 @@
   "note": "Alta de 2,22%, na máxima do dia."
  },
  {
-  "label": "Último fechamento",
+  "label": "Inflação dos EUA",
   "date": "10/11/2026",
   "points": 171336.99,
   "note": "Queda de 0,52%, com inflação dos EUA e ata do Copom."
+ },
+ {
+  "label": "Último fechamento",
+  "date": "11/11/2026",
+  "points": 172060.44,
+  "note": "Alta de 0,42%, com o pacote fiscal no radar."
  }
 ]

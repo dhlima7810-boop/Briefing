@@ -1,62 +1,62 @@
 [
  {
   "day_label": "Hoje",
-  "date": "2026-11-12",
-  "weekday": "Quinta-feira",
-  "condition": "Chuva",
-  "high": 25,
-  "low": 17,
-  "precip": 99,
-  "tip": "Sol entre nuvens e pancadas com trovoadas. Leve o guarda-chuva."
- },
- {
-  "day_label": "Amanhã",
   "date": "2026-11-13",
   "weekday": "Sexta-feira",
   "condition": "Chuva",
-  "high": 26,
+  "high": 25,
   "low": 17,
-  "precip": 95,
-  "tip": "Chuva rápida, com pouco volume. Guarda-chuva na bolsa resolve."
+  "precip": 96,
+  "tip": "Leve guarda-chuva. Há risco de pancadas com trovoadas à tarde."
  },
  {
-  "day_label": "Sáb",
+  "day_label": "Amanhã",
   "date": "2026-11-14",
   "weekday": "Sábado",
-  "condition": "Nublado",
-  "high": 27,
+  "condition": "Chuva",
+  "high": 26,
   "low": 17,
-  "precip": 10,
-  "tip": "Muitas nuvens, mas sem chuva prevista. Bom para resolver coisas na rua."
+  "precip": 59,
+  "tip": "Pode chover pouco. Planeje o passeio com um plano B coberto."
  },
  {
   "day_label": "Dom",
   "date": "2026-11-15",
   "weekday": "Domingo",
-  "condition": "Chuva",
-  "high": 29,
-  "low": 16,
-  "precip": 61,
-  "tip": "Dia mais quente da semana, com chance de pancada. Beba bastante água."
+  "condition": "Nublado",
+  "high": 27,
+  "low": 17,
+  "precip": 0,
+  "tip": "Dia firme, com muitas nuvens. Bom para resolver coisas na rua."
  },
  {
   "day_label": "Seg",
   "date": "2026-11-16",
   "weekday": "Segunda-feira",
-  "condition": "Nublado",
-  "high": 28,
-  "low": 18,
-  "precip": 10,
-  "tip": "Céu carregado, mas sem chuva prevista. Roupa leve funciona."
+  "condition": "Chuva",
+  "high": 29,
+  "low": 16,
+  "precip": 87,
+  "tip": "Calor e pancada rápida. Use roupa leve e tenha um guarda-chuva."
  },
  {
   "day_label": "Ter",
   "date": "2026-11-17",
   "weekday": "Terça-feira",
+  "condition": "Nublado",
+  "high": 28,
+  "low": 18,
+  "precip": 0,
+  "tip": "Tempo firme e quente. Beba água ao longo do dia."
+ },
+ {
+  "day_label": "Qua",
+  "date": "2026-11-18",
+  "weekday": "Quarta-feira",
   "condition": "Chuva",
   "high": 25,
   "low": 19,
-  "precip": 90,
-  "tip": "Volta a chuva com trovoadas. Saia com guarda-chuva e atenção no trânsito."
+  "precip": 86,
+  "tip": "Chuva mais forte prevista. Saia com antecedência por causa do trânsito."
  }
 ]

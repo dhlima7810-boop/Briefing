@@ -2,51 +2,51 @@
  {
   "id": "n1",
   "tag": "Brasil",
-  "headline": "Governo envia pacote fiscal de até R$ 60 bilhões",
-  "summary": "O ministro Bruno Moretti apresentou o projeto ao Congresso nesta quarta.",
-  "what": "O texto limita o crescimento real dos gastos a 2%, quando faltar receita. Também corta mais 10% dos benefícios fiscais e restringe compensações de impostos.",
-  "why": "O mercado esperava um sinal sobre as contas públicas. O efeito previsto é de R$ 50 a 60 bilhões em 2027. Ainda precisa passar no Congresso.",
-  "source": "O Povo; Imirante",
-  "date": "11/11/2026"
+  "headline": "Senado aprova o texto principal do ajuste fiscal",
+  "summary": "Por 45 votos a 31, o Senado aprovou a base do pacote de contenção de gastos.",
+  "what": "O texto limita o aumento real dos gastos a 2% em anos de aperto. Também corta benefícios fiscais. Quatro destaques ficam para terça, dia 17.",
+  "why": "O governo espera melhorar as contas de 2027 entre R$ 45 e 56 bilhões. Depois do Senado, o projeto vai à Câmara.",
+  "source": "Agência Senado",
+  "date": "12/11/2026"
  },
  {
   "id": "n2",
   "tag": "Brasil",
-  "headline": "Na COP31, Lula cobra países ricos",
-  "summary": "Lula abriu a Cúpula de Líderes, na Turquia, e disse que o clima perdeu espaço para guerras.",
-  "what": "Ele pediu US$ 1,3 trilhão por ano para o clima. Defendeu planos para reduzir petróleo e desmatamento. Disse que o desmatamento na Amazônia caiu 71% desde 2022.",
-  "why": "O Brasil acabou de entregar a presidência da COP à Turquia. Lula tenta manter o tema do clima na agenda mundial.",
-  "source": "Estado de Minas",
-  "date": "11/11/2026"
+  "headline": "Inflação de outubro fica abaixo do esperado",
+  "summary": "O IPCA subiu 0,14% em outubro, depois de 0,82% em setembro, segundo o IBGE.",
+  "what": "Em 12 meses, a inflação está em 4,63%. O mercado esperava 0,25% no mês. Alimentos subiram, mas transporte e habitação caíram.",
+  "why": "Inflação menor alivia o bolso. Mas, por enquanto, não mudou as apostas para os juros.",
+  "source": "Forbes Brasil, com dados do IBGE",
+  "date": "12/11/2026"
  },
  {
   "id": "n3",
   "tag": "Oriente Médio",
-  "headline": "Irã ameaça bases americanas distantes",
-  "summary": "Um chefe de segurança iraniano disse que novos ataques dos EUA terão resposta.",
-  "what": "Mohsen Rezaei disse que o material nuclear enriquecido não sai do Irã. Rubio disse que a pressão econômica tornou desnecessário um grande combate. Houve novo incidente com petroleiro em Ormuz.",
-  "why": "A guerra não tem acordo formal. Cada declaração mexe com o petróleo. O Brent subiu 1,39%, para US$ 92,76.",
-  "source": "Reuters; New York Times; UKMTO, via Just Security e Times of Israel",
-  "date": "11/11/2026"
+  "headline": "Trump diz que não precisa de acordo com o Irã",
+  "summary": "O presidente encerrou as conversas com Teerã e tirou o vice JD Vance da negociação.",
+  "what": "Trump disse que os dias de acordo já passaram. Vance culpou a guerra pela derrota republicana nas eleições de meio de mandato.",
+  "why": "Sem conversa, cresce o risco de novo conflito. O petróleo Brent subiu 3,3% no dia.",
+  "source": "Roll Call; BPMoney",
+  "date": "12/11/2026"
  },
  {
   "id": "n4",
   "tag": "Europa",
-  "headline": "Ucrânia e Rússia acertam grande troca de prisioneiros",
-  "summary": "As conversas em Abu Dhabi, com os EUA, terminaram após dois dias.",
-  "what": "Os dois lados concordaram com uma grande troca de prisioneiros de guerra. Os números ainda serão definidos. Não houve acordo de paz.",
-  "why": "É o primeiro resultado concreto da rodada. Mas drones perdidos entraram no espaço aéreo dos países bálticos, e a OTAN acionou caças.",
-  "source": "AP; BBC; Reuters, via Just Security",
-  "date": "11/11/2026"
+  "headline": "Putin recebe enviados de Trump em Moscou",
+  "summary": "Witkoff e Kushner conversaram com Putin sobre a guerra na Ucrânia. O Kremlin chamou o encontro de útil.",
+  "what": "Não houve avanço sobre território, o principal impasse. Uma nova rodada a três foi combinada, agora com europeus.",
+  "why": "A guerra afeta energia e comida no mundo todo. Putin deve falar com Trump na cúpula da APEC, ainda este mês.",
+  "source": "Reuters, via The Moscow Times",
+  "date": "12/11/2026"
  },
  {
   "id": "n5",
-  "tag": "Américas",
-  "headline": "Irã chama forças argentinas de terroristas",
-  "summary": "O Irã classificou a Marinha e a Força Aérea da Argentina como organizações terroristas.",
-  "what": "Teerã citou o princípio da reciprocidade. Em abril, a Argentina tinha colocado a Guarda Revolucionária do Irã na lista de terroristas.",
-  "why": "O governo Milei é um aliado próximo de Trump e de Israel. A medida aumenta a tensão do Irã com a América do Sul.",
-  "source": "Reuters, via Just Security e Times of Israel",
-  "date": "11/11/2026"
+  "tag": "Tecnologia",
+  "headline": "Jensen Huang deixa o comando da Nvidia",
+  "summary": "O fundador saiu do cargo de presidente-executivo depois de 33 anos. A diretora financeira, Colette Kress, assume interinamente.",
+  "what": "A Nvidia não deu motivo. A saída veio dias depois de Huang admitir um caso extraconjugal, ligado a suspeitas de espionagem.",
+  "why": "A Nvidia faz os chips que movem a IA. As ações chegaram a cair 14%, e as bolsas americanas fecharam em queda.",
+  "source": "TechCrunch; Al Jazeera",
+  "date": "12/11/2026"
  }
 ]

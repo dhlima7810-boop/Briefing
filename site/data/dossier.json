@@ -3,22 +3,22 @@
   "block": "A",
   "country": "EUA",
   "title": "Bloco A — Trump, Irã e instrumentos executivos",
-  "summary": "Washington aposta na pressão econômica, e Teerã responde com ameaças. Não achamos ordem executiva nova sobre o Irã.",
+  "summary": "Trump encerrou a negociação com o Irã. Não achamos ordem executiva nova sobre o tema.",
   "events": [
    {
-    "date": "10/11/2026",
-    "headline": "Rubio fala em linhas vermelhas",
-    "detail": "Disse que a pressão econômica tornou desnecessário um grande combate. Mas a força pode voltar, se o Irã cruzar certos limites."
+    "date": "12/11/2026",
+    "headline": "Sem acordo com Teerã",
+    "detail": "Trump disse que não precisa de acordo e tirou JD Vance da negociação."
    },
    {
-    "date": "11/11/2026",
-    "headline": "Irã ameaça bases distantes",
-    "detail": "Mohsen Rezaei disse que o material nuclear não sai do país. Novos ataques teriam resposta contra bases americanas."
+    "date": "12/11/2026",
+    "headline": "Comando militar nega preparo de guerra",
+    "detail": "A TV israelense Kan disse que os EUA pediram preparo a Israel. O comando chamou isso de especulação."
    },
    {
-    "date": "11/11/2026",
-    "headline": "Bessent muda para base militar",
-    "detail": "Segundo o New York Times, ele saiu de casa após ameaças iranianas. A gravidade das ameaças não está clara."
+    "date": "12/11/2026",
+    "headline": "Petróleo dispara",
+    "detail": "O Brent subiu 3,3%, para 95,82 dólares, com medo de novo conflito."
    }
   ]
  },
@@ -26,22 +26,17 @@
   "block": "B",
   "country": "Brasil",
   "title": "Bloco B — Planalto em tensão diplomática com a Argentina",
-  "summary": "Sem fato oficial novo entre os dois governos. O último foi o pronunciamento de Lula, em 8 de novembro. Na COP31, ele falou de clima.",
+  "summary": "Sem fato oficial novo entre os dois governos. O último foi em 11 de novembro. As embaixadas seguem sem embaixador.",
   "events": [
-   {
-    "date": "29/10/2026",
-    "headline": "Itamaraty convoca diplomata argentina",
-    "detail": "Pediu explicações sobre suposta ajuda do governo Milei à saída de Flávio Bolsonaro. Não há prova pública."
-   },
    {
     "date": "08/11/2026",
     "headline": "Soberania no pronunciamento",
-    "detail": "Lula disse que o Brasil não cabe no quintal de ninguém. Desde agosto, as embaixadas estão sem embaixador."
+    "detail": "Lula disse que o Brasil não cabe no quintal de ninguém."
    },
    {
     "date": "11/11/2026",
     "headline": "Irã mira forças argentinas",
-    "detail": "Teerã chamou a Marinha e a Força Aérea da Argentina de terroristas. O Brasil não comentou."
+    "detail": "Teerã chamou militares argentinos de terroristas. O Brasil não comentou."
    }
   ]
  },
@@ -49,22 +44,22 @@
   "block": "C",
   "country": "Análise",
   "title": "Bloco C — Leitura cruzada",
-  "summary": "Depois do susto de terça, o real respirou com o pacote fiscal. Lá fora, o petróleo voltou a subir.",
+  "summary": "O Senado avançou no ajuste, mas o dólar subiu forte. O medo veio de fora e da dúvida fiscal.",
   "events": [
    {
-    "date": "10/11/2026",
-    "headline": "Dólar no maior nível em 15 meses",
-    "detail": "A inflação dos EUA e a ata do Copom pressionaram o real."
+    "date": "12/11/2026",
+    "headline": "Dólar no maior valor desde junho de 2025",
+    "detail": "Fechou a R$ 5,652, alta de 1,62%."
    },
    {
-    "date": "11/11/2026",
-    "headline": "Pacote fiscal no Congresso",
-    "detail": "Prevê de R$ 50 a 60 bilhões em 2027. O dólar caiu 0,42%."
+    "date": "12/11/2026",
+    "headline": "Ajuste passa no Senado",
+    "detail": "Texto-base aprovado por 45 a 31. Destaques ficam para terça."
    },
    {
-    "date": "11/11/2026",
-    "headline": "Brent a US$ 92,76",
-    "detail": "Subiu 1,39%, com incerteza sobre o Irã e Ormuz."
+    "date": "12/11/2026",
+    "headline": "Inflação abaixo do esperado",
+    "detail": "O IPCA subiu 0,14% em outubro. Em 12 meses, 4,63%."
    }
   ]
  }

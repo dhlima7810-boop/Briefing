@@ -2,32 +2,32 @@
  {
   "id": "usd",
   "label": "Dólar (USD/BRL)",
-  "value": "R$ 5,563",
-  "delta": "-0,42%",
-  "trend": "down",
-  "note": "Fechamento de quarta-feira, 11/11/2026. Na terça, tinha batido o maior nível em 15 meses.",
-  "why": "O real se recuperou depois da forte queda de terça. O mercado reagiu ao pacote fiscal enviado ao Congresso. A alta do petróleo também ajudou a moeda brasileira.",
-  "source": "Imirante; O Tempo"
+  "value": "R$ 5,652",
+  "delta": "+1,62%",
+  "trend": "up",
+  "note": "Fechamento de quinta-feira, 12/11/2026. É o maior valor desde junho de 2025.",
+  "why": "Analistas acharam o pacote fiscal tímido, e houve busca por proteção. Nos EUA, cresceu a aposta de alta de juros. A tensão com o Irã também pesou.",
+  "source": "BPMoney; O Tempo"
  },
  {
   "id": "ibov",
   "label": "Ibovespa",
-  "value": "172.060,44 pts",
-  "delta": "+0,42%",
-  "trend": "up",
-  "note": "Fechamento de quarta-feira, 11/11/2026. O volume foi de R$ 28,5 bilhões.",
-  "why": "O pacote fiscal de até R$ 60 bilhões animou parte dos investidores. Nova York subiu, puxada pelas ações de tecnologia. A Petrobras caiu mais de 3%, com balanço abaixo do esperado.",
-  "source": "Imirante; O Tempo"
+  "value": "171.324,31 pts",
+  "delta": "-0,43%",
+  "trend": "down",
+  "note": "Fechamento de quinta-feira, 12/11/2026. O volume foi de R$ 31,9 bilhões.",
+  "why": "O Banco do Brasil caiu mais de 8%, depois de um lucro 66,5% menor. Nova York caiu com a saída do chefe da Nvidia. A Petrobras subiu com o petróleo.",
+  "source": "BPMoney; O Tempo"
  },
  {
   "id": "btc",
   "label": "Bitcoin",
-  "value": "US$ 73.744",
-  "delta": "+0,1%",
-  "trend": "flat",
-  "note": "Cotação das 10h56 de quarta, 11/11/2026, variação em 24 horas.",
-  "why": "A moeda ficou de lado, perto da mínima em três meses. Os ETFs de bitcoin tiveram o quarto dia seguido de saídas. A aposta de alta de juros nos EUA segue pesando.",
-  "source": "Exame"
+  "value": "US$ 71.529",
+  "delta": "-3,8%",
+  "trend": "down",
+  "note": "Cotação das 16h51 de quinta, 12/11/2026, na Coinbase.",
+  "why": "A tensão entre EUA e Irã e a crise na Nvidia afastaram investidores. Os ETFs de bitcoin seguem com saídas. A Strategy vai sair dos índices da MSCI.",
+  "source": "CNN Brasil"
  },
  {
   "id": "selic",
@@ -36,7 +36,7 @@
   "delta": "estável",
   "trend": "flat",
   "note": "Decisão do Copom de 04/11/2026. Próxima reunião: 8 e 9 de dezembro.",
-  "why": "A ata do Copom indicou juros altos por mais tempo. O Banco Central vê projeções de inflação em alta. O pacote fiscal entra no radar da próxima decisão.",
-  "source": "Banco Central"
+  "why": "O IPCA de outubro veio abaixo do esperado, com alta de 0,14%. Mesmo assim, as apostas para a Selic não mudaram. Galípolo defendeu o regime de metas.",
+  "source": "Banco Central; O Tempo; XP"
  }
 ]

@@ -1,38 +1,44 @@
 [
  {
-  "front": "Pacote fiscal de até R$ 60 bilhões",
-  "asset": "Real",
-  "effect": "sobe",
-  "note": "O dólar caiu 0,42%, para R$ 5,563."
- },
- {
-  "front": "Pacote fiscal no Congresso",
-  "asset": "Ibovespa",
-  "effect": "sobe",
-  "note": "A bolsa subiu 0,42%, para 172 mil pontos."
- },
- {
-  "front": "Ameaças do Irã e incidente em Ormuz",
+  "front": "Fim da negociação com o Irã",
   "asset": "Petróleo",
   "effect": "sobe",
-  "note": "O Brent subiu 1,39%, para US$ 92,76."
+  "note": "O Brent subiu 3,3%, para 95,82 dólares."
  },
  {
-  "front": "Balanço abaixo do esperado",
-  "asset": "Ações da Petrobras",
+  "front": "Pacote fiscal visto como tímido",
+  "asset": "Dólar",
+  "effect": "sobe",
+  "note": "Fechou a R$ 5,652, maior valor desde junho de 2025."
+ },
+ {
+  "front": "Lucro 66,5% menor",
+  "asset": "Ações do Banco do Brasil",
   "effect": "caem",
-  "note": "As preferenciais recuaram 3,11%."
+  "note": "Recuaram mais de 8% e puxaram o Ibovespa."
  },
  {
-  "front": "Saídas dos ETFs e juros dos EUA",
+  "front": "Petróleo em alta",
+  "asset": "Ações da Petrobras",
+  "effect": "sobem",
+  "note": "As preferenciais subiram 2,64%."
+ },
+ {
+  "front": "Saída de Jensen Huang",
+  "asset": "Ações de tecnologia",
+  "effect": "caem",
+  "note": "O Nasdaq caiu 0,39%."
+ },
+ {
+  "front": "Saídas dos ETFs e crise na Nvidia",
   "asset": "Bitcoin",
   "effect": "perde fluxo",
-  "note": "Quarto dia seguido de saídas dos fundos."
+  "note": "Caiu 3,8%, para cerca de 71,5 mil dólares."
  },
  {
-  "front": "Resultado forte da CoreWeave",
-  "asset": "Ações de tecnologia",
-  "effect": "sobem",
-  "note": "O Nasdaq subiu cerca de 1,6%."
+  "front": "Inflação abaixo do esperado",
+  "asset": "Juros futuros",
+  "effect": "estáveis",
+  "note": "O IPCA de 0,14% não mudou as apostas para a Selic."
  }
 ]

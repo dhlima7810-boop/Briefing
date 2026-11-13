@@ -24,15 +24,15 @@
   "note": "Alta de 2,22%, na máxima do dia."
  },
  {
-  "label": "Inflação dos EUA",
-  "date": "10/11/2026",
-  "points": 171336.99,
-  "note": "Queda de 0,52%, com inflação dos EUA e ata do Copom."
+  "label": "Pacote fiscal",
+  "date": "11/11/2026",
+  "points": 172060.44,
+  "note": "Alta de 0,42%, com o pacote no radar."
  },
  {
   "label": "Último fechamento",
-  "date": "11/11/2026",
-  "points": 172060.44,
-  "note": "Alta de 0,42%, com o pacote fiscal no radar."
+  "date": "12/11/2026",
+  "points": 171324.31,
+  "note": "Queda de 0,43%, com Banco do Brasil e Nvidia."
  }
 ]

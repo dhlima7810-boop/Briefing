@@ -25,126 +25,126 @@
   "text": "É o principal índice da bolsa brasileira. Mostra a média das ações mais negociadas."
  },
  {
-  "term": "ETF",
+  "term": "IPCA",
   "aliases": [
-   "fundo de índice"
+   "inflação oficial"
   ],
-  "section": "mercado",
-  "text": "É um fundo negociado na bolsa como uma ação. Os ETFs de bitcoin compram a moeda pelos investidores."
+  "section": "noticias",
+  "text": "É o índice oficial de inflação do Brasil, medido pelo IBGE. Mostra quanto os preços subiram."
  },
  {
-  "term": "Fed",
+  "term": "IBGE",
   "aliases": [
-   "Federal Reserve",
-   "banco central americano"
+   "Instituto Brasileiro de Geografia e Estatística"
+  ],
+  "section": "noticias",
+  "text": "É o órgão do governo que mede dados do país, como inflação, emprego e população."
+ },
+ {
+  "term": "ETF",
+  "aliases": [
+   "fundo de índice",
+   "ETFs"
   ],
   "section": "mercado",
-  "text": "É o banco central dos Estados Unidos. Decide os juros de lá, que afetam o mundo todo."
+  "text": "É um fundo vendido na bolsa, que segue um índice ou um ativo, como o bitcoin."
  },
  {
   "term": "Brent",
   "aliases": [
    "petróleo Brent"
   ],
-  "section": "geopolitica",
-  "text": "É o tipo de petróleo usado como referência de preço no mundo. É cotado em dólares por barril."
- },
- {
-  "term": "Pacote fiscal",
-  "aliases": [
-   "ajuste fiscal",
-   "PLP"
-  ],
-  "section": "noticias",
-  "text": "É um conjunto de medidas para equilibrar as contas do governo. Mistura corte de gastos e aumento de receita."
- },
- {
-  "term": "Arcabouço fiscal",
-  "aliases": [
-   "arcabouço"
-  ],
   "section": "dossie",
-  "text": "É a regra que limita o crescimento dos gastos do governo federal. Hoje o limite é de 2,5% acima da inflação."
- },
- {
-  "term": "Superávit primário",
-  "aliases": [
-   "superávit",
-   "meta fiscal"
-  ],
-  "section": "dossie",
-  "text": "É quando o governo arrecada mais do que gasta, sem contar os juros da dívida."
- },
- {
-  "term": "Benefício fiscal",
-  "aliases": [
-   "isenção",
-   "incentivo fiscal"
-  ],
-  "section": "noticias",
-  "text": "É um desconto de imposto dado a um setor ou atividade. O pacote propõe cortar 10% deles."
- },
- {
-  "term": "Contingenciamento",
-  "aliases": [
-   "bloqueio de gastos"
-  ],
-  "section": "dossie",
-  "text": "É quando o governo congela parte das despesas previstas, para cumprir a meta."
- },
- {
-  "term": "COP31",
-  "aliases": [
-   "COP 31",
-   "Cúpula do Clima"
-  ],
-  "section": "noticias",
-  "text": "É a conferência do clima da ONU deste ano, em Antália, na Turquia. Vai de 9 a 20 de novembro."
- },
- {
-  "term": "TFFF",
-  "aliases": [
-   "Fundo Florestas Tropicais para Sempre"
-  ],
-  "section": "noticias",
-  "text": "É um fundo proposto pelo Brasil para pagar países que mantêm florestas tropicais de pé."
+  "text": "É o tipo de petróleo usado como referência de preço no mundo."
  },
  {
   "term": "Estreito de Ormuz",
   "aliases": [
    "Ormuz"
   ],
-  "section": "geopolitica",
-  "text": "É uma passagem marítima estreita entre o Irã e a Península Arábica. Por ali passa grande parte do petróleo do mundo."
- },
- {
-  "term": "UKMTO",
-  "aliases": [],
-  "section": "noticias",
-  "text": "É o centro da Marinha britânica que monitora a segurança dos navios no Oriente Médio."
- },
- {
-  "term": "Itamaraty",
-  "aliases": [
-   "Ministério das Relações Exteriores"
-  ],
   "section": "dossie",
-  "text": "É o ministério que cuida da diplomacia do Brasil."
+  "text": "É uma passagem de mar entre o Irã e a Península Arábica. Por ali passa muito do petróleo do mundo."
+ },
+ {
+  "term": "Ajuste fiscal",
+  "aliases": [
+   "pacote fiscal",
+   "PLP do ajuste"
+  ],
+  "section": "noticias",
+  "text": "São medidas para equilibrar as contas do governo, cortando gastos ou aumentando receitas."
+ },
+ {
+  "term": "Texto-base",
+  "aliases": [
+   "texto principal"
+  ],
+  "section": "noticias",
+  "text": "É a parte central de um projeto. Depois dela, os parlamentares votam mudanças separadas."
+ },
+ {
+  "term": "Destaque",
+  "aliases": [
+   "destaques"
+  ],
+  "section": "noticias",
+  "text": "É um pedido para votar separadamente um trecho de um projeto já aprovado."
+ },
+ {
+  "term": "Benefício fiscal",
+  "aliases": [
+   "incentivo fiscal",
+   "renúncia fiscal"
+  ],
+  "section": "noticias",
+  "text": "É um desconto de imposto dado pelo governo a um setor ou atividade."
+ },
+ {
+  "term": "Fed",
+  "aliases": [
+   "Federal Reserve",
+   "Banco Central americano"
+  ],
+  "section": "mercado",
+  "text": "É o banco central dos Estados Unidos. Decide os juros de lá."
+ },
+ {
+  "term": "Nvidia",
+  "aliases": [],
+  "section": "ia",
+  "text": "É a empresa americana que faz a maioria dos chips usados para treinar inteligência artificial."
+ },
+ {
+  "term": "CEO",
+  "aliases": [
+   "presidente-executivo",
+   "executivo-chefe"
+  ],
+  "section": "ia",
+  "text": "É a pessoa que comanda o dia a dia de uma empresa."
+ },
+ {
+  "term": "Interino",
+  "aliases": [
+   "interina"
+  ],
+  "section": "ia",
+  "text": "É quem ocupa um cargo de forma temporária, até alguém ser escolhido."
  },
  {
   "term": "IPO",
   "aliases": [
    "oferta pública inicial",
-   "abertura de capital"
+   "estreia na bolsa"
   ],
   "section": "ia",
-  "text": "É a estreia de uma empresa na bolsa, quando ela vende ações ao público pela primeira vez."
+  "text": "É quando uma empresa começa a vender ações na bolsa pela primeira vez."
  },
  {
-  "term": "Nasdaq",
+  "term": "API",
   "aliases": [],
   "section": "ia",
-  "text": "É uma bolsa de valores dos EUA, onde estão muitas empresas de tecnologia. Também dá nome a um índice."
+  "text": "É uma porta de acesso para programas conversarem entre si. Empresas usam para ligar a IA aos seus sistemas."
  },
  {
   "term": "Token",
@@ -152,13 +152,7 @@
    "tokens"
   ],
   "section": "ia",
-  "text": "É um pedaço de texto que a IA lê ou escreve. O preço dos modelos é cobrado por milhão de tokens."
- },
- {
-  "term": "API",
-  "aliases": [],
-  "section": "ia",
-  "text": "É a porta de acesso para que programas conversem com um serviço, como um modelo de IA."
+  "text": "É um pedacinho de texto que a IA lê ou escreve. Serve para medir o uso e o preço."
  },
  {
   "term": "Agente de IA",
@@ -167,34 +161,38 @@
    "agentes"
   ],
   "section": "ia",
-  "text": "É uma IA que executa tarefas sozinha, em várias etapas, como pesquisar, preencher e enviar."
- },
- {
-  "term": "Nvidia",
-  "aliases": [],
-  "section": "ia",
-  "text": "É a maior fabricante de chips usados para treinar e rodar inteligência artificial."
+  "text": "É uma IA que faz tarefas sozinha, como pesquisar, preencher formulários ou comprar."
  },
  {
   "term": "CoreWeave",
   "aliases": [],
-  "section": "mercado",
-  "text": "É uma empresa americana que aluga poder de computação para IA, em grandes centros de dados."
+  "section": "ia",
+  "text": "É uma empresa americana que aluga computadores potentes para empresas de IA."
  },
  {
-  "term": "Gemini",
-  "aliases": [
-   "Gemini 4 Carbon"
-  ],
+  "term": "ByteDance",
+  "aliases": [],
   "section": "ia",
-  "text": "É a família de modelos de inteligência artificial do Google."
+  "text": "É a empresa chinesa dona do TikTok."
  },
  {
-  "term": "Grok",
-  "aliases": [
-   "xAI"
-  ],
+  "term": "DNA",
+  "aliases": [],
   "section": "ia",
-  "text": "É o assistente de inteligência artificial da xAI, empresa ligada a Elon Musk."
+  "text": "É a molécula que guarda as instruções genéticas de cada ser vivo."
+ },
+ {
+  "term": "APEC",
+  "aliases": [
+   "Cooperação Econômica Ásia-Pacífico"
+  ],
+  "section": "noticias",
+  "text": "É um fórum de países da Ásia e do Pacífico para discutir comércio e economia."
+ },
+ {
+  "term": "Kremlin",
+  "aliases": [],
+  "section": "noticias",
+  "text": "É a sede do governo da Rússia, em Moscou. O nome também indica o próprio governo russo."
  }
 ]
